@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SuperTerminal.Data.Entitys;
 using SuperTerminal.Filter;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace SuperTerminal.Api.Controllers
@@ -17,10 +19,9 @@ namespace SuperTerminal.Api.Controllers
             Thread.Sleep(3000);
             return result;
         }
-        [ClearDataCache(nameof(TestController))]
-        //[ClearDataCache("Test")]
-        [HttpGet]
-        public string DelDataCache()
+        [Validate(typeof(TestModel))]
+        [HttpPost]
+        public string DelDataCache(List<TestModel> models)
         {
             var result = "清理";
             return result;
