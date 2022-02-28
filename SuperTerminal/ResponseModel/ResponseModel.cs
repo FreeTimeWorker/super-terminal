@@ -10,11 +10,24 @@ namespace SuperTerminal
     {
         public ResponseModel()
         {
-            StatusCode = 0;
+            Status = 0;
         }
-        public int StatusCode { get; set; }
-        public string StatusMessage { get; set; }
-        public int Count { get; set; }
+        public int Status { get; set; }
+        public string StatusMsg { get; set; }
         public object Data { get; set; }
+    }
+    public class ResponseModel<T>
+    {
+        public int Status { get; set; }
+        public string StatusMsg { get; set; }
+        /// <summary>
+        /// 响应的数据
+        /// </summary>
+        public T Data { get; set; }
+
+        public static implicit operator ResponseModel<T>(T data)
+        {
+            return new ResponseModel<T> { Status = 200, StatusMsg = "请求正确返回", Data = data };
+        }
     }
 }

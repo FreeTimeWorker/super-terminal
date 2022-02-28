@@ -1,3 +1,4 @@
+using AutoMapper;
 using CSRedis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SuperTerminal.Data.Maintain;
+using SuperTerminal.Data.SqlSugarContent;
 using SuperTerminal.GlobalService;
 using SuperTerminal.JWT;
 using SuperTerminal.Utity;
@@ -25,6 +27,10 @@ namespace SuperTerminal.Api
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.AddSqlsugarSetup(Configuration);//单例注入数据库上下文
+            services.AddScoped<IDbContext, SqlSugarContext>();//注入上下文,常用的数据库操作
+            services.AddSingleton(sp => new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperConfiguration>()).CreateMapper());//AutoMap配置
             services.AddDbContext<MaintainContent>(options => options.UseMySql(Configuration.GetConnectionString("MySqlConnectionString"), MySqlServerVersion.LatestSupportedServerVersion));//这里需要Mysql版本号
             services.AddTransient<IJwt, Jwt>();
             services.AddControllers()
@@ -64,7 +70,7 @@ namespace SuperTerminal.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            ServiceAgent.Provider = app.ApplicationServices;
+            ServiceAgent.Provider = app.ApplicationServices;//DI对象处理器
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

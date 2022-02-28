@@ -12,7 +12,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.DependencyInjection;
+using SqlSugar;
 
 namespace SuperTerminal.Filter
 {
@@ -37,11 +38,11 @@ namespace SuperTerminal.Filter
             KeyValuePair<string, object> commitedModel = context.ActionArguments.Where(o => o.Value != null).FirstOrDefault(o => o.Value.GetType().ToString() == Type.FullName);//找到参数中对应的对象
             if (commitedModel.Value != null)
             {
-                foreach (System.Reflection.PropertyInfo property in properties)
+                foreach (PropertyInfo property in properties)
                 {
                     object currentItemvalue = property.GetValue(commitedModel.Value);//当前项属性的值
                     object[] validateFieldItems = property.GetCustomAttributes(typeof(FeildCheckAttribute), true);
-                    if (Vaildthis(currentItemvalue,property.PropertyType, validateFieldItems, context))
+                    if (Vaildthis(commitedModel.Value, currentItemvalue,property.PropertyType, validateFieldItems, context))
                     {
                         continue;
                     }
@@ -66,7 +67,7 @@ namespace SuperTerminal.Filter
                     {
                         object currentItemvalue = property.GetValue(item);//当前项属性的值
                         object[] validateFieldItems = property.GetCustomAttributes(typeof(FeildCheck.FeildCheckAttribute), true);
-                        if (Vaildthis(currentItemvalue, property.PropertyType, validateFieldItems, context))
+                        if (Vaildthis(item,currentItemvalue, property.PropertyType, validateFieldItems, context))
                         {
                             continue;
                         }
@@ -112,11 +113,11 @@ namespace SuperTerminal.Filter
                                 valid = false;
                                 ResponseModel responseMode = new ResponseModel()
                                 {
-                                    StatusCode = 0,
-                                    StatusMessage = "操作成功",
+                                    Status = 200,
+                                    StatusMsg = "操作成功",
                                     Data = new BoolModel() { Successed = false, Message = (validateFieldItems[0] as CheckUnique).ErrorMsg }
                                 };
-                                context.Result = new JsonResult(responseMode, new JsonSerializerSettings() { });
+                                context.Result = new JsonResult(responseMode);
                                 break;
                             }
                         }
@@ -125,8 +126,7 @@ namespace SuperTerminal.Filter
             }
             return valid;
         }
-
-        private bool Vaildthis(object currentItemvalue,Type currentItemType, object[] validateFieldItems, ActionExecutingContext context)
+        private bool Vaildthis(object currentItem, object currentItemvalue,Type currentItemType, object[] validateFieldItems, ActionExecutingContext context)
         {
             bool valid = true;
             if (validateFieldItems.Length > 0)
@@ -159,7 +159,7 @@ namespace SuperTerminal.Filter
                     }
                     else if (item.GetType() == typeof(CheckUnique))
                     {
-                        if (ValidUnique(currentItemvalue, currentItemType, (CheckUnique)item, context))
+                        if (ValidUnique(currentItem,currentItemvalue, currentItemType, (CheckUnique)item, context))
                         {
                             continue;
                         }
@@ -178,17 +178,79 @@ namespace SuperTerminal.Filter
             return valid;
         }
         /// <summary>
-        /// 验证单个值在数据库中是否存在
+        /// 验证单个值在数据库中是否存在重复
         /// </summary>
         /// <param name="currentItemvalue"></param>
         /// <param name="currentItemType"></param>
         /// <param name="item"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private bool ValidUnique(object currentItemvalue,Type currentItemType, CheckUnique item, ActionExecutingContext context)
+        private bool ValidUnique(object currentItem, object currentItemvalue,Type currentItemType, CheckUnique item, ActionExecutingContext context)
         {
-            throw new NotImplementedException();
+            //数据库中判断唯一
+            var dbContext = ServiceAgent.Provider.GetService<ISqlSugarClient>();
+            var identityFeild = Type.GetProperties().FirstOrDefault(o => o.Name == item.IdentityFeild);
+            if (identityFeild != null)
+            {
+                if (identityFeild.PropertyType == typeof(int))
+                {
+                    var id = identityFeild.GetValue(currentItem) as int?;
+                    if (id.HasValue && id.Value > 0)
+                    {
+                        //修改判断唯一
+                        var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and {item.IdentityFeild}={id}").Count();
+                        if (count > 0)
+                        {
+                            ResponseModel responseMode = new ResponseModel()
+                            {
+                                Status = 200,
+                                StatusMsg = "操作成功",
+                                Data = new BoolModel() { Successed = false, Message = item.ErrorMsg }
+                            };
+                            context.Result = new JsonResult(responseMode);
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return ValidUniqueInAdd(currentItemvalue, currentItemType, item, dbContext, context);
+                    }
+                }
+                else
+                {
+                    return ValidUniqueInAdd(currentItemvalue, currentItemType, item, dbContext, context);
+                }
+            }
+            else //没有ID属性的
+            {
+                return ValidUniqueInAdd(currentItemvalue, currentItemType, item, dbContext, context);
+            }
         }
+        //添加模式下判断唯一
+        private bool ValidUniqueInAdd(object currentItemvalue, Type currentItemType, CheckUnique item, ISqlSugarClient dbContext, ActionExecutingContext context)
+        {
+            var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}'").Count();
+            if (count > 0)
+            {
+                ResponseModel responseMode = new ResponseModel()
+                {
+                    Status = 200,
+                    StatusMsg = "操作成功",
+                    Data = new BoolModel() { Successed = false, Message = item.ErrorMsg }
+                };
+                context.Result = new JsonResult(responseMode);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         /// <summary>
         /// 范围值默认通过
         /// </summary>
@@ -213,11 +275,11 @@ namespace SuperTerminal.Filter
                 {
                     ResponseModel responseMode = new ResponseModel()
                     {
-                        StatusCode = 0,
-                        StatusMessage = "操作成功",
+                        Status = 200,
+                        StatusMsg = "操作成功",
                         Data = new BoolModel() { Successed = false, Message = string.Concat(item.ErrorMsg) }
                     };
-                    context.Result = new JsonResult(responseMode, new JsonSerializerSettings() { });
+                    context.Result = new JsonResult(responseMode);
                     return false;
                 }
             }
@@ -275,11 +337,11 @@ namespace SuperTerminal.Filter
             {
                 ResponseModel responseMode = new ResponseModel()
                 {
-                    StatusCode = 0,
-                    StatusMessage = "操作成功",
+                    Status = 200,
+                    StatusMsg = "操作成功",
                     Data = new BoolModel() { Successed = false, Message = string.Concat(validateattr.ErrorMsg) }
                 };
-                context.Result = new JsonResult(responseMode, new JsonSerializerSettings() { });
+                context.Result = new JsonResult(responseMode);
                 return false;
             }
             else

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SuperTerminal.Data.Maintain;
 
 namespace SuperTerminal.Data.Migrations
 {
     [DbContext(typeof(MaintainContent))]
-    partial class MaintainContentModelSnapshot : ModelSnapshot
+    [Migration("20220228020120_innt1")]
+    partial class innt1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

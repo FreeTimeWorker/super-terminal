@@ -21,6 +21,10 @@ namespace SuperTerminal.FeildCheck
         /// </summary>
         public string TableName { get; set; }
         /// <summary>
+        /// 字段名
+        /// </summary>
+        public string FeildName { get; set; }
+        /// <summary>
         /// 唯一标识，一般是ID
         /// </summary>
         public string IdentityFeild { get; set; } = "Id";
@@ -29,10 +33,11 @@ namespace SuperTerminal.FeildCheck
         /// 提交时判断唯一
         /// </summary>
         /// <param name="tableName"></param>
-        public CheckUnique(string errorMsg,string tableName)
+        public CheckUnique(string errorMsg,string tableName,string feildName)
         {
             ErrorMsg = errorMsg;
             TableName = tableName;
+            FeildName = feildName;
         }
     }
 }

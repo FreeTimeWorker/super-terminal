@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SuperTerminal.Data.Entitys;
 using SuperTerminal.Filter;
+using SuperTerminal.Model;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -8,10 +9,9 @@ namespace SuperTerminal.Api.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class TestCacheController : ControllerBase
     {
-        [DataCache(nameof(TestController))]
-        //[DataCache("Test")]
+        [DataCache(nameof(TestCacheController))]
         [HttpGet]
         public string GetData()
         {
@@ -19,9 +19,9 @@ namespace SuperTerminal.Api.Controllers
             Thread.Sleep(3000);
             return result;
         }
-        [Validate(typeof(TestModel))]
-        [HttpPost]
-        public string DelDataCache(List<TestModel> models)
+        [ClearDataCache(nameof(TestCacheController))]
+        [HttpGet]
+        public string DelDataCache()
         {
             var result = "清理";
             return result;
