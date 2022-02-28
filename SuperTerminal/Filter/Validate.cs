@@ -252,7 +252,7 @@ namespace SuperTerminal.Filter
         }
 
         /// <summary>
-        /// 范围值默认通过
+        /// 范围值
         /// </summary>
         /// <param name="currentItemvalue"></param>
         /// <param name="currentItemType"></param>
