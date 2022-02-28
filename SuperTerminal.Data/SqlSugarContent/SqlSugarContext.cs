@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 
 namespace SuperTerminal.Data.SqlSugarContent
 {
-    /// <summary>
-    /// 继承上下文搞点事情
-    /// </summary>
     public class SqlSugarContext:IDbContext
     {
         private ISqlSugarClient _sqlSugarScope;

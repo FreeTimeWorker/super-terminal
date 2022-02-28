@@ -22,12 +22,22 @@ namespace SuperTerminal.Api.Controllers
         }
         [Validate(typeof(ViewTestModel))]
         [HttpPost]
-        public ResponseModel<BoolModel> PostData(List<ViewTestModel> testModels)
+        public ResponseModel<BoolModel> PostDataList(List<ViewTestModel> testModels)
         {
             var result = _DbContext.Storageable(_mapper.Map<List<TestModel>>(testModels)).ToStorage();
             var add = result.AsInsertable.ExecuteCommand();
             var update= result.AsUpdateable.ExecuteCommand();
             return new BoolModel() { Successed=true,Message="保存成功" };
+        }
+
+        [Validate(typeof(ViewTestModel))]
+        [HttpPost]
+        public ResponseModel<BoolModel> PostDataModel(ViewTestModel testModel)
+        {
+            var result = _DbContext.Storageable(_mapper.Map<TestModel>(testModel)).ToStorage();
+            var add = result.AsInsertable.ExecuteCommand();
+            var update = result.AsUpdateable.ExecuteCommand();
+            return new BoolModel() { Successed = true, Message = "保存成功" };
         }
     }
 }
