@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SqlSugar;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,7 @@ namespace SuperTerminal.Data
         /// <summary>
         /// Id
         /// </summary>
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         [Comment("主键"), Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]//主键自增
         public int Id { get; set; }
         /// <summary>

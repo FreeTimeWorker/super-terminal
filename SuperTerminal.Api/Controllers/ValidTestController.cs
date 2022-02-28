@@ -24,7 +24,9 @@ namespace SuperTerminal.Api.Controllers
         [HttpPost]
         public ResponseModel<BoolModel> PostData(List<ViewTestModel> testModels)
         {
-            var result = _DbContext.Insertable(_mapper.Map<List<TestModel>>(testModels)).ExecuteCommand();
+            var result = _DbContext.Storageable(_mapper.Map<List<TestModel>>(testModels)).ToStorage();
+            var add = result.AsInsertable.ExecuteCommand();
+            var update= result.AsUpdateable.ExecuteCommand();
             return new BoolModel() { Successed=true,Message="保存成功" };
         }
     }

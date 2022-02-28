@@ -198,7 +198,7 @@ namespace SuperTerminal.Filter
                     if (id.HasValue && id.Value > 0)
                     {
                         //修改判断唯一
-                        var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and {item.IdentityFeild}={id}").Count();
+                        var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and {item.IdentityFeild}!={id}").Count();
                         if (count > 0)
                         {
                             ResponseModel responseMode = new ResponseModel()
