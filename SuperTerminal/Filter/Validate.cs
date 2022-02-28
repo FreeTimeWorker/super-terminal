@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Newtonsoft.Json;
 using SuperTerminal.FeildCheck;
 using SuperTerminal.GlobalService;
 using System;
@@ -8,10 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using SqlSugar;
 
@@ -66,7 +62,7 @@ namespace SuperTerminal.Filter
                     foreach (PropertyInfo property in properties)
                     {
                         object currentItemvalue = property.GetValue(item);//当前项属性的值
-                        object[] validateFieldItems = property.GetCustomAttributes(typeof(FeildCheck.FeildCheckAttribute), true);
+                        object[] validateFieldItems = property.GetCustomAttributes(typeof(FeildCheckAttribute), true);
                         if (Vaildthis(item,currentItemvalue, property.PropertyType, validateFieldItems, context))
                         {
                             continue;
@@ -188,7 +184,8 @@ namespace SuperTerminal.Filter
         private bool ValidUnique(object currentItem, object currentItemvalue,Type currentItemType, CheckUnique item, ActionExecutingContext context)
         {
             //数据库中判断唯一
-            var dbContext = ServiceAgent.Provider.GetService<ISqlSugarClient>();
+            //var dbContext = context.HttpContext.RequestServices.GetService<ISqlSugarClient>();//数据库上下文对象
+            var dbContext = ServiceAgent.Provider.GetService<ISqlSugarClient>();//数据库上下文对象
             var identityFeild = Type.GetProperties().FirstOrDefault(o => o.Name == item.IdentityFeild);
             if (identityFeild != null)
             {
@@ -230,7 +227,15 @@ namespace SuperTerminal.Filter
                 return ValidUniqueInAdd(currentItemvalue, currentItemType, item, dbContext, context);
             }
         }
-        //添加模式下判断唯一
+        /// <summary>
+        /// 添加模式下判断唯一
+        /// </summary>
+        /// <param name="currentItemvalue"></param>
+        /// <param name="currentItemType"></param>
+        /// <param name="item"></param>
+        /// <param name="dbContext"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         private bool ValidUniqueInAdd(object currentItemvalue, Type currentItemType, CheckUnique item, ISqlSugarClient dbContext, ActionExecutingContext context)
         {
             var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}'").Count();

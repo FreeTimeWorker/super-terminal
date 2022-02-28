@@ -20,10 +20,6 @@ namespace SuperTerminal.FeildCheck
         /// </summary>
         public bool Or { get; set; } = true;
         /// <summary>
-        /// 提示信息
-        /// </summary>
-        public string ErrorMsg { get; set; }
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="errorMsg"></param>

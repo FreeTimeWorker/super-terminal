@@ -13,10 +13,6 @@ namespace SuperTerminal.FeildCheck
     public class CheckUnique: FeildCheckAttribute
     {
         /// <summary>
-        /// 错误消息
-        /// </summary>
-        public string ErrorMsg { get; set; }
-        /// <summary>
         /// 所在数据表的表名称
         /// </summary>
         public string TableName { get; set; }

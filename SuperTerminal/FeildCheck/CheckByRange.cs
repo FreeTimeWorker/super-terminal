@@ -9,10 +9,6 @@ namespace SuperTerminal.FeildCheck
     public class CheckByRange: FeildCheckAttribute
     {
         /// <summary>
-        /// 错误消息
-        /// </summary>
-        public string ErrorMsg { get; set; }
-        /// <summary>
         /// 包含
         /// </summary>
         public IComparable Min { get; set; }

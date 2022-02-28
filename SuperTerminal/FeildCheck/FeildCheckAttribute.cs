@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace SuperTerminal.FeildCheck
 {
     [AttributeUsage(AttributeTargets.Property,AllowMultiple =true)]
-    public class FeildCheckAttribute: Attribute
+    public abstract class FeildCheckAttribute: Attribute
     {
+        public string ErrorMsg { get; set; }
     }
 }

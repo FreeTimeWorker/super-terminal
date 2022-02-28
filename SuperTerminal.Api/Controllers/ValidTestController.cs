@@ -20,6 +20,11 @@ namespace SuperTerminal.Api.Controllers
             _DbContext = DbContext;
             _mapper = mapper;
         }
+        /// <summary>
+        /// 测试列表
+        /// </summary>
+        /// <param name="testModels"></param>
+        /// <returns></returns>
         [Validate(typeof(ViewTestModel))]
         [HttpPost]
         public ResponseModel<BoolModel> PostDataList(List<ViewTestModel> testModels)
@@ -29,7 +34,11 @@ namespace SuperTerminal.Api.Controllers
             var update= result.AsUpdateable.ExecuteCommand();
             return new BoolModel() { Successed=true,Message="保存成功" };
         }
-
+        /// <summary>
+        /// 测试model
+        /// </summary>
+        /// <param name="testModel"></param>
+        /// <returns></returns>
         [Validate(typeof(ViewTestModel))]
         [HttpPost]
         public ResponseModel<BoolModel> PostDataModel(ViewTestModel testModel)
