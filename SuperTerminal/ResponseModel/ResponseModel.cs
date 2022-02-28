@@ -10,7 +10,7 @@ namespace SuperTerminal
     {
         public ResponseModel()
         {
-            Status = 0;
+            Status = 200;
         }
         public int Status { get; set; }
         public string StatusMsg { get; set; }
