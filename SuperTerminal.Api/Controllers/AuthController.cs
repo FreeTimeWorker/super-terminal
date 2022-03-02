@@ -24,7 +24,6 @@ namespace SuperTerminal.Api.Controllers
         /// <param name="userLogin">passWord</param>
         /// <returns></returns>
         [HttpGet]
-
         public BoolModel GetToken(ViewUserLogin viewUserLogin)
         {
             var result = _userService.CheckLogin(viewUserLogin);

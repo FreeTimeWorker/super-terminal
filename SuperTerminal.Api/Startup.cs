@@ -35,7 +35,7 @@ namespace SuperTerminal.Api
             services.AddSingleton(sp => new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperConfiguration>()).CreateMapper());//AutoMap配置
             services.AddDbContext<MaintainContent>(options => options.UseMySql(Configuration.GetConnectionString("MySqlConnectionString"), MySqlServerVersion.LatestSupportedServerVersion));//这里需要Mysql版本号
             services.AddTransient<IJwt, Jwt>();
-            services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();//以一种简化的方式访问httpcontext
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();//以一种简化的方式访问httpcontext
             services.AddTransient<IHttpParameter, HttpParameter>();
             services.AddControllers()
             .AddJsonOptions(options =>

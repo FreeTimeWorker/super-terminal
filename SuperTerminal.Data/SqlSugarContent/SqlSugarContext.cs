@@ -3,6 +3,7 @@ using SuperTerminal.Data;
 using SuperTerminal.MiddleWare;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,9 +26,10 @@ namespace SuperTerminal.Data.SqlSugarContent
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
-        private void _setBaseData<T>(T entity,int type=0) where T : IModel
+        /// <param name="id">实体的ID如果大于0,就不修改创建时间</param>
+        private void _setBaseData<T>(T entity,int id=0) where T : IModel
         {
-            if (type < 1)
+            if (id < 1)
             {
                 if (entity.CreateBy == null)
                 {
@@ -201,14 +203,14 @@ namespace SuperTerminal.Data.SqlSugarContent
         {
             foreach (var item in UpdateObjs)
             {
-                _setBaseData(item);
+                _setBaseData(item,item.Id);
             }
             return _sqlSugarScope.Updateable<T>(UpdateObjs);
         }
 
         public IUpdateable<T> Updateable<T>(T UpdateObj) where T : class, IModel, new()
         {
-            _setBaseData(UpdateObj);
+            _setBaseData(UpdateObj,UpdateObj.Id);
             return _sqlSugarScope.Updateable<T>(UpdateObj);
         }
 
@@ -216,7 +218,7 @@ namespace SuperTerminal.Data.SqlSugarContent
         {
             foreach (var item in UpdateObjs)
             {
-                _setBaseData(item);
+                _setBaseData(item,item.Id);
             }
             return _sqlSugarScope.Updateable<T>(UpdateObjs);
         }
@@ -257,7 +259,6 @@ namespace SuperTerminal.Data.SqlSugarContent
             return _sqlSugarScope.Updateable<T>(deleteObj).UpdateColumns(item => item.IsDeleted).ReSetValue(item => item.IsDeleted = true).ExecuteCommand();
         }
         #endregion
-
         #region 查询
         public ISugarQueryable<T> SqlQueryable<T>(string sql) where T : class, IModel, new()
         {
@@ -462,6 +463,48 @@ namespace SuperTerminal.Data.SqlSugarContent
         public ISugarQueryable<T> Queryable<T>(string shortName)
         {
             return _sqlSugarScope.Queryable<T>(shortName);
+        }
+        #endregion
+
+        #region Storageable
+        public IStorageable<T> Storageable<T>(List<T> dataList) where T:class,IModel,new()
+        {
+            foreach (var item in dataList)
+            {
+                _setBaseData(item, item.Id);
+            }
+            return _sqlSugarScope.Storageable(dataList);
+        }
+
+        public IStorageable<T> Storageable<T>(T data) where T : class, IModel, new()
+        {
+            _setBaseData(data, data.Id);
+            return _sqlSugarScope.Storageable(data);
+        }
+
+        public StorageableDataTable Storageable(DataTable data)
+        {
+            data.Columns.Add("CreateOn",typeof(DateTime));
+            data.Columns.Add("UpdateOn", typeof(DateTime));
+            data.Columns.Add("CreateBy",typeof(int));
+            data.Columns.Add("UpdateBy", typeof(int));
+            bool hasId = data.Columns.Contains("Id");
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                if (hasId && data.Rows[i]["Id"] != null && data.Rows[i]["Id"].ToString() != "0")
+                {
+                    data.Rows[i]["UpdateOn"] = DateTime.Now;
+                    data.Rows[i]["UpdateBy"] = _httpParameter.UserId;
+                }
+                else
+                {
+                    data.Rows[i]["UpdateOn"] = DateTime.Now;
+                    data.Rows[i]["UpdateBy"] = _httpParameter.UserId;
+                    data.Rows[i]["CreateOn"] = DateTime.Now;
+                    data.Rows[i]["CreateBy"] = _httpParameter.UserId;
+                }
+            }
+            return _sqlSugarScope.Storageable(data);
         }
         #endregion
     }

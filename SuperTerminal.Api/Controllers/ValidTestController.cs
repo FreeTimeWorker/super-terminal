@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 using SuperTerminal.Data.Entitys;
+using SuperTerminal.Data.SqlSugarContent;
 using SuperTerminal.Filter;
 using SuperTerminal.Model;
 using System.Collections.Generic;
@@ -13,9 +14,9 @@ namespace SuperTerminal.Api.Controllers
     [ApiController]
     public class ValidTestController : ControllerBase
     {
-        private readonly ISqlSugarClient _DbContext;
+        private readonly IDbContext _DbContext;
         private readonly IMapper _mapper;
-        public ValidTestController(ISqlSugarClient DbContext, IMapper mapper)
+        public ValidTestController(IDbContext DbContext, IMapper mapper)
         {
             _DbContext = DbContext;
             _mapper = mapper;

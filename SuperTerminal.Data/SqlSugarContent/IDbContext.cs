@@ -7,11 +7,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace SuperTerminal.Data.SqlSugarContent
 {
     public interface IDbContext
     {
+        #region Storageable
+        IStorageable<T> Storageable<T>(List<T> dataList) where T : class,IModel, new();
+
+        IStorageable<T> Storageable<T>(T data) where T : class, IModel, new();
+
+        StorageableDataTable Storageable(DataTable data);
+        #endregion
         #region 添加
         public IInsertable<T> Insertable<T>(Dictionary<string, object> dict) where T : class, new();
         public IInsertable<T> Insertable<T>(dynamic insertDynamicObject) where T : class, new();
