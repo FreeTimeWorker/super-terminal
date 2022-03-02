@@ -195,7 +195,7 @@ namespace SuperTerminal.Filter
                     if (id.HasValue && id.Value > 0)
                     {
                         //修改判断唯一
-                        var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and {item.IdentityFeild}!={id}").Count();
+                        var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and {item.IdentityFeild}!={id} and IsDeleted=0").Count();
                         if (count > 0)
                         {
                             ResponseModel responseMode = new ResponseModel()
@@ -238,7 +238,7 @@ namespace SuperTerminal.Filter
         /// <returns></returns>
         private bool ValidUniqueInAdd(object currentItemvalue, Type currentItemType, CheckUnique item, ISqlSugarClient dbContext, ActionExecutingContext context)
         {
-            var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}'").Count();
+            var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and IsDeleted=0").Count();
             if (count > 0)
             {
                 ResponseModel responseMode = new ResponseModel()
