@@ -38,6 +38,22 @@ namespace SuperTerminal.Data.SqlSugarContent
                     Console.WriteLine(sql);//输出sql
                     Console.WriteLine(JsonSerializer.Serialize(pars.Select(item => new { item.ParameterName, item.Value }).ToList()));
                 };
+                //过滤已经假删除的数据
+                db.QueryFilter.Add(new SqlFilterItem()
+                {
+                    FilterValue = filterDb =>
+                    {
+                        return new SqlFilterResult() { Sql = " IsDeleted=0" };
+                    },
+                    IsJoinQuery = false
+                }).Add(new SqlFilterItem()//多表全局过滤器
+                {
+                    FilterValue = filterDb =>
+                    {
+                        return new SqlFilterResult() { Sql = " m.IsDeleted=0" };
+                    },
+                    IsJoinQuery = true
+                });
             }
             );
             services.AddSingleton<ISqlSugarClient>(sqlSugar);

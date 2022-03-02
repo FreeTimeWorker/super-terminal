@@ -2,6 +2,7 @@ using AutoMapper;
 using CSRedis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,7 @@ using SuperTerminal.Data.Maintain;
 using SuperTerminal.Data.SqlSugarContent;
 using SuperTerminal.GlobalService;
 using SuperTerminal.JWT;
+using SuperTerminal.MiddleWare;
 using SuperTerminal.Utity;
 using System;
 
@@ -33,6 +35,8 @@ namespace SuperTerminal.Api
             services.AddSingleton(sp => new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperConfiguration>()).CreateMapper());//AutoMap配置
             services.AddDbContext<MaintainContent>(options => options.UseMySql(Configuration.GetConnectionString("MySqlConnectionString"), MySqlServerVersion.LatestSupportedServerVersion));//这里需要Mysql版本号
             services.AddTransient<IJwt, Jwt>();
+            services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();//以一种简化的方式访问httpcontext
+            services.AddTransient<IHttpParameter, HttpParameter>();
             services.AddControllers()
             .AddJsonOptions(options =>
             {
@@ -79,7 +83,7 @@ namespace SuperTerminal.Api
             }
             app.UseRouting();
             app.UseJwt();//加入jwt
-
+            app.UseHttpParamter();//jwt之后才有userid,先后顺序要弄对
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
