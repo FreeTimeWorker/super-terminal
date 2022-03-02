@@ -130,20 +130,12 @@ namespace SuperTerminal.Data.SqlSugarContent
         }
         #endregion
         #region 更新
-        public IUpdateable<T> Updateable<T>() where T : class, new()
+        public IUpdateable<T> Updateable<T>() where T : class,IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>();
+            return _sqlSugarScope.Updateable<T>().IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
         public IUpdateable<T> Updateable<T>(Dictionary<string, object> dict) where T:class,IModel,new()
         {
-            if (!dict.ContainsKey("CreateOn"))
-            {
-                dict.Add("CreateOn", DateTime.Now);
-            }
-            if (!dict.ContainsKey("CreateBy"))
-            {
-                dict.Add("CreateBy", _httpParameter.UserId);
-            }
             if (!dict.ContainsKey("UpdateOn"))
             {
                 dict.Add("UpdateOn", DateTime.Now);
@@ -152,11 +144,7 @@ namespace SuperTerminal.Data.SqlSugarContent
             {
                 dict.Add("UpdateBy", _httpParameter.UserId);
             }
-            if (!dict.ContainsKey("IsDeleted"))
-            {
-                dict.Add("IsDeleted", 0);
-            }
-            return _sqlSugarScope.Updateable<T>(dict);
+            return _sqlSugarScope.Updateable<T>(dict).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
         public IUpdateable<T> Updateable<T>(dynamic updateDynamicObject) where T : class, IModel, new()
@@ -166,14 +154,6 @@ namespace SuperTerminal.Data.SqlSugarContent
             {
                 dict[p.Name] = p.GetValue(updateDynamicObject, null);
             }
-            if (!dict.ContainsKey("CreateOn"))
-            {
-                dict.Add("CreateOn", DateTime.Now);
-            }
-            if (!dict.ContainsKey("CreateBy"))
-            {
-                dict.Add("CreateBy", _httpParameter.UserId);
-            }
             if (!dict.ContainsKey("UpdateOn"))
             {
                 dict.Add("UpdateOn", DateTime.Now);
@@ -186,17 +166,17 @@ namespace SuperTerminal.Data.SqlSugarContent
             {
                 dict.Add("IsDeleted", 0);
             }
-            return _sqlSugarScope.Updateable<T>(updateDynamicObject);
+            return _sqlSugarScope.Updateable<T>(updateDynamicObject).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
         public IUpdateable<T> Updateable<T>(Expression<Func<T, bool>> columns) where T : class, IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>(columns);
+            return _sqlSugarScope.Updateable<T>(columns).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
         public IUpdateable<T> Updateable<T>(Expression<Func<T, T>> columns) where T : class, IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>(columns);
+            return _sqlSugarScope.Updateable<T>(columns).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
         public IUpdateable<T> Updateable<T>(List<T> UpdateObjs) where T : class, IModel, new()
@@ -205,13 +185,13 @@ namespace SuperTerminal.Data.SqlSugarContent
             {
                 _setBaseData(item,item.Id);
             }
-            return _sqlSugarScope.Updateable<T>(UpdateObjs);
+            return _sqlSugarScope.Updateable<T>(UpdateObjs).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
         public IUpdateable<T> Updateable<T>(T UpdateObj) where T : class, IModel, new()
         {
             _setBaseData(UpdateObj,UpdateObj.Id);
-            return _sqlSugarScope.Updateable<T>(UpdateObj);
+            return _sqlSugarScope.Updateable<T>(UpdateObj).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
         public IUpdateable<T> Updateable<T>(T[] UpdateObjs) where T : class, IModel, new()
@@ -220,7 +200,7 @@ namespace SuperTerminal.Data.SqlSugarContent
             {
                 _setBaseData(item,item.Id);
             }
-            return _sqlSugarScope.Updateable<T>(UpdateObjs);
+            return _sqlSugarScope.Updateable<T>(UpdateObjs).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
         #endregion
         #region 删除
@@ -469,9 +449,20 @@ namespace SuperTerminal.Data.SqlSugarContent
         #region Storageable
         public IStorageable<T> Storageable<T>(List<T> dataList) where T:class,IModel,new()
         {
+            var ids = dataList.Where(o => o.Id > 0).Select(o => o.Id).ToList();
+            var entitys = _sqlSugarScope.Queryable<T>().Where(item => ids.Contains(item.Id)).ToList();
             foreach (var item in dataList)
             {
-                _setBaseData(item, item.Id);
+                if (item.Id > 0)
+                {
+                    _setBaseData(item, item.Id);
+                    item.CreateOn = entitys.FirstOrDefault(o => o.Id == item.Id).CreateOn;
+                    item.CreateBy = entitys.FirstOrDefault(o => o.Id == item.Id).CreateBy;
+                }
+                else
+                {
+                    _setBaseData(item);
+                }
             }
             return _sqlSugarScope.Storageable(dataList);
         }
@@ -479,30 +470,35 @@ namespace SuperTerminal.Data.SqlSugarContent
         public IStorageable<T> Storageable<T>(T data) where T : class, IModel, new()
         {
             _setBaseData(data, data.Id);
+            if (data.Id > 0)
+            {
+                var entity = _sqlSugarScope.Queryable<T>().First(item => item.Id == data.Id);
+                data.CreateOn = entity.CreateOn;
+                data.CreateBy = entity.CreateBy;
+            }
+            else
+            {
+                _setBaseData(data);
+            }
             return _sqlSugarScope.Storageable(data);
         }
-
+        /// <summary>
+        /// 比较少用,不写了
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public StorageableDataTable Storageable(DataTable data)
         {
             data.Columns.Add("CreateOn",typeof(DateTime));
             data.Columns.Add("UpdateOn", typeof(DateTime));
             data.Columns.Add("CreateBy",typeof(int));
             data.Columns.Add("UpdateBy", typeof(int));
-            bool hasId = data.Columns.Contains("Id");
             for (int i = 0; i < data.Rows.Count; i++)
             {
-                if (hasId && data.Rows[i]["Id"] != null && data.Rows[i]["Id"].ToString() != "0")
-                {
-                    data.Rows[i]["UpdateOn"] = DateTime.Now;
-                    data.Rows[i]["UpdateBy"] = _httpParameter.UserId;
-                }
-                else
-                {
-                    data.Rows[i]["UpdateOn"] = DateTime.Now;
-                    data.Rows[i]["UpdateBy"] = _httpParameter.UserId;
-                    data.Rows[i]["CreateOn"] = DateTime.Now;
-                    data.Rows[i]["CreateBy"] = _httpParameter.UserId;
-                }
+                data.Rows[i]["UpdateOn"] = DateTime.Now;
+                data.Rows[i]["UpdateBy"] = _httpParameter.UserId;
+                data.Rows[i]["CreateOn"] = DateTime.Now;
+                data.Rows[i]["CreateBy"] = _httpParameter.UserId;
             }
             return _sqlSugarScope.Storageable(data);
         }

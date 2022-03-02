@@ -18,7 +18,7 @@ namespace SuperTerminal.MiddleWare
             {
                 if (_httpContextAccessor.HttpContext.Items.Keys.Contains(HttpItem.UserId))
                 {
-                    return (int)_httpContextAccessor.HttpContext.Items[HttpItem.UserId];
+                    return int.Parse(_httpContextAccessor.HttpContext.Items[HttpItem.UserId].ToString());
                 }
                 else
                 {

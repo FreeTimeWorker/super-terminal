@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SuperTerminal.Const;
+using SuperTerminal.Filter;
 using SuperTerminal.JWT;
 using SuperTerminal.Model;
 using SuperTerminal.Service.Interfaces;
@@ -23,7 +24,7 @@ namespace SuperTerminal.Api.Controllers
         /// </summary>
         /// <param name="userLogin">passWord</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public BoolModel GetToken(ViewUserLogin viewUserLogin)
         {
             var result = _userService.CheckLogin(viewUserLogin);
@@ -37,6 +38,17 @@ namespace SuperTerminal.Api.Controllers
                 return result;
             }
             return result;
+        }
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="viewUserLogin"></param>
+        /// <returns></returns>
+        [Validate(typeof(ViewUserLogin))]
+        [HttpPost]
+        public BoolModel Regist(ViewUserLogin viewUserLogin)
+        {
+            return _userService.Regist(viewUserLogin);
         }
     }
 }

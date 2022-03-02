@@ -16,6 +16,9 @@ using SuperTerminal.JWT;
 using SuperTerminal.MiddleWare;
 using SuperTerminal.Utity;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace SuperTerminal.Api
 {
@@ -37,6 +40,16 @@ namespace SuperTerminal.Api
             services.AddTransient<IJwt, Jwt>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();//以一种简化的方式访问httpcontext
             services.AddTransient<IHttpParameter, HttpParameter>();
+
+            //注入service
+            Dictionary<Type, Type[]> types = GetTypes("SuperTerminal.Service");
+            foreach (KeyValuePair<Type, Type[]> item in types)
+            {
+                foreach (Type typeArray in item.Value)
+                {
+                    services.AddTransient(typeArray, item.Key);
+                }
+            }
             services.AddControllers()
             .AddJsonOptions(options =>
             {
@@ -88,6 +101,32 @@ namespace SuperTerminal.Api
             {
                 endpoints.MapControllers();
             });
+        }
+        /// <summary>
+        /// 通过程序集获取所有的类型以及相应的接口用于注入
+        /// </summary>
+        /// <param name="assemblyName"></param>
+        /// <returns></returns>
+        private static Dictionary<Type, Type[]> GetTypes(string assemblyName)
+        {
+            if (!string.IsNullOrEmpty(assemblyName))
+            {
+                Assembly assembly = Assembly.Load(assemblyName);
+                List<Type> ts = assembly.GetTypes().ToList();
+                Dictionary<Type, Type[]> result = new Dictionary<Type, Type[]>();
+                foreach (Type item in ts.Where(s => !s.IsInterface))
+                {
+                    Type[] interfaceType = item.GetInterfaces();
+                    if (item.IsGenericType || interfaceType.Length < 1)
+                    {
+                        continue;
+                    }
+
+                    result.Add(item, interfaceType);
+                }
+                return result;
+            }
+            return new Dictionary<Type, Type[]>();
         }
     }
 }

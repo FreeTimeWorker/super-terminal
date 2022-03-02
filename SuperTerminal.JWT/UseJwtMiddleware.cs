@@ -58,7 +58,7 @@ namespace SuperTerminal.JWT
                     }
                     authstr = authValue.ToString()[_jwtConfig.Prefix.Length..];
                 }
-                if (this._jwt.ValidateToken(authstr, out Dictionary<string, object> Clims))
+                if (_jwt.ValidateToken(authstr, out Dictionary<string, object> Clims))
                 {
                     List<string> climsKeys = new() { "nbf", "exp", "iat", "iss", "aud" };
                     IDictionary<string, object> RenewalDic = new Dictionary<string, object>();
@@ -84,11 +84,11 @@ namespace SuperTerminal.JWT
                         if (o.TotalMinutes > _jwtConfig.RenewalTime)
                         {
                             //执行续期
-                            var newToken = this._jwt.GetToken(RenewalDic);
+                            var newToken = _jwt.GetToken(RenewalDic);
                             context.Response.Headers.Add(_jwtConfig.ReTokenHeadField, newToken);
                         }
                     }
-                    return this._next(context);
+                    return _next(context);
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace SuperTerminal.JWT
                     }
                     else
                     {
-                        return this._next(context);
+                        return _next(context);
                     }
                 }
             }
@@ -114,7 +114,49 @@ namespace SuperTerminal.JWT
                 }
                 else
                 {
-                    return this._next(context);
+                    //不验证Token的情况下,如果有token字段,读取信息
+                    context.Request.Headers.TryGetValue(_jwtConfig.HeadField, out Microsoft.Extensions.Primitives.StringValues authValue1);
+                    var authstr = authValue1.ToString();
+                    if (_jwtConfig.Prefix.Length > 0)
+                    {
+                        if (!authstr.Contains(_jwtConfig.Prefix))
+                        {
+                            return _next(context);//这里直接跳过
+                        }
+                        authstr = authValue1.ToString()[_jwtConfig.Prefix.Length..];
+                    }
+                    if (_jwt.ValidateToken(authstr, out Dictionary<string, object> Clims))
+                    {
+                        List<string> climsKeys = new() { "nbf", "exp", "iat", "iss", "aud" };
+                        IDictionary<string, object> RenewalDic = new Dictionary<string, object>();
+                        foreach (var item in Clims)
+                        {
+                            if (climsKeys.FirstOrDefault(o => o == item.Key) == null)
+                            {
+                                if (context.Items.Keys.Contains(item.Key))//如果存在key则清理key;
+                                {
+                                    context.Items.Remove(item.Key);
+                                }
+                                context.Items.Add(item.Key, item.Value);
+                                RenewalDic.Add(item.Key, item.Value);
+                            }
+                        }
+                        //验证通过的情况下判断续期时间
+                        if (Clims.Keys.FirstOrDefault(o => o == "exp") != null)
+                        {
+                            var start = new DateTime(1970, 1, 1, 0, 0, 0);
+                            var timespanStart = long.Parse(Clims["nbf"].ToString());//token有效时间的开始时间点
+                            var tartDate = start.AddSeconds(timespanStart).ToLocalTime();
+                            var o = DateTime.Now - tartDate;//当前时间减去开始时间大于续期时间限制
+                            if (o.TotalMinutes > _jwtConfig.RenewalTime)
+                            {
+                                //执行续期
+                                var newToken = _jwt.GetToken(RenewalDic);
+                                context.Response.Headers.Add(_jwtConfig.ReTokenHeadField, newToken);
+                            }
+                        }
+                    }
+                    return _next(context);
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SuperTerminal.Data;
 using SuperTerminal.Data.Entitys;
 using SuperTerminal.Model;
 using System;
@@ -13,6 +14,7 @@ namespace SuperTerminal.Api
         public AutoMapperConfiguration()
         {
             CreateMap<ViewTestModel, TestModel>();
+            CreateMap<ViewUserLogin, SysUser>();
         }
     }
 }

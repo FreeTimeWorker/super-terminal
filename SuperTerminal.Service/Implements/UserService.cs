@@ -14,7 +14,7 @@ namespace SuperTerminal.Service.Implements
         {
         }
         /// <summary>
-        /// 
+        /// 验证登录
         /// </summary>
         /// <returns></returns>
         public BoolModel CheckLogin(ViewUserLogin viewUserLogin)
@@ -30,6 +30,16 @@ namespace SuperTerminal.Service.Implements
             }
             return new BoolModel(true, "成功",entity.Id);
         }
-
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="viewUserLogin"></param>
+        /// <returns></returns>
+        public BoolModel Regist(ViewUserLogin viewUserLogin)
+        {
+            viewUserLogin.Password = viewUserLogin.Password.MD5();
+            var result = _dbContext.Insertable(_mapper.Map<SysUser>(viewUserLogin)).ExecuteCommand();
+            return new BoolModel(result > 0, result > 0 ? "注册成功" : "注册失败");
+        }
     }
 }

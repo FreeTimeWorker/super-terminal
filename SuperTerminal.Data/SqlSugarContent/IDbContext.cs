@@ -28,7 +28,7 @@ namespace SuperTerminal.Data.SqlSugarContent
         public IInsertable<T> Insertable<T>(T[] insertObjs) where T : class, IModel, new();
         #endregion
         #region 编辑
-        public IUpdateable<T> Updateable<T>() where T : class, new();
+        public IUpdateable<T> Updateable<T>() where T : class,IModel, new();
         public IUpdateable<T> Updateable<T>(Dictionary<string, object> columnDictionary) where T : class,IModel, new();
         public IUpdateable<T> Updateable<T>(dynamic updateDynamicObject) where T : class,IModel, new();
         public IUpdateable<T> Updateable<T>(Expression<Func<T, bool>> columns) where T : class, IModel, new();
