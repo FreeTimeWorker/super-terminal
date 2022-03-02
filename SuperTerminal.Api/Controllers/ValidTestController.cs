@@ -5,6 +5,7 @@ using SuperTerminal.Data.Entitys;
 using SuperTerminal.Data.SqlSugarContent;
 using SuperTerminal.Filter;
 using SuperTerminal.Model;
+using SuperTerminal.Service.Interfaces;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -16,10 +17,12 @@ namespace SuperTerminal.Api.Controllers
     {
         private readonly IDbContext _DbContext;
         private readonly IMapper _mapper;
-        public ValidTestController(IDbContext DbContext, IMapper mapper)
+        private readonly ITestService _testService;
+        public ValidTestController(IDbContext DbContext, IMapper mapper, ITestService testService)
         {
             _DbContext = DbContext;
             _mapper = mapper;
+            _testService = testService;
         }
         /// <summary>
         /// 测试列表
@@ -48,6 +51,15 @@ namespace SuperTerminal.Api.Controllers
             var add = result.AsInsertable.ExecuteCommand();
             var update = result.AsUpdateable.ExecuteCommand();
             return new BoolModel() { Successed = true, Message = "保存成功" };
+        }
+        /// <summary>
+        /// 获取分页数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ResponseModel<Page<ViewTestModel>> Page()
+        {
+            return _testService.Page();
         }
     }
 }
