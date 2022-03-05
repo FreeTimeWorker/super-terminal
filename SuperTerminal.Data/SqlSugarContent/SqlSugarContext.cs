@@ -206,17 +206,13 @@ namespace SuperTerminal.Data.SqlSugarContent
         #region 删除
         public int Delete<T>(dynamic primaryKeyValue) where T : class, IModel, new()
         {
-            primaryKeyValue.IsDeleted = true;
-            return _sqlSugarScope.Updateable<T>(primaryKeyValue).ExecuteCommand();
+            int id = (int)primaryKeyValue;//主键已经确定就是int类型的。
+            return _sqlSugarScope.Updateable<T>().Where(o => o.Id.Equals(id)).UpdateColumns(item => item.IsDeleted).ReSetValue(o=>o.IsDeleted=true).ExecuteCommand();
         }
 
         public int Delete<T>(dynamic[] primaryKeyValues) where T : class, IModel, new()
         {
-            foreach (var item in primaryKeyValues)
-            {
-                item.IsDeleted = true;
-            }
-            return _sqlSugarScope.Updateable<T>(primaryKeyValues).ExecuteCommand();
+            return _sqlSugarScope.Updateable<T>().Where(o=>primaryKeyValues.Contains(o.Id)).UpdateColumns(item => item.IsDeleted).ReSetValue(item => item.IsDeleted = true).ExecuteCommand();
         }
 
         public int Delete<T>(Expression<Func<T, bool>> expression) where T : class, IModel, new()
@@ -226,7 +222,7 @@ namespace SuperTerminal.Data.SqlSugarContent
 
         public int Delete<T>(List<dynamic> pkValue) where T : class, IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>(pkValue).UpdateColumns(item=>item.IsDeleted).ReSetValue(item=>item.IsDeleted=true).ExecuteCommand();
+            return _sqlSugarScope.Updateable<T>().Where(o=>pkValue.Contains(o.Id)).UpdateColumns(item=>item.IsDeleted).ReSetValue(item=>item.IsDeleted=true).ExecuteCommand();
         }
 
         public int Delete<T>(List<T> deleteObjs) where T : class, IModel, new()
