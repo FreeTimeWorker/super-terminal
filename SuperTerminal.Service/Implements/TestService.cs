@@ -27,7 +27,7 @@ namespace SuperTerminal.Service.Implements
             var result = new Page<ViewTestModel>
             {
                 Data = _sqlSugarClient.Queryable<TestModel>().Select<ViewTestModel>().ToPageList(_httpParameter.PageIndex, _httpParameter.PageSize, ref totalNumber, ref totalPage),
-                Message = "获取成功",
+                Message = $"当前用户Id:{_httpParameter.UserId.ToString()}",
                 TotalRecords = totalNumber,
                 CurrentPageIndex = _httpParameter.PageIndex,
                 TotalPage = totalPage
