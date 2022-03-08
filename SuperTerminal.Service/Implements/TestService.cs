@@ -1,21 +1,20 @@
-﻿using AutoMapper;
+﻿using SqlSugar;
 using SuperTerminal.Data.Entitys;
-using SuperTerminal.Data.SqlSugarContent;
 using SuperTerminal.MiddleWare;
 using SuperTerminal.Model;
 using SuperTerminal.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SuperTerminal.Service.Implements
 {
-    public class TestService : BaseService, ITestService
+    public class TestService : ITestService
     {
-        public TestService(IDbContext dbContext, IMapper mapper, IHttpParameter httpParameter) : base(dbContext, mapper, httpParameter)
+        private readonly ISqlSugarClient _sqlSugarClient;
+        private readonly IHttpParameter _httpParameter;
+        public TestService(ISqlSugarClient sqlSugarClient, IHttpParameter httpParameter)
         {
+            this._sqlSugarClient = sqlSugarClient;
+            this._httpParameter = httpParameter;
         }
         /// <summary>
         /// 分页数据
@@ -23,7 +22,17 @@ namespace SuperTerminal.Service.Implements
         /// <returns></returns>
         public Page<ViewTestModel> Page()
         {
-            return _dbContext.Queryable<TestModel>().Select<ViewTestModel>().ToPage(_httpParameter);
+            int totalNumber = 0;
+            int totalPage = 0;
+            var result = new Page<ViewTestModel>
+            {
+                Data = _sqlSugarClient.Queryable<TestModel>().Select<ViewTestModel>().ToPageList(_httpParameter.PageIndex, _httpParameter.PageSize, ref totalNumber, ref totalPage),
+                Message = "获取成功",
+                TotalRecords = totalNumber,
+                CurrentPageIndex = _httpParameter.PageIndex,
+                TotalPage = totalPage
+            };
+            return result;
         }
     }
 }
