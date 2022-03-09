@@ -32,7 +32,6 @@ namespace SuperTerminal.Api
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.AddSqlsugarSetup(Configuration);//单例注入数据库上下文
             services.AddScoped<IDbContext, SqlSugarContext>();//注入上下文,常用的数据库操作
             services.AddSingleton(sp => new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperConfiguration>()).CreateMapper());//AutoMap配置

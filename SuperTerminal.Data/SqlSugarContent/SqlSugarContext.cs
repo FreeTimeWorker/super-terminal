@@ -162,10 +162,6 @@ namespace SuperTerminal.Data.SqlSugarContent
             {
                 dict.Add("UpdateBy", _httpParameter.UserId);
             }
-            if (!dict.ContainsKey("IsDeleted"))
-            {
-                dict.Add("IsDeleted", 0);
-            }
             return _sqlSugarScope.Updateable<T>(updateDynamicObject).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
