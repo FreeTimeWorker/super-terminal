@@ -1,5 +1,6 @@
 ﻿using SqlSugar;
 using SuperTerminal.Data.Entitys;
+using SuperTerminal.Data.SqlSugarContent;
 using SuperTerminal.MiddleWare;
 using SuperTerminal.Model;
 using SuperTerminal.Service.Interfaces;
@@ -32,6 +33,7 @@ namespace SuperTerminal.Service.Implements
                 CurrentPageIndex = _httpParameter.PageIndex,
                 TotalPage = totalPage
             };
+            _sqlSugarClient.Queryable<TestModel>().Select<ViewTestModel>().ToPage(_httpParameter);
             return result;
         }
     }
