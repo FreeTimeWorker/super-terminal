@@ -25,7 +25,7 @@ namespace SuperTerminal.Api.Controllers
         /// <param name="userLogin">passWord</param>
         /// <returns></returns>
         [HttpPost]
-        public BoolModel GetToken(ViewUserLogin viewUserLogin)
+        public ResponseModel<BoolModel> GetToken(ViewUserLogin viewUserLogin)
         {
             var result = _userService.CheckLogin(viewUserLogin);
             if (result.Successed) 
@@ -46,7 +46,7 @@ namespace SuperTerminal.Api.Controllers
         /// <returns></returns>
         [Validate(typeof(ViewUserLogin))]
         [HttpPost]
-        public BoolModel Regist(ViewUserLogin viewUserLogin)
+        public ResponseModel<BoolModel> Regist(ViewUserLogin viewUserLogin)
         {
             return _userService.Regist(viewUserLogin);
         }
