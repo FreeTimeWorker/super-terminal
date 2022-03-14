@@ -61,5 +61,15 @@ namespace SuperTerminal.Api.Controllers
         {
             return _testService.Page();
         }
+
+        /// <summary>
+        /// 获取分页数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ResponseModel<Page<ViewTestModel>> GetDataByCondition(string condition)
+        {
+            return _testService.GetDataByCondition(condition);
+        }
     }
 }
