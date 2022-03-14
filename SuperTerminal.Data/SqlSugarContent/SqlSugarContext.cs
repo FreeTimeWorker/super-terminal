@@ -200,35 +200,39 @@ namespace SuperTerminal.Data.SqlSugarContent
         }
         #endregion
         #region 删除
-        public int Delete<T>(dynamic primaryKeyValue) where T : class, IModel, new()
+        public int Delete<T>(int id) where T : class, IModel, new()
         {
-            int id = (int)primaryKeyValue;//主键已经确定就是int类型的。
-            return _sqlSugarScope.Updateable<T>().Where(o => o.Id.Equals(id)).UpdateColumns(item => item.IsDeleted).ReSetValue(o=>o.IsDeleted=true).ExecuteCommand();
+            return _sqlSugarScope.Updateable<T>().SetColumns(item => new T() { IsDeleted = true }).Where(o => o.Id == id).ExecuteCommand();
         }
 
-        public int Delete<T>(dynamic[] primaryKeyValues) where T : class, IModel, new()
+        public int Delete<T>(int[] ids) where T : class, IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>().Where(o=>primaryKeyValues.Contains(o.Id)).UpdateColumns(item => item.IsDeleted).ReSetValue(item => item.IsDeleted = true).ExecuteCommand();
+            return _sqlSugarScope.Updateable<T>().SetColumns(item => new T() { IsDeleted = true }).Where(o => ids.Contains(o.Id)).ExecuteCommand();
         }
 
         public int Delete<T>(Expression<Func<T, bool>> expression) where T : class, IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>(expression).UpdateColumns(item=>item.IsDeleted).ReSetValue(item=>item.IsDeleted=true).ExecuteCommand();
+            return _sqlSugarScope.Updateable<T>().SetColumns(item => new T() { IsDeleted = true }).Where(expression).ExecuteCommand();
         }
 
-        public int Delete<T>(List<dynamic> pkValue) where T : class, IModel, new()
+        public int Delete<T>(List<int> ids) where T : class, IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>().Where(o=>pkValue.Contains(o.Id)).UpdateColumns(item=>item.IsDeleted).ReSetValue(item=>item.IsDeleted=true).ExecuteCommand();
+            return _sqlSugarScope.Updateable<T>().SetColumns(item => new T() { IsDeleted = true }).Where(o => ids.Contains(o.Id)).ExecuteCommand();
         }
 
         public int Delete<T>(List<T> deleteObjs) where T : class, IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>(deleteObjs).UpdateColumns(item=>item.IsDeleted).ReSetValue(item=>item.IsDeleted=true).ExecuteCommand();
+            foreach (var item in deleteObjs)
+            {
+                item.IsDeleted = true;
+            }
+            return _sqlSugarScope.Updateable(deleteObjs).ExecuteCommand();
         }
 
         public int Delete<T>(T deleteObj) where T : class, IModel, new()
         {
-            return _sqlSugarScope.Updateable<T>(deleteObj).UpdateColumns(item => item.IsDeleted).ReSetValue(item => item.IsDeleted = true).ExecuteCommand();
+            deleteObj.IsDeleted = true;
+            return _sqlSugarScope.Updateable(deleteObj).ExecuteCommand();
         }
         #endregion
         #region 查询

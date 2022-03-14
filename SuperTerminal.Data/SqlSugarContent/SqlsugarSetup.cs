@@ -4,6 +4,9 @@ using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -46,14 +49,16 @@ namespace SuperTerminal.Data.SqlSugarContent
                         return new SqlFilterResult() { Sql = " IsDeleted=0" };
                     },
                     IsJoinQuery = false
-                }).Add(new SqlFilterItem()//多表全局过滤器
-                {
-                    FilterValue = filterDb =>
-                    {
-                        return new SqlFilterResult() { Sql = " m.IsDeleted=0" };
-                    },
-                    IsJoinQuery = true
                 });
+                Type[] types = Assembly.Load("SuperTerminal.Data").GetTypes().Where(o => (typeof(IModel)).IsAssignableFrom(o)).ToArray();
+                foreach (var entityType in types)
+                {
+                    var lambda = DynamicExpressionParser.ParseLambda
+                        (new[] { Expression.Parameter(entityType, "it") },
+                         typeof(bool), $"it.IsDeleted ==false",
+                          false);
+                    db.QueryFilter.Add(new TableFilterItem<object>(entityType, lambda)); //将Lambda传入过滤器
+                }
             }
             );
             services.AddSingleton<ISqlSugarClient>(sqlSugar);

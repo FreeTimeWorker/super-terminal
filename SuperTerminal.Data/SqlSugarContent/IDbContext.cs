@@ -38,13 +38,13 @@ namespace SuperTerminal.Data.SqlSugarContent
         public IUpdateable<T> Updateable<T>(T[] UpdateObjs) where T : class, IModel, new();
         #endregion
         #region 删除
-        int Delete<T>(dynamic primaryKeyValue) where T : class, IModel, new();
+        int Delete<T>(int id) where T : class, IModel, new();
 
-        int Delete<T>(dynamic[] primaryKeyValues) where T : class, IModel, new();
+        int Delete<T>(int[] ids) where T : class, IModel, new();
 
         int Delete<T>(Expression<Func<T, bool>> expression) where T : class, IModel, new();
 
-        int Delete<T>(List<dynamic> pkValue) where T : class, IModel, new();
+        int Delete<T>(List<int> ids) where T : class, IModel, new();
 
         int Delete<T>(List<T> deleteObjs) where T : class, IModel, new();
 
