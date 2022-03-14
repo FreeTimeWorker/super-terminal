@@ -11,6 +11,7 @@
 		</PackageReference>
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.4" />
 		<PackageReference Include="SqlSugarCore" Version="5.0.5.4" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.18" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\SuperTerminal.MiddleWare\SuperTerminal.MiddleWare.csproj" />
