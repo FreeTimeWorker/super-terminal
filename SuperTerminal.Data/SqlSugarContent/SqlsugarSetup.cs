@@ -42,14 +42,6 @@ namespace SuperTerminal.Data.SqlSugarContent
                     Console.WriteLine(JsonSerializer.Serialize(pars.Select(item => new { item.ParameterName, item.Value }).ToList()));
                 };
                 //过滤已经假删除的数据
-                db.QueryFilter.Add(new SqlFilterItem()
-                {
-                    FilterValue = filterDb =>
-                    {
-                        return new SqlFilterResult() { Sql = " IsDeleted=0" };
-                    },
-                    IsJoinQuery = false
-                });
                 Type[] types = Assembly.Load("SuperTerminal.Data").GetTypes().Where(o => (typeof(IModel)).IsAssignableFrom(o)).ToArray();
                 foreach (var entityType in types)
                 {
