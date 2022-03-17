@@ -22,6 +22,8 @@ namespace SuperTerminal.Tool
              * 服务端证书获取路径 ->windows证书服务中心 ->项目文件夹下特定文件
              * 
              * **/
+
+            //不同的平台通过工具生成不同的 密钥
         }
     }
 }
