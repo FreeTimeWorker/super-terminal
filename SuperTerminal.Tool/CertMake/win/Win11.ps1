@@ -1,7 +1,7 @@
 ﻿echo 生成证书
 #禁止导出私钥
 New-SelfSignedCertificate -Type Custom -Subject "CN=SuperTerminal" -FriendlyName "超级终端管理端证书" -KeyAlgorithm RSA -KeyLength 2048 -CertStoreLocation "Cert:\LocalMachine\My" -KeyExportPolicy NonExportable
-#可导出私钥 --windows服务器不支持的情况下,通过本地生成后，手动导入
+#可导出私钥 --windows服务器不支持的情况下,通过本地生成后，手动导入 mmc->文件添加删除管理单元->证书->计算机账户->导入  个人节点 SuperTerminal
 #New-SelfSignedCertificate -Type Custom -Subject "CN=SuperTerminal" -FriendlyName "超级终端管理端证书" -KeyAlgorithm RSA -KeyLength 2048 -CertStoreLocation "Cert:\LocalMachine\My"
 echo 证书生成成功
 $certs= Get-ChildItem -Path cert:\localMachine\my
