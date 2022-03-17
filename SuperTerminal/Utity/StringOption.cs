@@ -72,5 +72,35 @@ namespace SuperTerminal.Utity
                 return Encoding.UTF8.GetString(enc);
             }
         }
+        /// <summary>
+        /// RSA加密
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="rsa"></param>
+        /// <returns></returns>
+        public static string RSAEncrypt(this string source,RSA rsa)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+            var enc = rsa.Encrypt(Encoding.UTF8.GetBytes(source), RSAEncryptionPadding.Pkcs1);
+            return Convert.ToBase64String(enc);
+        }
+        /// <summary>
+        ///  RSA解密
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="rsa"></param>
+        /// <returns></returns>
+        public static string RSADecrypt(this string source, RSA rsa)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+            var dec = rsa.Decrypt(Convert.FromBase64String(source), RSAEncryptionPadding.Pkcs1);
+            return Encoding.UTF8.GetString(dec);
+        }
     }
 }
