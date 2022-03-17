@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperTerminal", "SuperTerminal\SuperTerminal.csproj", "{38F0E5F7-CAEE-4D53-8700-B0CB304ED80C}"
 EndProject
@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperTerminal.Service", "Su
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperTerminal.Tool", "SuperTerminal.Tool\SuperTerminal.Tool.csproj", "{2A3EF373-A3FA-47CE-B2FB-202D24D9256A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperTerminal.MiddleWare", "SuperTerminal.MiddleWare\SuperTerminal.MiddleWare.csproj", "{124E8B8A-28D4-4996-A953-064EBD081E49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperTerminal.MiddleWare", "SuperTerminal.MiddleWare\SuperTerminal.MiddleWare.csproj", "{124E8B8A-28D4-4996-A953-064EBD081E49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperTerminal.MessageHandler", "SuperTerminal.MessageHandler\SuperTerminal.MessageHandler.csproj", "{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,18 @@ Global
 		{124E8B8A-28D4-4996-A953-064EBD081E49}.Release|x64.Build.0 = Release|Any CPU
 		{124E8B8A-28D4-4996-A953-064EBD081E49}.Release|x86.ActiveCfg = Release|Any CPU
 		{124E8B8A-28D4-4996-A953-064EBD081E49}.Release|x86.Build.0 = Release|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Debug|x64.Build.0 = Debug|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Debug|x86.Build.0 = Debug|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|x64.ActiveCfg = Release|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|x64.Build.0 = Release|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|x86.ActiveCfg = Release|Any CPU
+		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

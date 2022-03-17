@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SuperTerminal.Data\SuperTerminal.Data.csproj" />
     <ProjectReference Include="..\SuperTerminal.JWT\SuperTerminal.JWT.csproj" />
+    <ProjectReference Include="..\SuperTerminal.MessageHandler\SuperTerminal.MessageHandler.csproj" />
     <ProjectReference Include="..\SuperTerminal.MiddleWare\SuperTerminal.MiddleWare.csproj" />
     <ProjectReference Include="..\SuperTerminal.Model\SuperTerminal.Model.csproj" />
     <ProjectReference Include="..\SuperTerminal.Service\SuperTerminal.Service.csproj" />

@@ -13,6 +13,7 @@ using SuperTerminal.Data.Maintain;
 using SuperTerminal.Data.SqlSugarContent;
 using SuperTerminal.GlobalService;
 using SuperTerminal.JWT;
+using SuperTerminal.MessageHandler.Instant;
 using SuperTerminal.MiddleWare;
 using SuperTerminal.Utity;
 using System;
@@ -98,6 +99,7 @@ namespace SuperTerminal.Api
             app.UseHttpParamter();//jwt之后才有userid,先后顺序要弄对
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<InstantMessage>("/instantMessage"); //每个请求都会走jwt，所以这里的即时通讯是需要通过权限认证的。
                 endpoints.MapControllers();
             });
         }
