@@ -14,13 +14,13 @@ namespace SuperTerminal.Utity
     {
         /// <summary>
         ///  通过文件路径加载RSA
-        ///  RSA通过Base64编码，写入文件
+        ///  通过RSA.Create(),拿到的随机密钥 Base64编码，公钥私钥分别写入文件
         ///  公钥仅用于加密，私钥可用于解密
         /// </summary>
         /// <param name="filePath">文件路径</param>
         /// <param name="RSAKeyType">密钥类型，公钥私钥</param>
         /// <returns></returns>
-        public static RSA GetRSAFromFile(string filePath, RSAKeyType RSAKeyType)
+        public static RSA GetRSAFromCustomFile(string filePath, RSAKeyType RSAKeyType)
         {
             try
             {
@@ -54,6 +54,8 @@ namespace SuperTerminal.Utity
         /// <summary>
         /// 在windows的证书中心读取 
         /// 公钥仅用于加密，私钥可用于解密
+        /// powershell --
+        /// New-SelfSignedCertificate -Type Custom -Subject "CN=SuperTerminal" -FriendlyName "超级终端管理端证书" -KeyAlgorithm RSA -KeyLength 2048 -CertStoreLocation "Cert:\LocalMachine\My"
         /// </summary>
         /// <param name="RSAKeyType"></param>
         /// <param name="storeLocation"></param>
@@ -90,6 +92,36 @@ namespace SuperTerminal.Utity
             finally
             {
                 store.Close();
+            }
+        }
+        /// <summary>
+        /// 根据 openssl生成的密钥对创建RSA实例
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static RSA GetRSAFromPem(string filePath)
+        {
+            /*
+             * 生成私钥：openssl genrsa -out privatekey.key 1024
+             * 对应公钥：openssl rsa -in privatekey.key -pubout -out pubkey.key
+             * **/
+            try
+            {
+                RSA result = RSA.Create();
+                using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                {
+                    using (StreamReader sr = new StreamReader(fs))
+                    {
+                        string dt = sr.ReadToEnd();
+                        result.ImportFromPem(dt);
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
             }
         }
     }
