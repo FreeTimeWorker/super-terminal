@@ -16,8 +16,8 @@ namespace SuperTerminal.Service.Implements
         private readonly IHttpParameter _httpParameter;
         public TestService(ISqlSugarClient sqlSugarClient, IHttpParameter httpParameter)
         {
-            this._sqlSugarClient = sqlSugarClient;
-            this._httpParameter = httpParameter;
+            _sqlSugarClient = sqlSugarClient;
+            _httpParameter = httpParameter;
         }
 
         public Page<ViewTestModel> GetDataByCondition(string conditionStr)

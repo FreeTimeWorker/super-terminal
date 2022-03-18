@@ -1,11 +1,9 @@
-﻿using SuperTerminal.GlobalService;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SuperTerminal.GlobalService;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 
 namespace SuperTerminal.Utity
 {
@@ -22,11 +20,9 @@ namespace SuperTerminal.Utity
             {
                 return null;
             }
-            using (HashAlgorithm hashAlgorithm = HashAlgorithm.Create(HashAlgorithmName.MD5.Name))
-            {
-                var result = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(source));
-                return Convert.ToBase64String(result);
-            }
+            using HashAlgorithm hashAlgorithm = HashAlgorithm.Create(HashAlgorithmName.MD5.Name);
+            byte[] result = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(source));
+            return Convert.ToBase64String(result);
         }
         /// <summary>
         /// Aes加密
@@ -39,16 +35,14 @@ namespace SuperTerminal.Utity
             {
                 return null;
             }
-            using (Aes aes = Aes.Create())
-            {
-                var config = ServiceAgent.Provider.GetService<IConfiguration>();
-                aes.IV = Convert.FromBase64String(config["Aes:IV"]);
-                aes.Key = Convert.FromBase64String(config["Aes:Key"]);
-                var Encryptor = aes.CreateEncryptor();
-                //原字符utf8编码获取byte加密后转换成base64字符串
-                var enc = Encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(source), 0, source.Length);
-                return Convert.ToBase64String(enc);
-            }
+            using Aes aes = Aes.Create();
+            IConfiguration config = ServiceAgent.Provider.GetService<IConfiguration>();
+            aes.IV = Convert.FromBase64String(config["Aes:IV"]);
+            aes.Key = Convert.FromBase64String(config["Aes:Key"]);
+            ICryptoTransform Encryptor = aes.CreateEncryptor();
+            //原字符utf8编码获取byte加密后转换成base64字符串
+            byte[] enc = Encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(source), 0, source.Length);
+            return Convert.ToBase64String(enc);
         }
         /// <summary>
         /// Aes解密
@@ -61,16 +55,14 @@ namespace SuperTerminal.Utity
             {
                 return null;
             }
-            using (Aes aes = Aes.Create())
-            {
-                var config = ServiceAgent.Provider.GetService<IConfiguration>();
-                aes.IV = Convert.FromBase64String(config["Aes:IV"]);
-                aes.Key = Convert.FromBase64String(config["Aes:Key"]);
-                var Encryptor = aes.CreateDecryptor();
-                //base64字符解码获取原byte[],解密后,通过UTF8编码还原
-                var enc = Encryptor.TransformFinalBlock(Convert.FromBase64String(source), 0, source.Length);
-                return Encoding.UTF8.GetString(enc);
-            }
+            using Aes aes = Aes.Create();
+            IConfiguration config = ServiceAgent.Provider.GetService<IConfiguration>();
+            aes.IV = Convert.FromBase64String(config["Aes:IV"]);
+            aes.Key = Convert.FromBase64String(config["Aes:Key"]);
+            ICryptoTransform Encryptor = aes.CreateDecryptor();
+            //base64字符解码获取原byte[],解密后,通过UTF8编码还原
+            byte[] enc = Encryptor.TransformFinalBlock(Convert.FromBase64String(source), 0, source.Length);
+            return Encoding.UTF8.GetString(enc);
         }
         /// <summary>
         /// RSA加密
@@ -78,15 +70,15 @@ namespace SuperTerminal.Utity
         /// <param name="source"></param>
         /// <param name="rsa"></param>
         /// <returns></returns>
-        public static string RSAEncrypt(this string source,RSA rsa)
+        public static string RSAEncrypt(this string source, RSA rsa)
         {
             try
             {
                 if (string.IsNullOrEmpty(source))
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
-                var enc = rsa.Encrypt(Encoding.UTF8.GetBytes(source), RSAEncryptionPadding.Pkcs1);
+                byte[] enc = rsa.Encrypt(Encoding.UTF8.GetBytes(source), RSAEncryptionPadding.Pkcs1);
                 return Convert.ToBase64String(enc);
             }
             catch (Exception ex)
@@ -107,9 +99,9 @@ namespace SuperTerminal.Utity
             {
                 if (string.IsNullOrEmpty(source))
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
-                var dec = rsa.Decrypt(Convert.FromBase64String(source), RSAEncryptionPadding.Pkcs1);
+                byte[] dec = rsa.Decrypt(Convert.FromBase64String(source), RSAEncryptionPadding.Pkcs1);
                 return Encoding.UTF8.GetString(dec);
             }
             catch (Exception ex)

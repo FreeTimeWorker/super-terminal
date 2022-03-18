@@ -3,10 +3,6 @@ using SuperTerminal.Data;
 using SuperTerminal.Data.Entitys;
 using SuperTerminal.Model;
 using SuperTerminal.Model.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SuperTerminal.Api
 {

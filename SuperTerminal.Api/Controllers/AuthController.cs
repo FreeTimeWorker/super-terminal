@@ -28,8 +28,8 @@ namespace SuperTerminal.Api.Controllers
         [HttpPost]
         public ResponseModel<BoolModel> GetToken(ViewUserLogin viewUserLogin)
         {
-            var result = _userService.CheckLogin(viewUserLogin);
-            if (result.Successed) 
+            BoolModel result = _userService.CheckLogin(viewUserLogin);
+            if (result.Successed)
             {
                 string token = _jwt.GetToken(new Dictionary<string, object>()
                 {

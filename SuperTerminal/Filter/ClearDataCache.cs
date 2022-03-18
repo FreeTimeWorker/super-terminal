@@ -1,20 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
-using SuperTerminal.GlobalService;
-using System.IO;
 using Microsoft.Extensions.DependencyInjection;
+using SuperTerminal.GlobalService;
 namespace SuperTerminal.Filter
 {
-    public class ClearDataCache: ActionFilterAttribute
+    public class ClearDataCache : ActionFilterAttribute
     {
-        private string _key { get; set; } = "";
+        private string Key { get; set; } = "";
         public ClearDataCache()
         {
-            
+
         }
         public ClearDataCache(string Key)
         {
-            this._key = Key;
+            this.Key = Key;
         }
         /// <summary>
         /// 执行结束执行
@@ -22,10 +21,10 @@ namespace SuperTerminal.Filter
         /// <param name="context"></param>
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            var config = ServiceAgent.Provider.GetService<IConfiguration>();
+            IConfiguration config = ServiceAgent.Provider.GetService<IConfiguration>();
             //这里保存的Key
-            var keys = RedisHelper.Instance.Keys($"{config["Redis:Prefix"]}DataCache_{_key}*");
-            var willDelKeys = new string[keys.Length];
+            string[] keys = RedisHelper.Instance.Keys($"{config["Redis:Prefix"]}DataCache_{Key}*");
+            string[] willDelKeys = new string[keys.Length];
             for (int i = 0; i < willDelKeys.Length; i++)
             {
                 willDelKeys[i] = keys[i][config["Redis:Prefix"].Length..];

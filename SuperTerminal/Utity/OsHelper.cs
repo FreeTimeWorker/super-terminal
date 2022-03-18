@@ -1,13 +1,9 @@
 ﻿using SuperTerminal.Const;
 using SuperTerminal.Enum;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SuperTerminal.Utity
 {
@@ -16,7 +12,7 @@ namespace SuperTerminal.Utity
         private readonly IHttpClientFactory _httpClientFactory;
         public OsHelper(IHttpClientFactory httpClientFactory)
         {
-            this._httpClientFactory = httpClientFactory;
+            _httpClientFactory = httpClientFactory;
 
         }
         /// <summary>
@@ -50,25 +46,12 @@ namespace SuperTerminal.Utity
         /// 系统名称
         /// </summary>
         /// <returns></returns>
-        public string OSDescription
-        {
-            get
-            {
-                return RuntimeInformation.OSDescription;
-            }
-
-        }
+        public string OSDescription => RuntimeInformation.OSDescription;
         /// <summary>
         /// 系统架构
         /// </summary>
         /// <returns></returns>
-        public Architecture OSArchitecture
-        {
-            get
-            {
-                return RuntimeInformation.OSArchitecture;
-            }
-        }
+        public Architecture OSArchitecture => RuntimeInformation.OSArchitecture;
         /// <summary>
         /// 获取本机IP地址
         /// </summary>
@@ -79,14 +62,14 @@ namespace SuperTerminal.Utity
             {
                 try
                 {
-                    var addressList = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList;
-                    var ips = addressList.Where(address => address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    System.Net.IPAddress[] addressList = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList;
+                    string[] ips = addressList.Where(address => address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                             .Select(address => address.ToString()).ToArray();
                     if (ips.Length == 1)
                     {
                         return ips.First();
                     }
-                    return ips.Where(address => address!="127.0.0.1").FirstOrDefault() ?? ips.FirstOrDefault();
+                    return ips.Where(address => address != "127.0.0.1").FirstOrDefault() ?? ips.FirstOrDefault();
                 }
                 catch
                 {
@@ -98,17 +81,11 @@ namespace SuperTerminal.Utity
         /// 获取公网IP
         /// </summary>
         /// <returns></returns>
-        public string PubIP
-        {
-            get
-            {
-                return GetIp();
-            }
-        }
+        public string PubIP => GetIp();
         private string GetIp()
         {
-            var html = GetHtml("https://www.ip.cn");
-            var result = GetIPFromHtml(html);
+            string html = GetHtml("https://www.ip.cn");
+            string result = GetIPFromHtml(html);
             if (!string.IsNullOrEmpty(result))
             {
                 return result;
@@ -133,11 +110,9 @@ namespace SuperTerminal.Utity
             string pageHtml = string.Empty;
             try
             {
-                using (var client = _httpClientFactory.CreateClient())
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36");
-                    pageHtml = client.GetStringAsync(url).Result;
-                }
+                using HttpClient client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36");
+                pageHtml = client.GetStringAsync(url).Result;
             }
             catch
             {

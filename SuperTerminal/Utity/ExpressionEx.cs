@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 
 namespace SuperTerminal.Utity
@@ -30,8 +28,8 @@ namespace SuperTerminal.Utity
                 string specchar = "&|()";
                 string tempconditon = "";
                 int i = 0;
-                Stack<string> stack = new Stack<string>();//条件符号，和(
-                Stack<Expression> expressions = new Stack<Expression>();
+                Stack<string> stack = new();//条件符号，和(
+                Stack<Expression> expressions = new();
                 while (i < condition.Length)
                 {
                     if (!specchar.Contains(condition[i]))
@@ -76,8 +74,8 @@ namespace SuperTerminal.Utity
                                     if (expressions.Count > 1)
                                     {
                                         string smby = top;//不是括号肯定是符号，不是&&就是||
-                                        var exp1 = expressions.Pop();
-                                        var exp2 = expressions.Pop();
+                                        Expression exp1 = expressions.Pop();
+                                        Expression exp2 = expressions.Pop();
                                         switch (smby)
                                         {
                                             case "&&":
@@ -106,8 +104,8 @@ namespace SuperTerminal.Utity
                 }
                 while (expressions.Count > 1)
                 {
-                    var exp1 = expressions.Pop();
-                    var exp2 = expressions.Pop();
+                    Expression exp1 = expressions.Pop();
+                    Expression exp2 = expressions.Pop();
                     string smby = stack.Pop();
                     switch (smby)
                     {
@@ -128,8 +126,8 @@ namespace SuperTerminal.Utity
         }
         public static Expression BuildExpression<TDelegate>(Expression<TDelegate> source, string condition)
         {
-            Regex r = new Regex("([a-zA-Z][a-zA-Z0-9_]*\\.*[a-zA-Z0-9_]*\\s*)([><=]=*|like)(.+)");
-            var res = r.Match(condition);
+            Regex r = new("([a-zA-Z][a-zA-Z0-9_]*\\.*[a-zA-Z0-9_]*\\s*)([><=]=*|like)(.+)");
+            Match res = r.Match(condition);
             if (res.Groups.Count < 4)
             {
                 throw new Exception("条件错误");
@@ -144,12 +142,12 @@ namespace SuperTerminal.Utity
             {
                 throw new Exception("表达式错误");
             }
-            var parmExp = source.Parameters.ToList().FirstOrDefault(o => o.Type.Name == leftgroup[0].Trim());
+            ParameterExpression parmExp = source.Parameters.ToList().FirstOrDefault(o => o.Type.Name == leftgroup[0].Trim());
             if (parmExp == null)
             {
                 throw new Exception("表达式错误,请确保表达式格式为 TableName.FeildName >= 0");
             }
-            var propertyInfo = parmExp.Type.GetProperty(leftgroup[1].Trim());
+            PropertyInfo propertyInfo = parmExp.Type.GetProperty(leftgroup[1].Trim());
             MemberExpression leftexp = Expression.Property(parmExp, propertyInfo);
             if (symbol.Trim().ToLower() == "like")
             {
@@ -204,21 +202,15 @@ namespace SuperTerminal.Utity
                     rightValue = right;
                 }
                 ConstantExpression rightexp = Expression.Constant(rightValue, propertyInfo.PropertyType);
-                switch (symbol)
+                return symbol switch
                 {
-                    case ">":
-                        return Expression.GreaterThan(leftexp, rightexp);
-                    case "<":
-                        return Expression.LessThan(leftexp, rightexp);
-                    case ">=":
-                        return Expression.GreaterThanOrEqual(leftexp, rightexp);
-                    case "==":
-                        return Expression.Equal(leftexp, rightexp);
-                    case "<=":
-                        return Expression.LessThanOrEqual(leftexp, rightexp);
-                    default:
-                        throw new Exception($"表达式错误,未定义符号{symbol}");
-                }
+                    ">" => Expression.GreaterThan(leftexp, rightexp),
+                    "<" => Expression.LessThan(leftexp, rightexp),
+                    ">=" => Expression.GreaterThanOrEqual(leftexp, rightexp),
+                    "==" => Expression.Equal(leftexp, rightexp),
+                    "<=" => Expression.LessThanOrEqual(leftexp, rightexp),
+                    _ => throw new Exception($"表达式错误,未定义符号{symbol}"),
+                };
             }
         }
     }

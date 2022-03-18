@@ -1,13 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperTerminal.Data.Entitys
 {
-    public class TestModel:BaseModel
+    public class TestModel : BaseModel
     {
         [Comment("范围")]
         public int Range { get; set; }

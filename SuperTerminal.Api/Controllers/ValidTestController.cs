@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SqlSugar;
 using SuperTerminal.Data.Entitys;
 using SuperTerminal.Data.SqlSugarContent;
 using SuperTerminal.Filter;
 using SuperTerminal.Model;
 using SuperTerminal.Service.Interfaces;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace SuperTerminal.Api.Controllers
 {
@@ -33,10 +31,10 @@ namespace SuperTerminal.Api.Controllers
         [HttpPost]
         public ResponseModel<BoolModel> PostDataList(List<ViewTestModel> testModels)
         {
-            var result = _DbContext.Storageable(_mapper.Map<List<TestModel>>(testModels)).ToStorage();
-            var add = result.AsInsertable.ExecuteCommand();
-            var update= result.AsUpdateable.ExecuteCommand();
-            return new BoolModel() { Successed=true,Message="保存成功" };
+            SqlSugar.StorageableResult<TestModel> result = _DbContext.Storageable(_mapper.Map<List<TestModel>>(testModels)).ToStorage();
+            _ = result.AsInsertable.ExecuteCommand();
+            _ = result.AsUpdateable.ExecuteCommand();
+            return new BoolModel() { Successed = true, Message = "保存成功" };
         }
         /// <summary>
         /// 测试model
@@ -47,9 +45,9 @@ namespace SuperTerminal.Api.Controllers
         [HttpPost]
         public ResponseModel<BoolModel> PostDataModel(ViewTestModel testModel)
         {
-            var result = _DbContext.Storageable(_mapper.Map<TestModel>(testModel)).ToStorage();
-            var add = result.AsInsertable.ExecuteCommand();
-            var update = result.AsUpdateable.ExecuteCommand();
+            SqlSugar.StorageableResult<TestModel> result = _DbContext.Storageable(_mapper.Map<TestModel>(testModel)).ToStorage();
+            _ = result.AsInsertable.ExecuteCommand();
+            _ = result.AsUpdateable.ExecuteCommand();
             return new BoolModel() { Successed = true, Message = "保存成功" };
         }
         /// <summary>

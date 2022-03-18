@@ -1,5 +1,5 @@
-﻿using SuperTerminal.Const;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using SuperTerminal.Const;
 using System.Collections.Concurrent;
 
 namespace SuperTerminal.MiddleWare
@@ -16,7 +16,7 @@ namespace SuperTerminal.MiddleWare
         {
             get
             {
-                if (_httpContextAccessor.HttpContext.Items.Keys.Contains(HttpItem.UserId))
+                if (_httpContextAccessor.HttpContext.Items.ContainsKey(HttpItem.UserId))
                 {
                     return int.Parse(_httpContextAccessor.HttpContext.Items[HttpItem.UserId].ToString());
                 }
@@ -34,19 +34,19 @@ namespace SuperTerminal.MiddleWare
                 int page = 1;
                 if (_httpContextAccessor.HttpContext.Request.QueryString.HasValue)
                 {
-                    var paramstrs = _httpContextAccessor.HttpContext.Request.QueryString.Value.TrimStart('?').Split('&');
+                    string[] paramstrs = _httpContextAccessor.HttpContext.Request.QueryString.Value.TrimStart('?').Split('&');
                     if (paramstrs.Length > 0)
                     {
-                        ConcurrentDictionary<string, string> prms = new ConcurrentDictionary<string, string>();
-                        foreach (var item in paramstrs)
+                        ConcurrentDictionary<string, string> prms = new();
+                        foreach (string item in paramstrs)
                         {
                             if (!string.IsNullOrEmpty(item) && item.IndexOf('=') > 0)
                             {
-                                var param = item.Split('=');
+                                string[] param = item.Split('=');
                                 prms.AddOrUpdate(param[0], param[1], (oldkey, oldvalue) => param[1]);
                             }
                         }
-                        if (prms.Keys.Contains("current"))
+                        if (prms.ContainsKey("current"))
                         {
                             int.TryParse(prms["current"], out page);
                             return page;
@@ -82,19 +82,19 @@ namespace SuperTerminal.MiddleWare
                 int limit = 20;
                 if (_httpContextAccessor.HttpContext.Request.QueryString.HasValue)
                 {
-                    var paramstrs = _httpContextAccessor.HttpContext.Request.QueryString.Value.TrimStart('?').Split('&');
+                    string[] paramstrs = _httpContextAccessor.HttpContext.Request.QueryString.Value.TrimStart('?').Split('&');
                     if (paramstrs.Length > 0)
                     {
-                        ConcurrentDictionary<string, string> prms = new ConcurrentDictionary<string, string>();
-                        foreach (var item in paramstrs)
+                        ConcurrentDictionary<string, string> prms = new();
+                        foreach (string item in paramstrs)
                         {
                             if (!string.IsNullOrEmpty(item) && item.IndexOf('=') > 0)
                             {
-                                var param = item.Split('=');
+                                string[] param = item.Split('=');
                                 prms.AddOrUpdate(param[0], param[1], (oldkey, oldvalue) => param[1]);
                             }
                         }
-                        if (prms.Keys.Contains("pageSize"))
+                        if (prms.ContainsKey("pageSize"))
                         {
                             int.TryParse(prms["pageSize"], out limit);
                             return limit;

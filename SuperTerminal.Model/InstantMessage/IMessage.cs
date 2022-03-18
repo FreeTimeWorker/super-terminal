@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SuperTerminal.Model.InstantMessage
+﻿namespace SuperTerminal.Model.InstantMessage
 {
     public interface IMessage
     {

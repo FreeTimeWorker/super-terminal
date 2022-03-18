@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# CA1822: 将成员标记为 static
+dotnet_diagnostic.CA1822.severity = none
+
+# CA1806: 不要忽略方法结果
+dotnet_diagnostic.CA1806.severity = none
+
+# IDE0044: 添加只读修饰符
+dotnet_diagnostic.IDE0044.severity = none

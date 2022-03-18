@@ -1,10 +1,5 @@
 ﻿using SqlSugar;
 using SuperTerminal.MiddleWare;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperTerminal.Data.SqlSugarContent
 {
@@ -14,7 +9,7 @@ namespace SuperTerminal.Data.SqlSugarContent
         {
             int totalNumber = 0;
             int totalPage = 0;
-            var result = new Page<TSource>
+            Page<TSource> result = new()
             {
                 Data = source.ToPageList(httpParameter.PageIndex, httpParameter.PageSize, ref totalNumber, ref totalPage),
                 Message = "",

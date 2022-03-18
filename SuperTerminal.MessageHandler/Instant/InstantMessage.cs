@@ -3,23 +3,21 @@ using SuperTerminal.Const;
 using SuperTerminal.Model.InstantMessage;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SuperTerminal.MessageHandler.Instant
 {
     public class InstantMessage : Hub<IInstantMessage>
     {
-        public static ConcurrentDictionary<int, string> Mapping = new ConcurrentDictionary<int, string>();
+        private static ConcurrentDictionary<int, string> Mapping = new();
         public override Task OnConnectedAsync()
         {
             lock (Mapping)
             {
-                if (Context.GetHttpContext().Items.Keys.Contains(HttpItem.UserId))
+                if (Context.GetHttpContext().Items.ContainsKey(HttpItem.UserId))
                 {
-                    var userid=int.Parse(Context.GetHttpContext().Items[HttpItem.UserId].ToString());
+                    int userid = int.Parse(Context.GetHttpContext().Items[HttpItem.UserId].ToString());
                     if (!Mapping.TryAdd(userid, Context.ConnectionId))
                     {
                         Mapping.TryRemove(userid, out string value);
@@ -43,7 +41,7 @@ namespace SuperTerminal.MessageHandler.Instant
         {
             lock (Mapping)
             {
-                var item = Mapping.FirstOrDefault(o => o.Value == Context.ConnectionId);
+                System.Collections.Generic.KeyValuePair<int, string> item = Mapping.FirstOrDefault(o => o.Value == Context.ConnectionId);
                 Mapping.TryRemove(item.Key, out string v);
             }
             return base.OnDisconnectedAsync(exception);
@@ -89,7 +87,7 @@ namespace SuperTerminal.MessageHandler.Instant
                 if (Mapping.TryGetValue(message.Receiver, out string connectionId))
                 {
                     await Clients.Client(connectionId).ReceiveExecTerminalCmd(message);
-                } 
+                }
             }
 
         }

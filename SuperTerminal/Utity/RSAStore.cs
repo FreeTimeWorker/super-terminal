@@ -1,12 +1,8 @@
 ﻿using SuperTerminal.Enum;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperTerminal.Utity
 {
@@ -24,28 +20,24 @@ namespace SuperTerminal.Utity
         {
             try
             {
-                using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                using FileStream fs = new(filePath, FileMode.Open);
+                using StreamReader sr = new(fs);
+                string base64Str = sr.ReadToEnd();
+                RSA result = RSA.Create();
+                switch (RSAKeyType)
                 {
-                    using (StreamReader sr = new StreamReader(fs))
-                    {
-                        var base64Str = sr.ReadToEnd();
-                        var result = RSA.Create();
-                        switch (RSAKeyType)
-                        {
-                            case RSAKeyType.PubKey:
-                                result.ImportRSAPublicKey(Convert.FromBase64String(base64Str), out int bytesread1);
-                                break;
-                            case RSAKeyType.PriKey:
-                                result.ImportRSAPrivateKey(Convert.FromBase64String(base64Str), out int bytesread2);
-                                break;
-                            default:
-                                break;
-                        }
-                        return result;
-                    }
+                    case RSAKeyType.PubKey:
+                        result.ImportRSAPublicKey(Convert.FromBase64String(base64Str), out int bytesread1);
+                        break;
+                    case RSAKeyType.PriKey:
+                        result.ImportRSAPrivateKey(Convert.FromBase64String(base64Str), out int bytesread2);
+                        break;
+                    default:
+                        break;
                 }
+                return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return null;
@@ -61,9 +53,9 @@ namespace SuperTerminal.Utity
         /// <param name="storeLocation"></param>
         /// <param name="subjectName"></param>
         /// <returns></returns>
-        public static RSA GetRSAFromX509(RSAKeyType RSAKeyType,string subjectName, StoreLocation storeLocation = StoreLocation.CurrentUser)
+        public static RSA GetRSAFromX509(RSAKeyType RSAKeyType, string subjectName, StoreLocation storeLocation = StoreLocation.CurrentUser)
         {
-            X509Store store = new X509Store(storeLocation);
+            X509Store store = new(storeLocation);
             try
             {
                 store.Open(OpenFlags.ReadOnly);
@@ -74,17 +66,14 @@ namespace SuperTerminal.Utity
                 {
                     return null;
                 }
-                switch (RSAKeyType)
+                return RSAKeyType switch
                 {
-                    case RSAKeyType.PubKey:
-                        return signingCert[0].GetRSAPublicKey();
-                    case RSAKeyType.PriKey:
-                        return signingCert[0].GetRSAPrivateKey();
-                    default:
-                        return null;
-                }
+                    RSAKeyType.PubKey => signingCert[0].GetRSAPublicKey(),
+                    RSAKeyType.PriKey => signingCert[0].GetRSAPrivateKey(),
+                    _ => null,
+                };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return null;
@@ -108,13 +97,11 @@ namespace SuperTerminal.Utity
             try
             {
                 RSA result = RSA.Create();
-                using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                using (FileStream fs = new(filePath, FileMode.Open))
                 {
-                    using (StreamReader sr = new StreamReader(fs))
-                    {
-                        string dt = sr.ReadToEnd();
-                        result.ImportFromPem(dt);
-                    }
+                    using StreamReader sr = new(fs);
+                    string dt = sr.ReadToEnd();
+                    result.ImportFromPem(dt);
                 }
                 return result;
             }

@@ -23,7 +23,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperTerminal.Tool", "Super
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperTerminal.MiddleWare", "SuperTerminal.MiddleWare\SuperTerminal.MiddleWare.csproj", "{124E8B8A-28D4-4996-A953-064EBD081E49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperTerminal.MessageHandler", "SuperTerminal.MessageHandler\SuperTerminal.MessageHandler.csproj", "{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperTerminal.MessageHandler", "SuperTerminal.MessageHandler\SuperTerminal.MessageHandler.csproj", "{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{421619DC-F9F4-4902-9446-9ED427061C14}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

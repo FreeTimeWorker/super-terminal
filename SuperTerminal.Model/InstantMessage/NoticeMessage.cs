@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SuperTerminal.Model.InstantMessage
+﻿namespace SuperTerminal.Model.InstantMessage
 {
     public class NoticeMessage : IMessage
     {
@@ -30,7 +26,7 @@ namespace SuperTerminal.Model.InstantMessage
 
         public override string ToString()
         {
-            return this.Content;
+            return Content;
         }
     }
     public class NoticeMessageMark

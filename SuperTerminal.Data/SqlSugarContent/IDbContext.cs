@@ -1,20 +1,16 @@
-﻿using SuperTerminal.Data;
-using SqlSugar;
+﻿using SqlSugar;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
+using System.Dynamic;
+using System.Linq.Expressions;
 
 namespace SuperTerminal.Data.SqlSugarContent
 {
     public interface IDbContext
     {
         #region Storageable
-        IStorageable<T> Storageable<T>(List<T> dataList) where T : class,IModel, new();
+        IStorageable<T> Storageable<T>(List<T> dataList) where T : class, IModel, new();
 
         IStorageable<T> Storageable<T>(T data) where T : class, IModel, new();
 
@@ -28,9 +24,9 @@ namespace SuperTerminal.Data.SqlSugarContent
         public IInsertable<T> Insertable<T>(T[] insertObjs) where T : class, IModel, new();
         #endregion
         #region 编辑
-        public IUpdateable<T> Updateable<T>() where T : class,IModel, new();
-        public IUpdateable<T> Updateable<T>(Dictionary<string, object> columnDictionary) where T : class,IModel, new();
-        public IUpdateable<T> Updateable<T>(dynamic updateDynamicObject) where T : class,IModel, new();
+        public IUpdateable<T> Updateable<T>() where T : class, IModel, new();
+        public IUpdateable<T> Updateable<T>(Dictionary<string, object> columnDictionary) where T : class, IModel, new();
+        public IUpdateable<T> Updateable<T>(dynamic updateDynamicObject) where T : class, IModel, new();
         public IUpdateable<T> Updateable<T>(Expression<Func<T, bool>> columns) where T : class, IModel, new();
         public IUpdateable<T> Updateable<T>(Expression<Func<T, T>> columns) where T : class, IModel, new();
         public IUpdateable<T> Updateable<T>(List<T> UpdateObjs) where T : class, IModel, new();
@@ -51,7 +47,7 @@ namespace SuperTerminal.Data.SqlSugarContent
         int Delete<T>(T deleteObj) where T : class, IModel, new();
         #endregion
         #region 查询
-        public ISugarQueryable<T> SqlQueryable<T>(string sql) where T : class,IModel, new();
+        public ISugarQueryable<T> SqlQueryable<T>(string sql) where T : class, IModel, new();
 
         public ISugarQueryable<ExpandoObject> Queryable(string tableName, string shortName);
 

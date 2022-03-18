@@ -15,9 +15,9 @@ namespace SuperTerminal.Service.Implements
     public class UserService : BaseService, IUserService
     {
         private readonly OsHelper _osHelper;
-        public UserService(IDbContext dbContext, IMapper mapper, IHttpParameter httpParameter,OsHelper osHelper) : base(dbContext, mapper, httpParameter)
+        public UserService(IDbContext dbContext, IMapper mapper, IHttpParameter httpParameter, OsHelper osHelper) : base(dbContext, mapper, httpParameter)
         {
-            _osHelper= osHelper; 
+            _osHelper = osHelper;
         }
         public Page<SysUser> GetPage()
         {
@@ -32,7 +32,7 @@ namespace SuperTerminal.Service.Implements
             //如果是管理员登录 解密数据
             if (viewUserLogin.IsManager)
             {
-                var rsa = getRsa();
+                RSA rsa = GetRsa();
                 if (rsa == null)
                 {
                     return new BoolModel(false, "服务端需要安装证书");
@@ -48,16 +48,16 @@ namespace SuperTerminal.Service.Implements
                     ");
                 }
             }
-            var entity = _dbContext.Queryable<SysUser>().Where(o => o.UserName == viewUserLogin.UserName).First();
+            SysUser entity = _dbContext.Queryable<SysUser>().Where(o => o.UserName == viewUserLogin.UserName).First();
             if (entity == null)
             {
-                return new BoolModel(false,"用户名不存在");
+                return new BoolModel(false, "用户名不存在");
             }
             if (!viewUserLogin.Password.MD5().Equals(entity.PassWord))
             {
                 return new BoolModel(false, "密码错误");
             }
-            return new BoolModel(true, "成功",new{Id= entity.Id ,UserType=entity.UserType});
+            return new BoolModel(true, "成功", new { entity.Id, entity.UserType });
         }
         /// <summary>
         /// 注册管理员
@@ -72,7 +72,7 @@ namespace SuperTerminal.Service.Implements
              * 2,解密传递过来的用户名和密码
              * 3,注册
              * **/
-            var rsa = getRsa();
+            RSA rsa = GetRsa();
             if (rsa == null)
             {
                 return new BoolModel(false, "服务端需要安装证书");
@@ -92,15 +92,15 @@ namespace SuperTerminal.Service.Implements
             {
                 return new BoolModel(false, "用户名不能使用admin,Administrator,root");
             }
-            var entity = _mapper.Map<SysUser>(viewUserLogin);
+            SysUser entity = _mapper.Map<SysUser>(viewUserLogin);
             entity.UserType = 999;//管理员的类型只能是999
             entity.PassWord = entity.PassWord.MD5();//密码单向加密
-            var result = _dbContext.Insertable(entity).ExecuteCommand();
+            int result = _dbContext.Insertable(entity).ExecuteCommand();
             return new BoolModel(result > 0, result > 0 ? "注册成功" : "注册失败");
         }
-        private RSA getRsa()
+        private RSA GetRsa()
         {
-            RSA rsa = RSA.Create();
+            RSA rsa;
             if (_osHelper.OSPlatformEnum == Enum.OSPlatformEnum.Windows)
             {
                 //windows系统需要从证书中心的localMathine取私钥 用私钥解密
@@ -124,11 +124,11 @@ namespace SuperTerminal.Service.Implements
         /// <returns></returns>
         public BoolModel<int> RegistEquipment(ViewEquipmentModel viewEquipmentModel)
         {
-            var entity = _mapper.Map<SysUser>(viewEquipmentModel);
+            SysUser entity = _mapper.Map<SysUser>(viewEquipmentModel);
             entity.UserType = 0;
             entity.PassWord = entity.PassWord.MD5();
-            var result = _dbContext.Insertable(entity).ExecuteReturnIdentity();
-            return new BoolModel<int>(result > 0, result > 0 ? "注册成功" : "注册失败",result);
+            int result = _dbContext.Insertable(entity).ExecuteReturnIdentity();
+            return new BoolModel<int>(result > 0, result > 0 ? "注册成功" : "注册失败", result);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
+using SqlSugar;
 using SuperTerminal.FeildCheck;
 using SuperTerminal.GlobalService;
 using System;
@@ -8,8 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.DependencyInjection;
-using SqlSugar;
 
 namespace SuperTerminal.Filter
 {
@@ -38,7 +38,7 @@ namespace SuperTerminal.Filter
                 {
                     object currentItemvalue = property.GetValue(commitedModel.Value);//当前项属性的值
                     object[] validateFieldItems = property.GetCustomAttributes(typeof(FeildCheckAttribute), true);
-                    if (Vaildthis(commitedModel.Value, currentItemvalue,property.PropertyType, validateFieldItems, context))
+                    if (Vaildthis(commitedModel.Value, currentItemvalue, property.PropertyType, validateFieldItems, context))
                     {
                         continue;
                     }
@@ -63,7 +63,7 @@ namespace SuperTerminal.Filter
                     {
                         object currentItemvalue = property.GetValue(item);//当前项属性的值
                         object[] validateFieldItems = property.GetCustomAttributes(typeof(FeildCheckAttribute), true);
-                        if (Vaildthis(item,currentItemvalue, property.PropertyType, validateFieldItems, context))
+                        if (Vaildthis(item, currentItemvalue, property.PropertyType, validateFieldItems, context))
                         {
                             continue;
                         }
@@ -82,15 +82,15 @@ namespace SuperTerminal.Filter
         /// <param name="lst"></param>
         /// <param name="properties"></param>
         /// <returns></returns>
-        private bool ValidUniqueInList(IEnumerable lst,PropertyInfo[] properties, ActionExecutingContext context)
+        private bool ValidUniqueInList(IEnumerable lst, PropertyInfo[] properties, ActionExecutingContext context)
         {
             bool valid = true;
-            Dictionary<string, HashSet<object>> tempData = new Dictionary<string, HashSet<object>>();
-            foreach (var item in lst)//遍历列表
+            Dictionary<string, HashSet<object>> tempData = new();
+            foreach (object item in lst)//遍历列表
             {
                 if (valid)//验证通过继续执行
                 {
-                    foreach (var property in properties)//遍历属性
+                    foreach (PropertyInfo property in properties)//遍历属性
                     {
                         if (!tempData.ContainsKey(property.Name))
                         {
@@ -107,7 +107,7 @@ namespace SuperTerminal.Filter
                             else //存在重复数据
                             {
                                 valid = false;
-                                ResponseModel responseMode = new ResponseModel()
+                                ResponseModel responseMode = new()
                                 {
                                     Status = 200,
                                     StatusMsg = "操作成功",
@@ -122,16 +122,16 @@ namespace SuperTerminal.Filter
             }
             return valid;
         }
-        private bool Vaildthis(object currentItem, object currentItemvalue,Type currentItemType, object[] validateFieldItems, ActionExecutingContext context)
+        private bool Vaildthis(object currentItem, object currentItemvalue, Type currentItemType, object[] validateFieldItems, ActionExecutingContext context)
         {
             bool valid = true;
             if (validateFieldItems.Length > 0)
             {
-                foreach (var item in validateFieldItems)
+                foreach (object item in validateFieldItems)
                 {
                     if (item.GetType() == typeof(CheckByRegular))
                     {
-                        if (ValidRegular(currentItemvalue, currentItemType, (CheckByRegular)item, context))
+                        if (ValidRegular(currentItemvalue, (CheckByRegular)item, context))
                         {
                             continue;
                         }
@@ -155,7 +155,7 @@ namespace SuperTerminal.Filter
                     }
                     else if (item.GetType() == typeof(CheckUnique))
                     {
-                        if (ValidUnique(currentItem,currentItemvalue, currentItemType, (CheckUnique)item, context))
+                        if (ValidUnique(currentItem, currentItemvalue, (CheckUnique)item, context))
                         {
                             continue;
                         }
@@ -177,28 +177,27 @@ namespace SuperTerminal.Filter
         /// 验证单个值在数据库中是否存在重复
         /// </summary>
         /// <param name="currentItemvalue"></param>
-        /// <param name="currentItemType"></param>
         /// <param name="item"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private bool ValidUnique(object currentItem, object currentItemvalue,Type currentItemType, CheckUnique item, ActionExecutingContext context)
+        private bool ValidUnique(object currentItem, object currentItemvalue,CheckUnique item, ActionExecutingContext context)
         {
             //数据库中判断唯一
             //var dbContext = context.HttpContext.RequestServices.GetService<ISqlSugarClient>();//数据库上下文对象
-            var dbContext = ServiceAgent.Provider.GetService<ISqlSugarClient>();//数据库上下文对象
-            var identityFeild = Type.GetProperties().FirstOrDefault(o => o.Name == item.IdentityFeild);
+            ISqlSugarClient dbContext = ServiceAgent.Provider.GetService<ISqlSugarClient>();//数据库上下文对象
+            PropertyInfo identityFeild = Type.GetProperties().FirstOrDefault(o => o.Name == item.IdentityFeild);
             if (identityFeild != null)
             {
                 if (identityFeild.PropertyType == typeof(int))
                 {
-                    var id = identityFeild.GetValue(currentItem) as int?;
+                    int? id = identityFeild.GetValue(currentItem) as int?;
                     if (id.HasValue && id.Value > 0)
                     {
                         //修改判断唯一
-                        var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and {item.IdentityFeild}!={id} and IsDeleted=0").Count();
+                        int count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and {item.IdentityFeild}!={id} and IsDeleted=0").Count();
                         if (count > 0)
                         {
-                            ResponseModel responseMode = new ResponseModel()
+                            ResponseModel responseMode = new()
                             {
                                 Status = 200,
                                 StatusMsg = "操作成功",
@@ -214,34 +213,33 @@ namespace SuperTerminal.Filter
                     }
                     else
                     {
-                        return ValidUniqueInAdd(currentItemvalue, currentItemType, item, dbContext, context);
+                        return ValidUniqueInAdd(currentItemvalue, item, dbContext, context);
                     }
                 }
                 else
                 {
-                    return ValidUniqueInAdd(currentItemvalue, currentItemType, item, dbContext, context);
+                    return ValidUniqueInAdd(currentItemvalue, item, dbContext, context);
                 }
             }
             else //没有ID属性的
             {
-                return ValidUniqueInAdd(currentItemvalue, currentItemType, item, dbContext, context);
+                return ValidUniqueInAdd(currentItemvalue, item, dbContext, context);
             }
         }
         /// <summary>
         /// 添加模式下判断唯一
         /// </summary>
         /// <param name="currentItemvalue"></param>
-        /// <param name="currentItemType"></param>
         /// <param name="item"></param>
         /// <param name="dbContext"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private bool ValidUniqueInAdd(object currentItemvalue, Type currentItemType, CheckUnique item, ISqlSugarClient dbContext, ActionExecutingContext context)
+        private bool ValidUniqueInAdd(object currentItemvalue, CheckUnique item, ISqlSugarClient dbContext, ActionExecutingContext context)
         {
-            var count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and IsDeleted=0").Count();
+            int count = dbContext.SqlQueryable<dynamic>($"SELECT * FROM `{item.TableName}` where {item.FeildName}='{currentItemvalue}' and IsDeleted=0").Count();
             if (count > 0)
             {
-                ResponseModel responseMode = new ResponseModel()
+                ResponseModel responseMode = new()
                 {
                     Status = 200,
                     StatusMsg = "操作成功",
@@ -264,7 +262,7 @@ namespace SuperTerminal.Filter
         /// <param name="item"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private bool ValidRange(object currentItemvalue,Type currentItemType, CheckByRange item, ActionExecutingContext context)
+        private bool ValidRange(object currentItemvalue, Type currentItemType, CheckByRange item, ActionExecutingContext context)
         {
             if (currentItemvalue == null)
             {
@@ -278,7 +276,7 @@ namespace SuperTerminal.Filter
                 }
                 else
                 {
-                    ResponseModel responseMode = new ResponseModel()
+                    ResponseModel responseMode = new()
                     {
                         Status = 200,
                         StatusMsg = "操作成功",
@@ -301,7 +299,7 @@ namespace SuperTerminal.Filter
         /// <param name="validateFieldItems"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        private bool ValidRegular(object currentItemvalue,Type currentItemType, CheckByRegular validateattr, ActionExecutingContext context)
+        private bool ValidRegular(object currentItemvalue, CheckByRegular validateattr, ActionExecutingContext context)
         {
             if (currentItemvalue == null)
             {
@@ -323,7 +321,7 @@ namespace SuperTerminal.Filter
             }
             else
             {
-                List<bool> listpass = new List<bool>();
+                List<bool> listpass = new();
                 foreach (string item in validateattr.Rules)
                 {
                     regex = new Regex(item);
@@ -340,7 +338,7 @@ namespace SuperTerminal.Filter
             }
             if (!passed)
             {
-                ResponseModel responseMode = new ResponseModel()
+                ResponseModel responseMode = new()
                 {
                     Status = 200,
                     StatusMsg = "操作成功",

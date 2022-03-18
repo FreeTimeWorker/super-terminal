@@ -1,5 +1,4 @@
 ﻿using SqlSugar;
-using SuperTerminal.Data;
 using SuperTerminal.MiddleWare;
 using System;
 using System.Collections.Generic;
@@ -7,15 +6,13 @@ using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperTerminal.Data.SqlSugarContent
 {
     public class SqlSugarContext : IDbContext
     {
-        private ISqlSugarClient _sqlSugarScope;
-        private IHttpParameter _httpParameter;
+        private readonly ISqlSugarClient _sqlSugarScope;
+        private readonly IHttpParameter _httpParameter;
         public SqlSugarContext(ISqlSugarClient sqlSugarScope, IHttpParameter httpParameter)
         {
             _sqlSugarScope = sqlSugarScope;
@@ -27,7 +24,7 @@ namespace SuperTerminal.Data.SqlSugarContent
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
         /// <param name="id">实体的ID如果大于0,就不修改创建时间</param>
-        private void _setBaseData<T>(T entity,int id=0) where T : IModel
+        private void SetBaseData<T>(T entity, int id = 0) where T : IModel
         {
             if (id < 1)
             {
@@ -80,7 +77,7 @@ namespace SuperTerminal.Data.SqlSugarContent
             {
                 throw new ArgumentNullException(nameof(insertDynamicObject));
             }
-            var dict = new Dictionary<string, object>();
+            Dictionary<string, object> dict = new();
             foreach (System.Reflection.PropertyInfo p in insertDynamicObject.GetType().GetProperties())
             {
                 dict[p.Name] = p.GetValue(insertDynamicObject, null);
@@ -107,34 +104,34 @@ namespace SuperTerminal.Data.SqlSugarContent
             }
             return _sqlSugarScope.Insertable<T>(dict);
         }
-        public IInsertable<T> Insertable<T>(List<T> insertObjs) where T :class,IModel, new()
+        public IInsertable<T> Insertable<T>(List<T> insertObjs) where T : class, IModel, new()
         {
-            foreach (var entity in insertObjs)
+            foreach (T entity in insertObjs)
             {
-                _setBaseData(entity);
+                SetBaseData(entity);
             }
             return _sqlSugarScope.Insertable(insertObjs);
         }
-        public IInsertable<T> Insertable<T>(T insertObj) where T : class,IModel, new()
+        public IInsertable<T> Insertable<T>(T insertObj) where T : class, IModel, new()
         {
-            _setBaseData(insertObj);
+            SetBaseData(insertObj);
             return _sqlSugarScope.Insertable(insertObj);
         }
-        public IInsertable<T> Insertable<T>(T[] insertObjs) where T : class, IModel,new()
+        public IInsertable<T> Insertable<T>(T[] insertObjs) where T : class, IModel, new()
         {
-            foreach (var item in insertObjs)
+            foreach (T item in insertObjs)
             {
-                _setBaseData(item);
+                SetBaseData(item);
             }
             return _sqlSugarScope.Insertable(insertObjs);
         }
         #endregion
         #region 更新
-        public IUpdateable<T> Updateable<T>() where T : class,IModel, new()
+        public IUpdateable<T> Updateable<T>() where T : class, IModel, new()
         {
             return _sqlSugarScope.Updateable<T>().IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
-        public IUpdateable<T> Updateable<T>(Dictionary<string, object> dict) where T:class,IModel,new()
+        public IUpdateable<T> Updateable<T>(Dictionary<string, object> dict) where T : class, IModel, new()
         {
             if (!dict.ContainsKey("UpdateOn"))
             {
@@ -149,7 +146,7 @@ namespace SuperTerminal.Data.SqlSugarContent
 
         public IUpdateable<T> Updateable<T>(dynamic updateDynamicObject) where T : class, IModel, new()
         {
-            var dict = new Dictionary<string, object>();
+            Dictionary<string, object> dict = new();
             foreach (System.Reflection.PropertyInfo p in updateDynamicObject.GetType().GetProperties())
             {
                 dict[p.Name] = p.GetValue(updateDynamicObject, null);
@@ -177,24 +174,24 @@ namespace SuperTerminal.Data.SqlSugarContent
 
         public IUpdateable<T> Updateable<T>(List<T> UpdateObjs) where T : class, IModel, new()
         {
-            foreach (var item in UpdateObjs)
+            foreach (T item in UpdateObjs)
             {
-                _setBaseData(item,item.Id);
+                SetBaseData(item, item.Id);
             }
             return _sqlSugarScope.Updateable<T>(UpdateObjs).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
         public IUpdateable<T> Updateable<T>(T UpdateObj) where T : class, IModel, new()
         {
-            _setBaseData(UpdateObj,UpdateObj.Id);
+            SetBaseData(UpdateObj, UpdateObj.Id);
             return _sqlSugarScope.Updateable<T>(UpdateObj).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
 
         public IUpdateable<T> Updateable<T>(T[] UpdateObjs) where T : class, IModel, new()
         {
-            foreach (var item in UpdateObjs)
+            foreach (T item in UpdateObjs)
             {
-                _setBaseData(item,item.Id);
+                SetBaseData(item, item.Id);
             }
             return _sqlSugarScope.Updateable<T>(UpdateObjs).IgnoreColumns("CreateOn", "CreateBy", "IsDeleted");
         }
@@ -222,7 +219,7 @@ namespace SuperTerminal.Data.SqlSugarContent
 
         public int Delete<T>(List<T> deleteObjs) where T : class, IModel, new()
         {
-            foreach (var item in deleteObjs)
+            foreach (T item in deleteObjs)
             {
                 item.IsDeleted = true;
             }
@@ -413,7 +410,7 @@ namespace SuperTerminal.Data.SqlSugarContent
 
         public ISugarQueryable<T, T2> Queryable<T, T2>(ISugarQueryable<T> joinQueryable1, ISugarQueryable<T2> joinQueryable2, Expression<Func<T, T2, bool>> joinExpression) where T : class, new() where T2 : class, IModel, new()
         {
-            return _sqlSugarScope.Queryable(joinQueryable1,joinQueryable2,joinExpression);
+            return _sqlSugarScope.Queryable(joinQueryable1, joinQueryable2, joinExpression);
         }
 
         public ISugarQueryable<T, T2> Queryable<T, T2>(ISugarQueryable<T> joinQueryable1, ISugarQueryable<T2> joinQueryable2, JoinType joinType, Expression<Func<T, T2, bool>> joinExpression) where T : class, new() where T2 : class, IModel, new()
@@ -431,7 +428,7 @@ namespace SuperTerminal.Data.SqlSugarContent
             return _sqlSugarScope.Queryable<T>();
         }
 
-        public  ISugarQueryable<T> Queryable<T>(ISugarQueryable<T> queryable) where T : class, IModel, new()
+        public ISugarQueryable<T> Queryable<T>(ISugarQueryable<T> queryable) where T : class, IModel, new()
         {
             return _sqlSugarScope.Queryable<T>(queryable);
         }
@@ -443,21 +440,21 @@ namespace SuperTerminal.Data.SqlSugarContent
         #endregion
 
         #region Storageable
-        public IStorageable<T> Storageable<T>(List<T> dataList) where T:class,IModel,new()
+        public IStorageable<T> Storageable<T>(List<T> dataList) where T : class, IModel, new()
         {
-            var ids = dataList.Where(o => o.Id > 0).Select(o => o.Id).ToList();
-            var entitys = _sqlSugarScope.Queryable<T>().Where(item => ids.Contains(item.Id)).ToList();
-            foreach (var item in dataList)
+            List<int> ids = dataList.Where(o => o.Id > 0).Select(o => o.Id).ToList();
+            List<T> entitys = _sqlSugarScope.Queryable<T>().Where(item => ids.Contains(item.Id)).ToList();
+            foreach (T item in dataList)
             {
                 if (item.Id > 0)
                 {
-                    _setBaseData(item, item.Id);
+                    SetBaseData(item, item.Id);
                     item.CreateOn = entitys.FirstOrDefault(o => o.Id == item.Id).CreateOn;
                     item.CreateBy = entitys.FirstOrDefault(o => o.Id == item.Id).CreateBy;
                 }
                 else
                 {
-                    _setBaseData(item);
+                    SetBaseData(item);
                 }
             }
             return _sqlSugarScope.Storageable(dataList);
@@ -465,16 +462,16 @@ namespace SuperTerminal.Data.SqlSugarContent
 
         public IStorageable<T> Storageable<T>(T data) where T : class, IModel, new()
         {
-            _setBaseData(data, data.Id);
+            SetBaseData(data, data.Id);
             if (data.Id > 0)
             {
-                var entity = _sqlSugarScope.Queryable<T>().First(item => item.Id == data.Id);
+                T entity = _sqlSugarScope.Queryable<T>().First(item => item.Id == data.Id);
                 data.CreateOn = entity.CreateOn;
                 data.CreateBy = entity.CreateBy;
             }
             else
             {
-                _setBaseData(data);
+                SetBaseData(data);
             }
             return _sqlSugarScope.Storageable(data);
         }
@@ -485,9 +482,9 @@ namespace SuperTerminal.Data.SqlSugarContent
         /// <returns></returns>
         public StorageableDataTable Storageable(DataTable data)
         {
-            data.Columns.Add("CreateOn",typeof(DateTime));
+            data.Columns.Add("CreateOn", typeof(DateTime));
             data.Columns.Add("UpdateOn", typeof(DateTime));
-            data.Columns.Add("CreateBy",typeof(int));
+            data.Columns.Add("CreateBy", typeof(int));
             data.Columns.Add("UpdateBy", typeof(int));
             for (int i = 0; i < data.Rows.Count; i++)
             {

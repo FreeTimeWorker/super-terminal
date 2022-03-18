@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SuperTerminal.FeildCheck
+﻿namespace SuperTerminal.FeildCheck
 {
     /// <summary>
     /// 通过正则表达式验证
     /// </summary>
-    public class CheckByRegular: FeildCheckAttribute
+    public class CheckByRegular : FeildCheckAttribute
     {
         /// <summary>
         /// 规则

@@ -24,7 +24,7 @@ namespace SuperTerminal.JWT
         private static Regex GetIgnoreUrlsReg(List<string> urls)
         {
             List<string> regStrs = new();
-            foreach (var item in urls)
+            foreach (string item in urls)
             {
                 regStrs.Add(string.Concat("^", item, ".*$"));
             }
@@ -47,7 +47,7 @@ namespace SuperTerminal.JWT
             //验证token的情况下执行
             if (ValidateToken && context.Request.Headers.TryGetValue(_jwtConfig.HeadField, out Microsoft.Extensions.Primitives.StringValues authValue))
             {
-                var authstr = authValue.ToString();
+                string authstr = authValue.ToString();
                 if (_jwtConfig.Prefix.Length > 0)
                 {
                     if (!authstr.Contains(_jwtConfig.Prefix))
@@ -62,7 +62,7 @@ namespace SuperTerminal.JWT
                 {
                     List<string> climsKeys = new() { "nbf", "exp", "iat", "iss", "aud" };
                     IDictionary<string, object> RenewalDic = new Dictionary<string, object>();
-                    foreach (var item in Clims)
+                    foreach (KeyValuePair<string, object> item in Clims)
                     {
                         if (climsKeys.FirstOrDefault(o => o == item.Key) == null)
                         {
@@ -77,14 +77,14 @@ namespace SuperTerminal.JWT
                     //验证通过的情况下判断续期时间
                     if (Clims.Keys.FirstOrDefault(o => o == "exp") != null)
                     {
-                        var start = new DateTime(1970, 1, 1, 0, 0, 0);
-                        var timespanStart = long.Parse(Clims["nbf"].ToString());//token有效时间的开始时间点
-                        var tartDate = start.AddSeconds(timespanStart).ToLocalTime();
-                        var o = DateTime.Now - tartDate;//当前时间减去开始时间大于续期时间限制
+                        DateTime start = new DateTime(1970, 1, 1, 0, 0, 0);
+                        long timespanStart = long.Parse(Clims["nbf"].ToString());//token有效时间的开始时间点
+                        DateTime tartDate = start.AddSeconds(timespanStart).ToLocalTime();
+                        TimeSpan o = DateTime.Now - tartDate;//当前时间减去开始时间大于续期时间限制
                         if (o.TotalMinutes > _jwtConfig.RenewalTime)
                         {
                             //执行续期
-                            var newToken = _jwt.GetToken(RenewalDic);
+                            string newToken = _jwt.GetToken(RenewalDic);
                             context.Response.Headers.Add(_jwtConfig.ReTokenHeadField, newToken);
                         }
                     }
@@ -116,7 +116,7 @@ namespace SuperTerminal.JWT
                 {
                     //不验证Token的情况下,如果有token字段,读取信息
                     context.Request.Headers.TryGetValue(_jwtConfig.HeadField, out Microsoft.Extensions.Primitives.StringValues authValue1);
-                    var authstr = authValue1.ToString();
+                    string authstr = authValue1.ToString();
                     if (_jwtConfig.Prefix.Length > 0)
                     {
                         if (!authstr.Contains(_jwtConfig.Prefix))
@@ -129,7 +129,7 @@ namespace SuperTerminal.JWT
                     {
                         List<string> climsKeys = new() { "nbf", "exp", "iat", "iss", "aud" };
                         IDictionary<string, object> RenewalDic = new Dictionary<string, object>();
-                        foreach (var item in Clims)
+                        foreach (KeyValuePair<string, object> item in Clims)
                         {
                             if (climsKeys.FirstOrDefault(o => o == item.Key) == null)
                             {
@@ -144,14 +144,14 @@ namespace SuperTerminal.JWT
                         //验证通过的情况下判断续期时间
                         if (Clims.Keys.FirstOrDefault(o => o == "exp") != null)
                         {
-                            var start = new DateTime(1970, 1, 1, 0, 0, 0);
-                            var timespanStart = long.Parse(Clims["nbf"].ToString());//token有效时间的开始时间点
-                            var tartDate = start.AddSeconds(timespanStart).ToLocalTime();
-                            var o = DateTime.Now - tartDate;//当前时间减去开始时间大于续期时间限制
+                            DateTime start = new DateTime(1970, 1, 1, 0, 0, 0);
+                            long timespanStart = long.Parse(Clims["nbf"].ToString());//token有效时间的开始时间点
+                            DateTime tartDate = start.AddSeconds(timespanStart).ToLocalTime();
+                            TimeSpan o = DateTime.Now - tartDate;//当前时间减去开始时间大于续期时间限制
                             if (o.TotalMinutes > _jwtConfig.RenewalTime)
                             {
                                 //执行续期
-                                var newToken = _jwt.GetToken(RenewalDic);
+                                string newToken = _jwt.GetToken(RenewalDic);
                                 context.Response.Headers.Add(_jwtConfig.ReTokenHeadField, newToken);
                             }
                         }

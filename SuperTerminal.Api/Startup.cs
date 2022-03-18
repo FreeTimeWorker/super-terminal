@@ -3,7 +3,6 @@ using CSRedis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,7 +59,7 @@ namespace SuperTerminal.Api
                 options.JsonSerializerOptions.MaxDepth = 1024;//对象循环深度，默认32 
                 options.JsonSerializerOptions.WriteIndented = true;//输出json是否带格式，默认不携带任何格式
                 options.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());//时间输入格式为yyyy-MM-dd，时间序列化为yyyy-MM-dd
-            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+            });
             services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("SuperTerminal", new OpenApiSecurityScheme()
@@ -115,7 +114,7 @@ namespace SuperTerminal.Api
             {
                 Assembly assembly = Assembly.Load(assemblyName);
                 List<Type> ts = assembly.GetTypes().ToList();
-                Dictionary<Type, Type[]> result = new Dictionary<Type, Type[]>();
+                Dictionary<Type, Type[]> result = new();
                 foreach (Type item in ts.Where(s => !s.IsInterface))
                 {
                     Type[] interfaceType = item.GetInterfaces();

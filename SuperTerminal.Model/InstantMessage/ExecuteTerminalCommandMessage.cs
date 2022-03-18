@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SuperTerminal.Model.InstantMessage
+﻿namespace SuperTerminal.Model.InstantMessage
 {
     /// <summary>
     /// 在打开的终端中执行命令
     /// </summary>
-    public class ExecuteTerminalCommandMessage:IMessage
+    public class ExecuteTerminalCommandMessage : IMessage
     {
         /// <summary>
         /// 执行的命令
@@ -29,7 +25,7 @@ namespace SuperTerminal.Model.InstantMessage
 
         public override string ToString()
         {
-            return this.Content;
+            return Content;
         }
     }
 }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SuperTerminal.FeildCheck
+﻿namespace SuperTerminal.FeildCheck
 {
     /// <summary>
     /// 验证唯一
     /// </summary>
-    
-    public class CheckUnique: FeildCheckAttribute
+
+    public class CheckUnique : FeildCheckAttribute
     {
         /// <summary>
         /// 所在数据表的表名称
@@ -29,7 +23,7 @@ namespace SuperTerminal.FeildCheck
         /// 提交时判断唯一
         /// </summary>
         /// <param name="tableName"></param>
-        public CheckUnique(string errorMsg,string tableName,string feildName)
+        public CheckUnique(string errorMsg, string tableName, string feildName)
         {
             ErrorMsg = errorMsg;
             TableName = tableName;

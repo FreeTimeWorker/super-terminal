@@ -4,16 +4,16 @@ using SuperTerminal.Const;
 
 namespace SuperTerminal.Filter
 {
-    public class DataCache: ActionFilterAttribute
+    public class DataCache : ActionFilterAttribute
     {
-        private string _key { get; set; } = "";
+        private string Key { get; set; } = "";
         public DataCache()
         {
-            
+
         }
         public DataCache(string Key)
         {
-            this._key = Key;
+            this.Key = Key;
         }
         /// <summary>
         /// 进入前执行
@@ -21,11 +21,11 @@ namespace SuperTerminal.Filter
         /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var salt = context.HttpContext.Items[HttpItem.UserId];
-            var path = context.HttpContext.Request.Path.HasValue ? context.HttpContext.Request.Path.Value : "";
-            var query = context.HttpContext.Request.QueryString.HasValue ? context.HttpContext.Request.QueryString.Value : "";
-            var key = $"DataCache_{_key}_{salt}_{path}{query}";
-            var jsonvalue = RedisHelper.Instance.Get(key);
+            object salt = context.HttpContext.Items[HttpItem.UserId];
+            string path = context.HttpContext.Request.Path.HasValue ? context.HttpContext.Request.Path.Value : "";
+            string query = context.HttpContext.Request.QueryString.HasValue ? context.HttpContext.Request.QueryString.Value : "";
+            string key = $"DataCache_{Key}_{salt}_{path}{query}";
+            string jsonvalue = RedisHelper.Instance.Get(key);
             if (string.IsNullOrEmpty(jsonvalue))
             {
                 base.OnActionExecuting(context);
@@ -47,10 +47,10 @@ namespace SuperTerminal.Filter
         /// <param name="context"></param>
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            var salt = context.HttpContext.Items[HttpItem.UserId];
-            var path = context.HttpContext.Request.Path.HasValue ? context.HttpContext.Request.Path.Value : "";
-            var query = context.HttpContext.Request.QueryString.HasValue ? context.HttpContext.Request.QueryString.Value : "";
-            var key = $"DataCache_{_key}_{salt}_{path}{query}";
+            object salt = context.HttpContext.Items[HttpItem.UserId];
+            string path = context.HttpContext.Request.Path.HasValue ? context.HttpContext.Request.Path.Value : "";
+            string query = context.HttpContext.Request.QueryString.HasValue ? context.HttpContext.Request.QueryString.Value : "";
+            string key = $"DataCache_{Key}_{salt}_{path}{query}";
             if (context.Result != null)
             {
                 RedisHelper.Instance.Set(key, ((Microsoft.AspNetCore.Mvc.ObjectResult)context.Result).Value, CacheSetting.DataCacheTimeOut * 60);

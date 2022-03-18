@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 namespace SuperTerminal.Model.InstantMessage
 {
-    public class OpenTerminalMessage:IMessage
+    public class OpenTerminalMessage : IMessage
     {
         /// <summary>
         /// 发送者
@@ -41,10 +39,10 @@ namespace SuperTerminal.Model.InstantMessage
 
         public override string ToString()
         {
-            return $"打开终端,终端路径:{(string.IsNullOrEmpty(Content) ? "默认":Content)}" +
+            return $"打开终端,终端路径:{(string.IsNullOrEmpty(Content) ? "默认" : Content)}" +
                    $",标准输入编码:{StandardOutputEncoding?.EncodingName}" +
                    $",标准输出编码:{StandardInputEncoding?.EncodingName}" +
-                   $",标准错误编码:{StandardErrorEncoding?.EncodingName}" ;
+                   $",标准错误编码:{StandardErrorEncoding?.EncodingName}";
         }
     }
 }

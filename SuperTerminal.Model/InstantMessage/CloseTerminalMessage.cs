@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SuperTerminal.Model.InstantMessage
+﻿namespace SuperTerminal.Model.InstantMessage
 {
     /// <summary>
     /// 关闭终端
     /// </summary>
-    public class CloseTerminalMessage:IMessage
+    public class CloseTerminalMessage : IMessage
     {
         /// <summary>
         /// 

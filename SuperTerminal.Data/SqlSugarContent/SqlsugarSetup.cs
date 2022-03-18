@@ -2,14 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using SqlSugar;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SuperTerminal.Data.SqlSugarContent
 {
@@ -22,7 +19,7 @@ namespace SuperTerminal.Data.SqlSugarContent
         /// <param name="configuration"></param>
         public static void AddSqlsugarSetup(this IServiceCollection services, IConfiguration configuration)
         {
-            SqlSugarScope sqlSugar = new SqlSugarScope(new ConnectionConfig()
+            SqlSugarScope sqlSugar = new(new ConnectionConfig()
             {
                 DbType = DbType.MySql,
                 ConnectionString = configuration.GetConnectionString("MySqlConnectionString"),
@@ -43,9 +40,9 @@ namespace SuperTerminal.Data.SqlSugarContent
                 };
                 //过滤已经假删除的数据
                 Type[] types = Assembly.Load("SuperTerminal.Data").GetTypes().Where(o => (typeof(IModel)).IsAssignableFrom(o)).ToArray();
-                foreach (var entityType in types)
+                foreach (Type entityType in types)
                 {
-                    var lambda = DynamicExpressionParser.ParseLambda
+                    LambdaExpression lambda = DynamicExpressionParser.ParseLambda
                         (new[] { Expression.Parameter(entityType, "it") },
                          typeof(bool), $"it.IsDeleted ==false",
                           false);

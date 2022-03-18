@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SuperTerminal.Data.Entitys;
 using SuperTerminal.Filter;
-using SuperTerminal.Model;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace SuperTerminal.Api.Controllers
@@ -15,7 +12,7 @@ namespace SuperTerminal.Api.Controllers
         [HttpGet]
         public string GetData()
         {
-            var result = "123";
+            string result = "123";
             Thread.Sleep(3000);
             return result;
         }
@@ -23,7 +20,7 @@ namespace SuperTerminal.Api.Controllers
         [HttpGet]
         public string DelDataCache()
         {
-            var result = "清理";
+            string result = "清理";
             return result;
         }
     }
