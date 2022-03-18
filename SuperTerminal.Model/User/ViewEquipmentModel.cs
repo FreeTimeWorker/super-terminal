@@ -7,6 +7,7 @@ namespace SuperTerminal.Model.User
 {
     public class ViewEquipmentModel
     {
+        public int Id { get; set;}
         /// <summary>
         /// 用户名
         /// </summary>
@@ -42,6 +43,8 @@ namespace SuperTerminal.Model.User
         /// <summary>
         /// 别名
         /// </summary>
+        [CheckUnique("别名不能重复", "SysUser", "NickName")]
+        [CheckByRegular("别名不能为空", Rules.Requird)]
         public string NickName { get; set; }
     }
 }
