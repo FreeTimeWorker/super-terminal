@@ -40,7 +40,8 @@ namespace SuperTerminal.Api
             services.AddTransient<IJwt, Jwt>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();//以一种简化的方式访问httpcontext
             services.AddTransient<IHttpParameter, HttpParameter>();
-
+            services.AddHttpClient();//OsHelper中使用了IHttpClientFactory 要在OsHelper注入前注入
+            services.AddSingleton<OsHelper>();
             //注入service
             Dictionary<Type, Type[]> types = GetTypes("SuperTerminal.Service");
             foreach (KeyValuePair<Type, Type[]> item in types)

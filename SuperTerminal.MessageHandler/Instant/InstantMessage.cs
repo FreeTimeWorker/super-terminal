@@ -68,11 +68,13 @@ namespace SuperTerminal.MessageHandler.Instant
         /// <returns></returns>
         public async Task SendOpenTerminal(OpenTerminalMessage message)
         {
-            if (Mapping.TryGetValue(message.Receiver, out string connectionId))
+            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals(999))
             {
-                await Clients.Client(connectionId).ReceiveOpenTerminal(message);
+                if (Mapping.TryGetValue(message.Receiver, out string connectionId))
+                {
+                    await Clients.Client(connectionId).ReceiveOpenTerminal(message);
+                }
             }
-
         }
         /// <summary>
         /// 打开终端的情况下执行终端命令
@@ -82,9 +84,12 @@ namespace SuperTerminal.MessageHandler.Instant
         /// <returns></returns>
         public async Task SendExecTerminalCmd(ExecuteTerminalCommandMessage message)
         {
-            if (Mapping.TryGetValue(message.Receiver, out string connectionId))
+            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals(999))
             {
-                await Clients.Client(connectionId).ReceiveExecTerminalCmd(message);
+                if (Mapping.TryGetValue(message.Receiver, out string connectionId))
+                {
+                    await Clients.Client(connectionId).ReceiveExecTerminalCmd(message);
+                } 
             }
 
         }
@@ -96,9 +101,12 @@ namespace SuperTerminal.MessageHandler.Instant
         /// <returns></returns>
         public async Task SendCloseTerminal(CloseTerminalMessage message)
         {
-            if (Mapping.TryGetValue(message.Receiver, out string connectionId))
+            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals(999))
             {
-                await Clients.Client(connectionId).ReceiveCloseTerminal(message);
+                if (Mapping.TryGetValue(message.Receiver, out string connectionId))
+                {
+                    await Clients.Client(connectionId).ReceiveCloseTerminal(message);
+                }
             }
         }
     }

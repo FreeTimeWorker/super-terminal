@@ -80,12 +80,20 @@ namespace SuperTerminal.Utity
         /// <returns></returns>
         public static string RSAEncrypt(this string source,RSA rsa)
         {
-            if (string.IsNullOrEmpty(source))
+            try
             {
-                return null;
+                if (string.IsNullOrEmpty(source))
+                {
+                    return String.Empty;
+                }
+                var enc = rsa.Encrypt(Encoding.UTF8.GetBytes(source), RSAEncryptionPadding.Pkcs1);
+                return Convert.ToBase64String(enc);
             }
-            var enc = rsa.Encrypt(Encoding.UTF8.GetBytes(source), RSAEncryptionPadding.Pkcs1);
-            return Convert.ToBase64String(enc);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return "-1";
+            }
         }
         /// <summary>
         ///  RSA解密
@@ -95,12 +103,22 @@ namespace SuperTerminal.Utity
         /// <returns></returns>
         public static string RSADecrypt(this string source, RSA rsa)
         {
-            if (string.IsNullOrEmpty(source))
+            try
             {
-                return null;
+                if (string.IsNullOrEmpty(source))
+                {
+                    return String.Empty;
+                }
+                var dec = rsa.Decrypt(Convert.FromBase64String(source), RSAEncryptionPadding.Pkcs1);
+                return Encoding.UTF8.GetString(dec);
             }
-            var dec = rsa.Decrypt(Convert.FromBase64String(source), RSAEncryptionPadding.Pkcs1);
-            return Encoding.UTF8.GetString(dec);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return "-1";
+            }
         }
+
+
     }
 }

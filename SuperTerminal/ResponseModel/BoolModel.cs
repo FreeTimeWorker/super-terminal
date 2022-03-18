@@ -49,7 +49,7 @@ namespace SuperTerminal
         /// <summary>
         /// 附带信息
         /// </summary>
-        public object Data { get; set; }
+        public dynamic Data { get; set; }
     }
 
     public class BoolModel<T>

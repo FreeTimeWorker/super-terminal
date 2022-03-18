@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace SuperTerminal.Model
 {
-    public class ViewUserLogin
+    public class ViewManagerModel
     {
         /// <summary>
         /// 用户名
         /// </summary>
         [CheckUnique("用户名不能重复", "SysUser", "UserName")]
-        [CheckByRegular("用户名不能为空", Rules.Requird, Rules.StringLength50)]
+        [CheckByRegular("用户名必须大于5位", Rules.Requird, Rules.StringThanLength5)]
         public string UserName { get; set; }
         /// <summary>
         /// 密码

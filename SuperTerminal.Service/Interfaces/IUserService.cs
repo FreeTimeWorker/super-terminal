@@ -1,4 +1,5 @@
 ﻿using SuperTerminal.Model;
+using SuperTerminal.Model.User;
 
 namespace SuperTerminal.Service.Interfaces
 {
@@ -11,10 +12,16 @@ namespace SuperTerminal.Service.Interfaces
         /// <returns></returns>
         BoolModel CheckLogin(ViewUserLogin viewUserLogin);
         /// <summary>
-        /// 注册
+        /// 管理员注册
         /// </summary>
         /// <param name="viewUserLogin"></param>
         /// <returns></returns>
-        BoolModel Regist(ViewUserLogin viewUserLogin);
+        BoolModel RegistManager(ViewManagerModel viewUserLogin);
+        /// <summary>
+        /// 设备注册
+        /// </summary>
+        /// <param name="viewUserLogin"></param>
+        /// <returns></returns>
+        BoolModel<int> RegistEquipment(ViewEquipmentModel viewUserLogin);
     }
 }

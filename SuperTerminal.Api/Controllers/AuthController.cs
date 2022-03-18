@@ -3,6 +3,7 @@ using SuperTerminal.Const;
 using SuperTerminal.Filter;
 using SuperTerminal.JWT;
 using SuperTerminal.Model;
+using SuperTerminal.Model.User;
 using SuperTerminal.Service.Interfaces;
 using System.Collections.Generic;
 
@@ -20,7 +21,7 @@ namespace SuperTerminal.Api.Controllers
             _jwt = jwt;
         }
         /// <summary>
-        ///  登录
+        ///  获取token
         /// </summary>
         /// <param name="userLogin">passWord</param>
         /// <returns></returns>
@@ -32,7 +33,8 @@ namespace SuperTerminal.Api.Controllers
             {
                 string token = _jwt.GetToken(new Dictionary<string, object>()
                 {
-                    { HttpItem.UserId,result.Data}
+                    { HttpItem.UserId,result.Data.Id},
+                    { HttpItem.UserType,result.Data.UserType}
                 });
                 result.Data = token;
                 return result;
@@ -44,11 +46,23 @@ namespace SuperTerminal.Api.Controllers
         /// </summary>
         /// <param name="viewUserLogin"></param>
         /// <returns></returns>
-        [Validate(typeof(ViewUserLogin))]
+        [Validate(typeof(ViewManagerModel))]
         [HttpPost]
-        public ResponseModel<BoolModel> Regist(ViewUserLogin viewUserLogin)
+        public ResponseModel<BoolModel> RegistManager(ViewManagerModel viewUserLogin)
         {
-            return _userService.Regist(viewUserLogin);
+            return _userService.RegistManager(viewUserLogin);
+        }
+
+        /// <summary>
+        /// 注册设备
+        /// </summary>
+        /// <param name="viewUserLogin"></param>
+        /// <returns></returns>
+        [Validate(typeof(ViewEquipmentModel))]
+        [HttpPost]
+        public ResponseModel<BoolModel<int>> RegistEquipment(ViewEquipmentModel viewUserLogin)
+        {
+            return _userService.RegistEquipment(viewUserLogin);
         }
     }
 }
