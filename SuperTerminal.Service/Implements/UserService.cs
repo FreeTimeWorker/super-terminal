@@ -109,10 +109,10 @@ namespace SuperTerminal.Service.Implements
             else
             {
                 //非windows系统的读取根目录下的私钥
-                rsa = RSAStore.GetRSAFromPem("SuperTerminal.Key");//读取通过openssl生成的私钥
+                rsa = RSAStore.GetRSAFromPem("SuperTerminal.key");//读取通过openssl生成的私钥
                 if (rsa == null)
                 {
-                    rsa = RSAStore.GetRSAFromCustomFile("SuperTerminal.Key", Enum.RSAKeyType.PriKey);//读取自生成的私钥
+                    rsa = RSAStore.GetRSAFromCustomFile("SuperTerminal.key", Enum.RSAKeyType.PriKey);//读取自生成的私钥
                 }
             }
             return rsa;

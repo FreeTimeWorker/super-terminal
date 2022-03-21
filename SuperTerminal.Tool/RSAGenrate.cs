@@ -13,7 +13,7 @@ namespace SuperTerminal.Tool
             Console.WriteLine(Convert.ToBase64String(rsa.ExportRSAPublicKey()));
             Console.WriteLine("密钥");
             Console.WriteLine(Convert.ToBase64String(rsa.ExportRSAPrivateKey()));
-            Console.WriteLine("公钥需放到SuperTerminal.Key文件置于Server端根目录下,私钥需放到SuperTerminal.pem置于管理端根目录下,，非特殊情况不建议用这种方式");
+            Console.WriteLine("公钥需放到SuperTerminal.key文件置于Server端根目录下,私钥需放到SuperTerminal.pem置于管理端根目录下,，非特殊情况不建议用这种方式");
             Console.WriteLine("windows下使用Win11.ps1生成密钥对,linux使用 linux.sh生成密钥对，linux的密钥保存位置对于上述方式相同" +
                 "windows下的生成结束后，如果是在服务器执行的，只需将公钥置于管理端根目录下，如果是在个人电脑执行，" +
                 "修改Win11.ps1中的脚本，导出私钥后，在windows服务器上将私钥置于LocalMachine\\My节点下,cer文件需要安装到管理端所在计算机上的 currentUser/My 下");
