@@ -140,5 +140,41 @@ namespace SuperTerminal.Utity
             }
             return ip;
         }
+        /// <summary>
+        /// 获取内存指数
+        /// </summary>
+        /// <returns></returns>
+        public MemoryMetrics GetMemoryMetrics()
+        {
+            MemoryMetricsHandler memoryMetricsClient = new MemoryMetricsHandler();
+            if (this.OSPlatformEnum == OSPlatformEnum.Linux || this.OSPlatformEnum == OSPlatformEnum.OSX)
+            {
+                return memoryMetricsClient.GetUnixMetrics();
+            }
+            else if(this.OSPlatformEnum.Equals(OSPlatformEnum.Windows))
+            {
+                return memoryMetricsClient.GetWindowsMetrics();
+            }
+            else
+            {
+                throw new System.Exception("暂无该系统的实现");
+            }
+        }
+        public CupMetrics GetCPUMetrics()
+        {
+            CPUMetricsHandler memoryMetricsClient = new CPUMetricsHandler();
+            if (this.OSPlatformEnum == OSPlatformEnum.Linux || this.OSPlatformEnum == OSPlatformEnum.OSX)
+            {
+                return memoryMetricsClient.GetUnixMetrics();
+            }
+            else if (this.OSPlatformEnum.Equals(OSPlatformEnum.Windows))
+            {
+                return memoryMetricsClient.GetWindowsMetrics();
+            }
+            else
+            {
+                throw new System.Exception("暂无该系统的实现");
+            }
+        }
     }
 }
