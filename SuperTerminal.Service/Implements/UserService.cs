@@ -53,7 +53,7 @@ namespace SuperTerminal.Service.Implements
             {
                 return new BoolModel(false, "用户名不存在");
             }
-            if (!viewUserLogin.Password.MD5().Equals(entity.PassWord))
+            if (!viewUserLogin.Password.Equals(entity.PassWord))
             {
                 return new BoolModel(false, "密码错误");
             }
