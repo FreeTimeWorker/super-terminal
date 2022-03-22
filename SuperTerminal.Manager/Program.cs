@@ -1,4 +1,8 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace SuperTerminal.Manager
@@ -14,7 +18,25 @@ namespace SuperTerminal.Manager
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            var host = CreateHostBuilder().Build();
+            ServiceProvider = host.Services;
+            Application.Run(ServiceProvider.GetRequiredService<Login>());
+        }
+        public static IServiceProvider ServiceProvider { get; private set; }
+        static IHostBuilder CreateHostBuilder()
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, reloadOnChange: true)
+                .Build();
+            return Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) => {
+                    services.AddSingleton<IConfiguration>(config);
+                    services.AddTransient<Login>();
+                    services.AddTransient<Regist>();
+                    services.AddTransient<Setting>();
+                });
         }
     }
 }
