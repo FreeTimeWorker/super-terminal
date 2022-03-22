@@ -40,6 +40,7 @@ namespace SuperTerminal.Manager
                     services.AddTransient<Setting>(); 
                     services.AddTransient<Main>();
                     services.AddSingleton<IApiHelper, ApiHelper>();
+                    services.AddSingleton<SignalRClient>();
                 });
         }
     }

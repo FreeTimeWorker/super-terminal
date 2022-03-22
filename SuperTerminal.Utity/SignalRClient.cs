@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SuperTerminal.Utity
 {
     /// <summary>
-    /// 单例
+    /// 必须单例
     /// </summary>
     public class SignalRClient : IDisposable
     {
