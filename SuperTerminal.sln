@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperTerminal.Utity", "SuperTerminal.Utity\SuperTerminal.Utity.csproj", "{2DAFF050-2681-4558-867A-D031F9EF7AC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +174,18 @@ Global
 		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|x64.Build.0 = Release|Any CPU
 		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|x86.ActiveCfg = Release|Any CPU
 		{A48C7B96-6AAE-48B4-8E1B-0BF663CCCF09}.Release|x86.Build.0 = Release|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Debug|x64.Build.0 = Debug|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Debug|x86.Build.0 = Debug|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Release|x64.ActiveCfg = Release|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Release|x64.Build.0 = Release|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Release|x86.ActiveCfg = Release|Any CPU
+		{2DAFF050-2681-4558-867A-D031F9EF7AC0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

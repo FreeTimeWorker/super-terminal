@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SuperTerminal.Utity;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -21,7 +22,7 @@ namespace SuperTerminal.Manager
 
             var host = CreateHostBuilder().Build();
             ServiceProvider = host.Services;
-            Application.Run(ServiceProvider.GetRequiredService<Login>());
+            Application.Run(ServiceProvider.GetRequiredService<Main>());
         }
         public static IServiceProvider ServiceProvider { get; private set; }
         static IHostBuilder CreateHostBuilder()
@@ -32,10 +33,13 @@ namespace SuperTerminal.Manager
                 .Build();
             return Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) => {
+                    services.AddHttpClient();//IHttpClientFactory
                     services.AddSingleton<IConfiguration>(config);
                     services.AddTransient<Login>();
                     services.AddTransient<Regist>();
-                    services.AddTransient<Setting>();
+                    services.AddTransient<Setting>(); 
+                    services.AddTransient<Main>();
+                    services.AddSingleton<IApiHelper, ApiHelper>();
                 });
         }
     }

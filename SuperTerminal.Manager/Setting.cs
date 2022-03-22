@@ -22,7 +22,10 @@ namespace SuperTerminal.Manager
             InitializeComponent();
             _configuration= configuration; 
         }
-
+        private void Setting_Load(object sender, EventArgs e)
+        {
+            this.txtAddress.Text = _configuration["Address"];
+        }
         private void btnSave_Click(object sender, EventArgs e)
         {
             var model = new {Address=txtAddress.Text };
@@ -35,6 +38,8 @@ namespace SuperTerminal.Manager
                 }
             }
             (_configuration as IConfigurationRoot).Reload();
+            ShowSuccessNotifier("设置成功");
+            this.Close();
         }
     }
 }

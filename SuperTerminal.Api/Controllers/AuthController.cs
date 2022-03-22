@@ -64,5 +64,23 @@ namespace SuperTerminal.Api.Controllers
         {
             return _userService.RegistEquipment(viewUserLogin);
         }
+
+
+        /// <summary>
+        /// 检查本地token是否过期
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ResponseModel<bool> Check()
+        {
+            if (int.Parse(HttpContext.Items[HttpItem.UserId].ToString()) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

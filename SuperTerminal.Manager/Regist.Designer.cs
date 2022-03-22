@@ -121,7 +121,7 @@
             this.uiTextBox3.Symbol = 61475;
             this.uiTextBox3.TabIndex = 3;
             this.uiTextBox3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiTextBox3.Watermark = "密码";
+            this.uiTextBox3.Watermark = "确认密码";
             // 
             // uiLabel3
             // 

@@ -84,6 +84,7 @@
             this.MinimizeBox = false;
             this.Name = "Setting";
             this.Text = "Setting";
+            this.Load += new System.EventHandler(this.Setting_Load);
             this.ResumeLayout(false);
 
         }
