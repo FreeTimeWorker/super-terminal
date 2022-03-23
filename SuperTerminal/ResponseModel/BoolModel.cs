@@ -11,7 +11,7 @@
             Successed = successed;
             Message = message;
         }
-        public BoolModel(bool successed, string message, object Data)
+        public BoolModel(bool successed, string message, dynamic Data)
         {
             Successed = successed;
             Message = message;

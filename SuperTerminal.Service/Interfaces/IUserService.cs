@@ -10,7 +10,7 @@ namespace SuperTerminal.Service.Interfaces
         /// </summary>
         /// <param name="viewUserLogin"></param>
         /// <returns></returns>
-        BoolModel CheckLogin(ViewUserLogin viewUserLogin);
+        BoolModel<(int, int)> CheckLogin(ViewUserLogin viewUserLogin);
         /// <summary>
         /// 管理员注册
         /// </summary>

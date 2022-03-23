@@ -59,14 +59,14 @@ namespace SuperTerminal.Manager
                     }));
                     return;
                 }
-                if (result.Data.Successed)
+                if (result.Successed)
                 {
                     ShowSuccessDialog("注册成功");
                     DialogResult = DialogResult.OK;
                 }
                 else
                 {
-                    ShowErrorDialog(result.Message);
+                    ShowErrorTip(result.Message,5000,false);
                 }
                 this.btnRegist.Invoke(new Action(() =>
                 {

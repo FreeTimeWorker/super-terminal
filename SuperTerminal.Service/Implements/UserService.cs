@@ -27,7 +27,7 @@ namespace SuperTerminal.Service.Implements
         /// 验证登录
         /// </summary>
         /// <returns></returns>
-        public BoolModel CheckLogin(ViewUserLogin viewUserLogin)
+        public BoolModel<(int,int)> CheckLogin(ViewUserLogin viewUserLogin)
         {
             //如果是管理员登录 解密数据
             if (viewUserLogin.IsManager)
@@ -35,29 +35,29 @@ namespace SuperTerminal.Service.Implements
                 RSA rsa = GetRsa();
                 if (rsa == null)
                 {
-                    return new BoolModel(false, "服务端需要安装证书");
+                    return new BoolModel<(int,int)>(false, "服务端需要安装证书",(0,0));
                 }
                 viewUserLogin.UserName = viewUserLogin.UserName.RSADecrypt(rsa);
                 viewUserLogin.Password = viewUserLogin.Password.RSADecrypt(rsa);
                 if (viewUserLogin.UserName == "-1" || viewUserLogin.Password == "-1")
                 {
-                    return new BoolModel(false,
+                    return new BoolModel<(int,int)>(false,
                         @$"数据校验失败,请在本地安装证书后重试,
                     服务端为Windows    证书安装位置为:cert;CurrentUser/My
                     服务端为非windows  请将 SuperTerminal.Pem文件置于根目录 公钥
-                    ");
+                    ",(0,0));
                 }
             }
             SysUser entity = _dbContext.Queryable<SysUser>().Where(o => o.UserName == viewUserLogin.UserName).First();
             if (entity == null)
             {
-                return new BoolModel(false, "用户名不存在");
+                return new BoolModel<(int, int)>(false, "用户名不存在");
             }
             if (!viewUserLogin.Password.Equals(entity.PassWord))
             {
-                return new BoolModel(false, "密码错误");
+                return new BoolModel<(int, int)>(false, "密码错误");
             }
-            return new BoolModel(true, "成功", new { entity.Id, entity.UserType });
+            return new BoolModel<(int, int)>(true, "成功", (entity.Id, entity.UserType));
         }
         /// <summary>
         /// 注册管理员
@@ -91,6 +91,18 @@ namespace SuperTerminal.Service.Implements
             if (ignoreNames.Contains(viewUserLogin.UserName))
             {
                 return new BoolModel(false, "用户名不能使用admin,Administrator,root");
+            }
+            if (viewUserLogin.UserName.Length < 5)
+            {
+                return new BoolModel(false, "用户名必须大于5");
+            }
+            if (viewUserLogin.Password.Length < 5)
+            {
+                return new BoolModel(false, "密码长度必须大于5");
+            }
+            if (_dbContext.Queryable<SysUser>().Any(o => o.UserName == viewUserLogin.UserName))
+            {
+                return new BoolModel(false, "用户名出现重复,注册失败");
             }
             SysUser entity = _mapper.Map<SysUser>(viewUserLogin);
             entity.UserType = 999;//管理员的类型只能是999

@@ -65,28 +65,36 @@ namespace SuperTerminal.Manager
                 }
                 var rsa = _common.GetRSA();
                 var userName = txtUserName.Text.Trim().RSAEncrypt(rsa);
-                var password = txtPassword.Text.Trim().RSAEncrypt(rsa);
+                var password = txtPassword.Text.Trim().MD5().RSAEncrypt(rsa);
                 this.btnLogin.Invoke(new Action(() =>
                 {
                     this.Enabled = false;
                 }));
-                var result = _apiHelper.Post<BoolModel>("/Auth/GetToken", new ViewUserLogin { UserName = userName, Password = password });
+                var result = _apiHelper.Post<BoolModel>("/Auth/GetToken", new ViewUserLogin { UserName = userName, Password = password,IsManager=true });
                 if (result == null)
                 {
                     ShowErrorTip("通信失败，请检查配置");
                     this.btnRegist.Invoke(new Action(() =>
                     {
-                        this.btnRegist.Enabled = true;
+                        this.Enabled = true;
                     }));
                     return;
                 }
-                if (result.Data.Successed)
+                if (result.Successed)
                 {
                     ApiHelper.UserName = userName;
                     ApiHelper.PassWord = password;
                     _apiHelper.GetToken();
                     DialogResult = DialogResult.OK;
                 }
+                else
+                {
+                    ShowErrorTip(result.Message, 5000, false);
+                }
+                this.btnRegist.Invoke(new Action(() =>
+                {
+                    this.Enabled = true;
+                }));
             });
         }
     }

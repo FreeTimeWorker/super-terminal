@@ -28,16 +28,21 @@ namespace SuperTerminal.Api.Controllers
         [HttpPost]
         public ResponseModel<BoolModel> GetToken(ViewUserLogin viewUserLogin)
         {
-            BoolModel result = _userService.CheckLogin(viewUserLogin);
-            if (result.Successed)
+            var result=new BoolModel();
+            BoolModel<(int,int)> chekLogin = _userService.CheckLogin(viewUserLogin);
+            if (chekLogin.Successed)
             {
                 string token = _jwt.GetToken(new Dictionary<string, object>()
                 {
-                    { HttpItem.UserId,result.Data.Id},
-                    { HttpItem.UserType,result.Data.UserType}
+                    { HttpItem.UserId,chekLogin.Data.Item1},
+                    { HttpItem.UserType,chekLogin.Data.Item2}
                 });
                 result.Data = token;
                 return result;
+            }
+            else
+            {
+                result.Message = chekLogin.Message;
             }
             return result;
         }
@@ -64,8 +69,6 @@ namespace SuperTerminal.Api.Controllers
         {
             return _userService.RegistEquipment(viewUserLogin);
         }
-
-
         /// <summary>
         /// 检查本地token是否过期
         /// </summary>

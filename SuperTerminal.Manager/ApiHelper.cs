@@ -79,8 +79,8 @@ namespace SuperTerminal.Manager
             }
             if (result.Successed)
             {
-                Token = result.Data.Data;
-                return result.Data.Data;
+                Token = result.Data;
+                return result.Data;
             }
             else
             {
@@ -109,6 +109,10 @@ namespace SuperTerminal.Manager
                     {
                         var res = result.Content.ReadAsStringAsync().Result.ToObject<ResponseModel<T>>();
                         return res.Data;
+                    }
+                    else if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new UnauthorizedException("Token过期,请重新登录");
                     }
                     else
                     {
