@@ -21,10 +21,6 @@ namespace SuperTerminal.Client
                     .ConfigureLogging((hostingContext, logging) => {
                         logging.AddFilter(log => log == LogLevel.Error);
                     })
-                    .ConfigureHostConfiguration(host => 
-                    {
-                        host.AddEnvironmentVariables();
-                    })
                     .ConfigureAppConfiguration((hostContext, config) =>
                     {
                         var env = hostContext.HostingEnvironment;
