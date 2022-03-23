@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace SuperTerminal.Client
 {
-    internal class Codebook
+    public class Codebook
     {
         /// <summary>
         /// 生成一个512位的密码本
         /// </summary>
         /// <returns></returns>
-        internal void GenratePassFile()
+        public void GenratePassFile()
         {
             Random r = new Random();
             byte[] bt = new byte[512];
@@ -33,7 +33,7 @@ namespace SuperTerminal.Client
         /// 拿到IV和key
         /// </summary>
         /// <returns></returns>
-        internal (string, string) GetIVandKey()
+        public(string, string) GetIVandKey()
         {
             var buffer = new byte[512];
             Span<byte> bt = new Span<byte>(buffer);

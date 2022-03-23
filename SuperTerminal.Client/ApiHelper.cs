@@ -15,10 +15,12 @@ namespace SuperTerminal.Client
         private static string Token = "";
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        public ApiHelper(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        private readonly Codebook _codebook;
+        public ApiHelper(IConfiguration configuration, IHttpClientFactory httpClientFactory,Codebook codebook)
         {
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
+            _codebook = codebook;
         }
         public string Domain 
         { 
@@ -63,10 +65,11 @@ namespace SuperTerminal.Client
             {
                 return string.Empty;
             }
+            var ivKey = _codebook.GetIVandKey();
             var data = new
             {
-                UserName= _configuration["UserName"],
-                PassWord= _configuration["PassWord"]
+                UserName= _configuration["UserName"].AesDecrypt(ivKey.Item1,ivKey.Item2),
+                PassWord= _configuration["PassWord"].AesDecrypt(ivKey.Item1, ivKey.Item2)
             };
             var result = this.Post<BoolModel>("Auth/GetToken", data);
             if (result == null)
