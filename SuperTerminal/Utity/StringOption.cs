@@ -25,9 +25,53 @@ namespace SuperTerminal.Utity
             return Convert.ToBase64String(result);
         }
         /// <summary>
-        /// Aes加密
+        /// 
         /// </summary>
         /// <param name="source"></param>
+        /// <param name="base64IV"></param>
+        /// <param name="base64Key"></param>
+        /// <returns></returns>
+        public static string AesEncrypt(this string source, string base64IV, string base64Key)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+            using Aes aes = Aes.Create();
+            aes.IV = Convert.FromBase64String(base64IV);
+            aes.Key = Convert.FromBase64String(base64Key);
+            ICryptoTransform Encryptor = aes.CreateEncryptor();
+            //原字符utf8编码获取byte加密后转换成base64字符串
+            byte[] enc = Encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(source), 0, source.Length);
+            return Convert.ToBase64String(enc);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="base64IV"></param>
+        /// <param name="base64Key"></param>
+        /// <returns></returns>
+        public static string AesDecrypt(this string source, string base64IV, string base64Key)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+            using Aes aes = Aes.Create();
+            aes.IV = Convert.FromBase64String(base64IV);
+            aes.Key = Convert.FromBase64String(base64Key);
+            ICryptoTransform Encryptor = aes.CreateDecryptor();
+            //base64字符解码获取原byte[],解密后,通过UTF8编码还原
+            byte[] enc = Encryptor.TransformFinalBlock(Convert.FromBase64String(source), 0, source.Length);
+            return Encoding.UTF8.GetString(enc);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="base64IV"></param>
+        /// <param name="base64Key"></param>
         /// <returns></returns>
         public static string AesEncrypt(this string source)
         {

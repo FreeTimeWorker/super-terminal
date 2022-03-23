@@ -30,7 +30,7 @@ namespace SuperTerminal.Manager
                     return;
                 }
                 string str = "";
-                string strDateInfo = "\r\n\r\n出现应用程序未处理的异常：" + DateTime.Now.ToString() + "\r\n";
+                string strDateInfo = "\r\n出现应用程序未处理的异常：" + DateTime.Now.ToString() + "\r\n";
                 Exception error = e.Exception as Exception;
                 if (error != null)
                 {
@@ -70,14 +70,12 @@ namespace SuperTerminal.Manager
         public static IServiceProvider ServiceProvider { get; private set; }
         static IHostBuilder CreateHostBuilder()
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, reloadOnChange: true)
-                .Build();
             return Host.CreateDefaultBuilder()
+                .ConfigureAppConfiguration((host,config) => {
+                    config.AddJsonFile("appsettings.json", true, reloadOnChange: true);
+                })
                 .ConfigureServices((context, services) => {
                     services.AddHttpClient();
-                    services.AddSingleton<IConfiguration>(config);
                     services.AddTransient<Login>();
                     services.AddTransient<Regist>();
                     services.AddTransient<Setting>(); 

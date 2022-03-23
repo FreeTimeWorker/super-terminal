@@ -84,20 +84,8 @@ namespace SuperTerminal.Utity
         public string PubIP => GetIp();
         private string GetIp()
         {
-            string html = GetHtml("https://www.ip.cn");
+            string html = GetHtml("https://www.ip.cn/api/index?ip=&type=0");
             string result = GetIPFromHtml(html);
-            if (!string.IsNullOrEmpty(result))
-            {
-                return result;
-            }
-            html = GetHtml("http://www.ip138.com/ips138.asp");
-            result = GetIPFromHtml(html);
-            if (!string.IsNullOrEmpty(result))
-            {
-                return result;
-            }
-            html = GetHtml("http://www.net.cn/static/customercare/yourip.asp");
-            result = GetIPFromHtml(html);
             if (!string.IsNullOrEmpty(result))
             {
                 return result;
