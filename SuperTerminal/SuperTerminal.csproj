@@ -13,8 +13,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-		<PackageReference Include="Norns.Urd" Version="0.0.4.6" />
-		<PackageReference Include="Polly" Version="7.2.3" />
 		<PackageReference Include="SqlSugarCore" Version="5.0.6" />
 	</ItemGroup>
 </Project>

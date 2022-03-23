@@ -13,13 +13,18 @@ namespace SuperTerminal.Manager
 {
     public partial class Main : UIForm
     {
-        public Main()
+        private readonly Login _login;
+        public Main(Login login)
         {
             InitializeComponent();
+            _login = login;
         }
         private void Main_Load(object sender, EventArgs e)
         {
-
+            if (_login.ShowDialog() != DialogResult.OK)
+            { 
+                Application.Exit();
+            }
         }
     }
 }

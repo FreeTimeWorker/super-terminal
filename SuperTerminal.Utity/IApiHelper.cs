@@ -25,7 +25,7 @@ namespace SuperTerminal.Utity
         /// <param name="url"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public ResponseModel<T> Post<T>(string url, object obj);
+        public T Post<T>(string url, object obj);
         /// <summary>
         /// Get
         /// </summary>
@@ -33,6 +33,6 @@ namespace SuperTerminal.Utity
         /// <param name="domain"></param>
         /// <param name="url"></param>
         /// <returns></returns>
-        public ResponseModel<T> Get<T>(string url);
+        public T Get<T>(string url);
     }
 }

@@ -33,12 +33,13 @@ namespace SuperTerminal.Manager
                 .Build();
             return Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) => {
-                    services.AddHttpClient();//IHttpClientFactory
+                    services.AddHttpClient();
                     services.AddSingleton<IConfiguration>(config);
                     services.AddTransient<Login>();
                     services.AddTransient<Regist>();
                     services.AddTransient<Setting>(); 
                     services.AddTransient<Main>();
+                    services.AddTransient<Common>();
                     services.AddSingleton<IApiHelper, ApiHelper>();
                     services.AddSingleton<SignalRClient>();
                 });

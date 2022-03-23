@@ -28,32 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.uiTextBox1 = new Sunny.UI.UITextBox();
+            this.txtUserName = new Sunny.UI.UITextBox();
             this.uiLabel1 = new Sunny.UI.UILabel();
-            this.uiTextBox2 = new Sunny.UI.UITextBox();
+            this.txtPassword = new Sunny.UI.UITextBox();
             this.uiLabel2 = new Sunny.UI.UILabel();
             this.btnLogin = new Sunny.UI.UIButton();
             this.btnRegist = new Sunny.UI.UIButton();
             this.btnSetting = new Sunny.UI.UISymbolButton();
             this.SuspendLayout();
             // 
-            // uiTextBox1
+            // txtUserName
             // 
-            this.uiTextBox1.ButtonSymbol = 61761;
-            this.uiTextBox1.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
-            this.uiTextBox1.Font = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.uiTextBox1.Location = new System.Drawing.Point(184, 94);
-            this.uiTextBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiTextBox1.Maximum = 2147483647D;
-            this.uiTextBox1.Minimum = -2147483648D;
-            this.uiTextBox1.MinimumSize = new System.Drawing.Size(1, 16);
-            this.uiTextBox1.Name = "uiTextBox1";
-            this.uiTextBox1.Radius = 10;
-            this.uiTextBox1.Size = new System.Drawing.Size(321, 39);
-            this.uiTextBox1.Symbol = 61447;
-            this.uiTextBox1.TabIndex = 0;
-            this.uiTextBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiTextBox1.Watermark = "用户名";
+            this.txtUserName.ButtonSymbol = 61761;
+            this.txtUserName.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
+            this.txtUserName.Font = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtUserName.Location = new System.Drawing.Point(184, 94);
+            this.txtUserName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtUserName.Maximum = 2147483647D;
+            this.txtUserName.Minimum = -2147483648D;
+            this.txtUserName.MinimumSize = new System.Drawing.Size(1, 16);
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Radius = 10;
+            this.txtUserName.Size = new System.Drawing.Size(321, 39);
+            this.txtUserName.Symbol = 61447;
+            this.txtUserName.TabIndex = 0;
+            this.txtUserName.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.txtUserName.Watermark = "用户名";
             // 
             // uiLabel1
             // 
@@ -65,24 +65,24 @@
             this.uiLabel1.Text = "用户名：";
             this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // uiTextBox2
+            // txtPassword
             // 
-            this.uiTextBox2.ButtonSymbol = 61761;
-            this.uiTextBox2.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
-            this.uiTextBox2.Font = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.uiTextBox2.Location = new System.Drawing.Point(184, 181);
-            this.uiTextBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiTextBox2.Maximum = 2147483647D;
-            this.uiTextBox2.Minimum = -2147483648D;
-            this.uiTextBox2.MinimumSize = new System.Drawing.Size(1, 16);
-            this.uiTextBox2.Name = "uiTextBox2";
-            this.uiTextBox2.PasswordChar = '⚫';
-            this.uiTextBox2.Radius = 10;
-            this.uiTextBox2.Size = new System.Drawing.Size(321, 39);
-            this.uiTextBox2.Symbol = 61475;
-            this.uiTextBox2.TabIndex = 0;
-            this.uiTextBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiTextBox2.Watermark = "密码";
+            this.txtPassword.ButtonSymbol = 61761;
+            this.txtPassword.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
+            this.txtPassword.Font = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtPassword.Location = new System.Drawing.Point(184, 181);
+            this.txtPassword.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtPassword.Maximum = 2147483647D;
+            this.txtPassword.Minimum = -2147483648D;
+            this.txtPassword.MinimumSize = new System.Drawing.Size(1, 16);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '⚫';
+            this.txtPassword.Radius = 10;
+            this.txtPassword.Size = new System.Drawing.Size(321, 39);
+            this.txtPassword.Symbol = 61475;
+            this.txtPassword.TabIndex = 0;
+            this.txtPassword.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.txtPassword.Watermark = "密码";
             // 
             // uiLabel2
             // 
@@ -142,9 +142,9 @@
             this.Controls.Add(this.btnRegist);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.uiLabel2);
-            this.Controls.Add(this.uiTextBox2);
+            this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.uiLabel1);
-            this.Controls.Add(this.uiTextBox1);
+            this.Controls.Add(this.txtUserName);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Login";
@@ -156,9 +156,9 @@
 
         #endregion
 
-        private Sunny.UI.UITextBox uiTextBox1;
+        private Sunny.UI.UITextBox txtUserName;
         private Sunny.UI.UILabel uiLabel1;
-        private Sunny.UI.UITextBox uiTextBox2;
+        private Sunny.UI.UITextBox txtPassword;
         private Sunny.UI.UILabel uiLabel2;
         private Sunny.UI.UIButton btnLogin;
         private Sunny.UI.UIButton btnRegist;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,8 +30,7 @@ namespace SuperTerminal.Manager
                 return _configuration["Address"];
             }
         }
-        [Retry(3)]
-        public virtual ResponseModel<T> Get<T>(string url)
+        public T Get<T>(string url)
         {
             using (var client = _httpClientFactory.CreateClient())
             {
@@ -38,7 +38,7 @@ namespace SuperTerminal.Manager
                 if (!string.IsNullOrEmpty(Token))
                 {
                     client.DefaultRequestHeaders.Remove("Token");
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Token", string.Concat("naw ", Token));
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Token", string.Concat("SuperTerminal ", Token));
                 }
                 var result = client.GetAsync(url).Result;
                 if (result.Headers.Contains("ReToken"))
@@ -47,7 +47,8 @@ namespace SuperTerminal.Manager
                 }
                 if (result.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    return result.Content.ReadAsStringAsync().Result.ToObject<ResponseModel<T>>();
+                    var res = result.Content.ReadAsStringAsync().Result.ToObject<ResponseModel<T>>();
+                    return res.Data;
                 }
                 else
                 {
@@ -62,59 +63,62 @@ namespace SuperTerminal.Manager
         /// <returns></returns>
         public string GetToken()
         {
-            if (string.IsNullOrEmpty(Token))
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(PassWord))
             {
-                var data = new
-                {
-                    UserName = UserName,
-                    PassWord = PassWord
-                };
-                var result = this.Post<BoolModel>("Auth/GetToken", data);
-                if (result == null)
-                {
-                    return null;
-                }
-                if (result.Status == 200 && result.Data.Successed)
-                {
-                    Token = result.Data.Data;
-                    return result.Data.Data;
-                }
-                else
-                {
-                    return string.Empty;
-                }
+                return string.Empty;
+            }
+            var data = new
+            {
+                UserName,
+                PassWord
+            };
+            var result = this.Post<BoolModel>("Auth/GetToken", data);
+            if (result == null)
+            {
+                return string.Empty;
+            }
+            if (result.Successed)
+            {
+                Token = result.Data.Data;
+                return result.Data.Data;
             }
             else
             {
-                return Token;
+                return string.Empty;
             }
         }
-
-        [Retry(3)]
-        public virtual ResponseModel<T> Post<T>(string url, object obj)
+        public T Post<T>(string url, object obj)
         {
-            using (var client = _httpClientFactory.CreateClient())
+            try
             {
-                client.BaseAddress = new Uri(Domain);
-                StringContent content = new StringContent(obj.ToJson(), Encoding.UTF8, "application/json");
-                if (!string.IsNullOrEmpty(Token))
+                using (var client = _httpClientFactory.CreateClient())
                 {
-                    client.DefaultRequestHeaders.Remove("Token");
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Token", string.Concat("naw ", Token));
+                    client.BaseAddress = new Uri(Domain);
+                    StringContent content = new StringContent(obj.ToJson(), Encoding.UTF8, "application/json");
+                    if (!string.IsNullOrEmpty(Token))
+                    {
+                        client.DefaultRequestHeaders.Remove("Token");
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Token", string.Concat("SuperTerminal ", Token));
+                    }
+                    var result = client.PostAsync(url, content).Result;
+                    if (result.Headers.Contains("ReToken"))
+                    {
+                        Token = result.Headers.GetValues("ReToken").First();
+                    }
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var res = result.Content.ReadAsStringAsync().Result.ToObject<ResponseModel<T>>();
+                        return res.Data;
+                    }
+                    else
+                    {
+                        return default;
+                    }
                 }
-                var result = client.PostAsync(url, content).Result;
-                if (result.Headers.Contains("ReToken"))
-                {
-                    Token = result.Headers.GetValues("ReToken").First();
-                }
-                if (result.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    return result.Content.ReadAsStringAsync().Result.ToObject<ResponseModel<T>>();
-                }
-                else
-                {
-                    throw new Exception("请求发生错误");
-                }
+            }
+            catch
+            {
+                return default;
             }
         }
     }
