@@ -37,6 +37,8 @@ namespace SuperTerminal.Api.Controllers
                     { HttpItem.UserId,chekLogin.Data.Item1},
                     { HttpItem.UserType,chekLogin.Data.Item2}
                 });
+                result.Successed = true;
+                result.Message = chekLogin.Message;
                 result.Data = token;
                 return result;
             }
