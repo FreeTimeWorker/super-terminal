@@ -59,13 +59,13 @@ namespace SuperTerminal.Client
         /// </summary>
         private void WriteConfig(ViewEquipmentModel model,string Address)
         {
-            var config = new
+            var config = new Config()
             {
-                model.Id,
-                model.UserName,
-                model.PassWord,
-                model.NickName,
-                Address
+                Id=model.Id,
+                UserName= model.UserName,
+                PassWord= model.PassWord,
+                NickName= model.NickName,
+                Address=Address
             };
             string json = config.ToJson();
             using (FileStream fs = new FileStream("appsettings.json", FileMode.Create))
