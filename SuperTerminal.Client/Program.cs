@@ -77,9 +77,7 @@ namespace SuperTerminal.Client
                     services.AddSingleton<Codebook>();
                     services.AddSingleton<LogServer>();
                     services.AddSingleton<SignalRClient>();//signalr
-                    services.AddTransient<InstantCmdService>();//每次获取都必须不同
                     services.AddHostedService<MessageControleService>();
-                    ServiceAgent.Provider = services.BuildServiceProvider();
                 })
                 .Build().RunAsync();
         }

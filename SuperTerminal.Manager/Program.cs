@@ -31,7 +31,7 @@ namespace SuperTerminal.Manager
                 }
                 string str = "";
                 string strDateInfo = "\r\n出现应用程序未处理的异常：" + DateTime.Now.ToString() + "\r\n";
-                Exception error = e.Exception as Exception;
+                Exception error = e.Exception;
                 if (error != null)
                 {
                     string logInfo = string.Format(strDateInfo + "异常类型：{0}\r\n异常消息：{1}\r\n异常信息：{2}\r\n", error.GetType().Name, error.Message, error.StackTrace);
