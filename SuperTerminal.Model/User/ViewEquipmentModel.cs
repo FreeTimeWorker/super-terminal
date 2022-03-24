@@ -46,5 +46,10 @@ namespace SuperTerminal.Model.User
         [CheckUnique("别名不能重复", "SysUser", "NickName")]
         [CheckByRegular("别名不能为空", Rules.Requird)]
         public string NickName { get; set; }
+
+        /// <summary>
+        /// 是否在线
+        /// </summary>
+        public bool OnLine { get; set; } = false;
     }
 }

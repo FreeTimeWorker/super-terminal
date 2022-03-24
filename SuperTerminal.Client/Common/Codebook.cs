@@ -37,7 +37,7 @@ namespace SuperTerminal.Client
         {
             var buffer = new byte[512];
             Span<byte> bt = new Span<byte>(buffer);
-            using (FileStream fs = new FileStream("pass.dll", FileMode.Open))
+            using (FileStream fs = new FileStream("pass.dll", FileMode.Open, FileAccess.Read))
             {
                 fs.Read(bt);
             }

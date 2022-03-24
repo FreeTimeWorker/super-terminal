@@ -2,6 +2,7 @@
 {
     public interface IHttpParameter
     {
+        int UserType { get; }
         int UserId { get; }
         /// <summary>
         /// 读取公共位置的  current

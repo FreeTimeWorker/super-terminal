@@ -26,7 +26,20 @@ namespace SuperTerminal.MiddleWare
                 }
             }
         }
-
+        public int UserType
+        {
+            get
+            {
+                if (_httpContextAccessor.HttpContext.Items.ContainsKey(HttpItem.UserType))
+                {
+                    return int.Parse(_httpContextAccessor.HttpContext.Items[HttpItem.UserType].ToString());
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
         public int PageIndex
         {
             get

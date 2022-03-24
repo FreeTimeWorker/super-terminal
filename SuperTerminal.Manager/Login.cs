@@ -70,7 +70,7 @@ namespace SuperTerminal.Manager
                 {
                     this.Enabled = false;
                 }));
-                var result = _apiHelper.Post<BoolModel>("/Auth/GetToken", new ViewUserLogin { UserName = userName, Password = password,IsManager=true });
+                var result = _apiHelper.Post<BoolModel<string>>("/Auth/GetToken", new ViewUserLogin { UserName = userName, Password = password,IsManager=true });
                 if (result == null)
                 {
                     ShowErrorTip("通信失败，请检查配置");
@@ -84,7 +84,7 @@ namespace SuperTerminal.Manager
                 {
                     ApiHelper.UserName = userName;
                     ApiHelper.PassWord = password;
-                    _apiHelper.GetToken();
+                    ApiHelper.Token = result.Data;
                     DialogResult = DialogResult.OK;
                 }
                 else

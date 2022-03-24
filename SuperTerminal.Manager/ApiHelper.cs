@@ -15,7 +15,7 @@ namespace SuperTerminal.Manager
         //这里保存提交到api的用户名和密码
         public static string UserName = "";
         public static string PassWord = "";
-        private static string Token = "";
+        public static string Token = "";
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         public ApiHelper(IConfiguration configuration, IHttpClientFactory httpClientFactory)
@@ -52,7 +52,6 @@ namespace SuperTerminal.Manager
                 }
                 else
                 {
-                    GetToken();
                     throw new Exception("请求发生错误");
                 }
             }
@@ -70,7 +69,8 @@ namespace SuperTerminal.Manager
             var data = new
             {
                 UserName,
-                PassWord
+                PassWord,
+                IsManager=true
             };
             var result = this.Post<BoolModel>("Auth/GetToken", data);
             if (result == null)

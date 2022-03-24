@@ -63,7 +63,7 @@ namespace SuperTerminal.Utity
             aes.Key = Convert.FromBase64String(base64Key);
             ICryptoTransform Encryptor = aes.CreateDecryptor();
             //base64字符解码获取原byte[],解密后,通过UTF8编码还原
-            byte[] enc = Encryptor.TransformFinalBlock(Convert.FromBase64String(source), 0, source.Length);
+            byte[] enc = Encryptor.TransformFinalBlock(Convert.FromBase64String(source), 0, Convert.FromBase64String(source).Length);
             return Encoding.UTF8.GetString(enc);
         }
         /// <summary>

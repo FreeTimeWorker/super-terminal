@@ -6,9 +6,12 @@ using SuperTerminal.Model;
 using SuperTerminal.Model.User;
 using SuperTerminal.Service.Interfaces;
 using SuperTerminal.Utity;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using SqlSugar;
+using SuperTerminal.MessageHandler.Instant;
 
 namespace SuperTerminal.Service.Implements
 {
@@ -141,6 +144,34 @@ namespace SuperTerminal.Service.Implements
             entity.PassWord = entity.PassWord.MD5();
             int result = _dbContext.Insertable(entity).ExecuteReturnIdentity();
             return new BoolModel<int>(result > 0, result > 0 ? "注册成功" : "注册失败", result);
+        }
+        /// <summary>
+        /// 根据条件获取设备信息
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public List<ViewEquipmentModel> GetClients(string keyword)
+        {
+            if (_httpParameter.UserType == 999)
+            {
+                var result = _dbContext.Queryable<SysUser>()
+                .Where(o => o.UserType == 0)
+                .Where(o => o.NickName.Contains(keyword) || o.PubIp.Contains(keyword) || o.PrivIp.Contains(keyword))
+                .Select<ViewEquipmentModel>().ToList();
+                foreach (var item in result)
+                {
+                    item.PassWord = "********";
+                    if (InstantMessage.Mapping.Keys.Any(o => o == item.Id))
+                    {
+                        item.OnLine = true;
+                    }
+                }
+                return result;
+            }
+            else
+            { 
+                return new List<ViewEquipmentModel>();
+            }
         }
     }
 }

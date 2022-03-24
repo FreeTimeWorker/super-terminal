@@ -68,10 +68,10 @@ namespace SuperTerminal.Client
             var ivKey = _codebook.GetIVandKey();
             var data = new
             {
-                UserName= _configuration["UserName"].AesDecrypt(ivKey.Item1,ivKey.Item2),
-                PassWord= _configuration["PassWord"].AesDecrypt(ivKey.Item1, ivKey.Item2)
+                UserName= _configuration["UserName"],
+                Password = _configuration["PassWord"].AesDecrypt(ivKey.Item1, ivKey.Item2)
             };
-            var result = this.Post<BoolModel>("Auth/GetToken", data);
+            var result = this.Post<BoolModel<string>>("Auth/GetToken", data);
             if (result == null)
             {
                 return string.Empty;

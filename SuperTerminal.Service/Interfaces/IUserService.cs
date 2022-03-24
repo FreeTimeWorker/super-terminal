@@ -1,5 +1,6 @@
 ﻿using SuperTerminal.Model;
 using SuperTerminal.Model.User;
+using System.Collections.Generic;
 
 namespace SuperTerminal.Service.Interfaces
 {
@@ -23,5 +24,6 @@ namespace SuperTerminal.Service.Interfaces
         /// <param name="viewUserLogin"></param>
         /// <returns></returns>
         BoolModel<int> RegistEquipment(ViewEquipmentModel viewUserLogin);
+        List<ViewEquipmentModel> GetClients(string keyword);
     }
 }

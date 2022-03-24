@@ -37,6 +37,7 @@ namespace SuperTerminal.Client
             {
                 if (!cancelSource.Token.IsCancellationRequested)
                 {
+                    _signalRClient.StartConnection();
                     //打开连接,接收消息
                     _signalRClient.AddReceiveHandler<NoticeMessage>("ReceiveNotice", o => {
                         Task.Factory.StartNew(() =>

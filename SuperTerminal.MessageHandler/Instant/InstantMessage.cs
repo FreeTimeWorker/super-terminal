@@ -10,7 +10,7 @@ namespace SuperTerminal.MessageHandler.Instant
 {
     public class InstantMessage : Hub<IInstantMessage>
     {
-        private static ConcurrentDictionary<int, string> Mapping = new();
+        public static ConcurrentDictionary<int, string> Mapping = new();
         public override Task OnConnectedAsync()
         {
             lock (Mapping)

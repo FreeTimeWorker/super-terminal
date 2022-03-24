@@ -26,9 +26,9 @@ namespace SuperTerminal.Api.Controllers
         /// <param name="userLogin">passWord</param>
         /// <returns></returns>
         [HttpPost]
-        public ResponseModel<BoolModel> GetToken(ViewUserLogin viewUserLogin)
+        public ResponseModel<BoolModel<string>> GetToken(ViewUserLogin viewUserLogin)
         {
-            var result=new BoolModel();
+            var result=new BoolModel<string>();
             BoolModel<(int,int)> chekLogin = _userService.CheckLogin(viewUserLogin);
             if (chekLogin.Successed)
             {
@@ -71,6 +71,18 @@ namespace SuperTerminal.Api.Controllers
         {
             return _userService.RegistEquipment(viewUserLogin);
         }
+
+        /// <summary>
+        /// 检查本地token是否过期
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ResponseModel<int> GetUserId()
+        {
+            return int.Parse(HttpContext.Items[HttpItem.UserId].ToString());
+        }
+
+
         /// <summary>
         /// 检查本地token是否过期
         /// </summary>

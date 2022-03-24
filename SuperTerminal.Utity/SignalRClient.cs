@@ -30,7 +30,6 @@ namespace SuperTerminal.Utity
         public SignalRClient(IApiHelper apiHelper)
         {
             _apiHelper = apiHelper;
-            StartConnection();
         }
         private event Func<Exception, Task> ClosedEvent = null;
         private HubConnection connection;

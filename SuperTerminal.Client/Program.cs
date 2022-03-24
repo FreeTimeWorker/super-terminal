@@ -14,7 +14,7 @@ namespace SuperTerminal.Client
     {
         private static void Main(string[] args)
         {
-            args = new string[] { "purpose:regist", "Address=http://localhost:5000", "NickName=测试1" };
+            //args = new string[] { "purpose:regist", "Address=http://localhost:5000", "NickName=测试1" };
             args = new string[] { "purpose:WindowsServer" };
             if (args.Length == 0)
             {
@@ -62,12 +62,20 @@ namespace SuperTerminal.Client
                 })
                 .UseConsoleLifetime().RunConsoleAsync(op => op.SuppressStatusMessages = true);
         }
-        private async static void RunAsWindowsServer(string[] args)
+        private static void RunAsWindowsServer(string[] args)
         {
-            await Host.CreateDefaultBuilder(args)
+             Host.CreateDefaultBuilder(args)
                 .UseWindowsService(options =>
                 {
                     options.ServiceName = "SuperTerminal_Client";
+                })
+                .ConfigureAppConfiguration((hostContext, config) =>
+                {
+                    config.AddJsonFile("appsettings.json", true, reloadOnChange: true);
+                    if (args != null)
+                    {
+                        config.AddCommandLine(args);
+                    }
                 })
                 .ConfigureServices(services =>
                 {
@@ -79,7 +87,7 @@ namespace SuperTerminal.Client
                     services.AddSingleton<SignalRClient>();//signalr
                     services.AddHostedService<MessageControleService>();
                 })
-                .Build().RunAsync();
+                .Build().RunAsync().Wait();
         }
     }
 }
