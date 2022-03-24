@@ -51,14 +51,16 @@ namespace SuperTerminal.Client
                             //打开终端
                             if (!_terminalMap.ContainsKey(msg.Sender))
                             {
-                                InstantCmdService InstantCmdService = new InstantCmdService(_configuration,_logServer,_signalRClient,_osHelper);
+                                InstantCmdService InstantCmdService = new InstantCmdService(_configuration, _logServer, _signalRClient, _osHelper);
+                                InstantCmdService.StartControle(msg);
                                 _terminalMap.TryAdd(msg.Sender, InstantCmdService);
                             }
                             else if (_terminalMap.TryGetValue(msg.Sender, out InstantCmdService _terminal))
                             {
                                 if (_terminal == null || _terminal.Process == null)
                                 {
-                                    InstantCmdService InstantCmdService = new new InstantCmdService(_configuration, _logServer, _signalRClient, _osHelper);
+                                    InstantCmdService InstantCmdService = new InstantCmdService(_configuration, _logServer, _signalRClient, _osHelper);
+                                    InstantCmdService.StartControle(msg);
                                     _terminalMap.TryAdd(msg.Sender, InstantCmdService);
                                 }
                             }
@@ -83,6 +85,7 @@ namespace SuperTerminal.Client
                             }
                         }
                     });
+                    //关闭终端
                     _signalRClient.AddReceiveHandler<CloseTerminalMessage>("ReceiveCloseTerminal", msg => {
                         //打开终端
                         lock (teminalLock)

@@ -14,7 +14,8 @@ namespace SuperTerminal.Client
     {
         private static void Main(string[] args)
         {
-            //args = new string[] { "purpose:regist", "Address=http://localhost:5000", "NickName=测试1" };
+            args = new string[] { "purpose:regist", "Address=http://localhost:5000", "NickName=测试1" };
+            args = new string[] { "purpose:WindowsServer" };
             if (args.Length == 0)
             {
                 Console.WriteLine("请勿直接执行");
@@ -28,6 +29,7 @@ namespace SuperTerminal.Client
                         Init(args);
                         break;
                     case "purpose:WindowsServer":
+                        RunAsWindowsServer(args);
                         break;
                     default:
                         Console.WriteLine("请勿直接执行");
@@ -53,10 +55,10 @@ namespace SuperTerminal.Client
                 {
                     services.AddHttpClient();
                     services.AddTransient<IApiHelper, ApiHelper>();
-                    services.AddHostedService<Init>();
-                    services.AddTransient<OsHelper>();
+                    services.AddSingleton<OsHelper>();
                     services.AddSingleton<Codebook>();
                     services.AddSingleton<LogServer>();
+                    services.AddHostedService<Init>();
                 })
                 .UseConsoleLifetime().RunConsoleAsync(op => op.SuppressStatusMessages = true);
         }
@@ -71,11 +73,11 @@ namespace SuperTerminal.Client
                 {
                     services.AddHttpClient();
                     services.AddTransient<IApiHelper, ApiHelper>();
-                    services.AddTransient<OsHelper>();
+                    services.AddSingleton<OsHelper>();
                     services.AddSingleton<Codebook>();
                     services.AddSingleton<LogServer>();
                     services.AddSingleton<SignalRClient>();//signalr
-                    services.AddTransient<InstantCmdService>();
+                    services.AddTransient<InstantCmdService>();//每次获取都必须不同
                     services.AddHostedService<MessageControleService>();
                     ServiceAgent.Provider = services.BuildServiceProvider();
                 })
