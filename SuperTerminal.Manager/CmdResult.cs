@@ -15,6 +15,7 @@ namespace SuperTerminal.Manager
         public CmdResult()
         {
             InitializeComponent();
+            AutoScaleMode = AutoScaleMode.None;
         }
         public string Title 
         {
@@ -27,6 +28,5 @@ namespace SuperTerminal.Manager
                 this.g_title.Text= value; 
             }
         }
-
     }
 }

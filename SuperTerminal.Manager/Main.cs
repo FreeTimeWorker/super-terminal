@@ -22,6 +22,7 @@ namespace SuperTerminal.Manager
         private int UserId;
         public Main(Login login, IApiHelper apiHelper,SignalRClient signalRClient)
         {
+            AutoScaleMode = AutoScaleMode.None;
             InitializeComponent();
             _login = login;
             _signalRClient = signalRClient;
@@ -70,12 +71,12 @@ namespace SuperTerminal.Manager
             if (string.IsNullOrWhiteSpace(keyword)) keyword = "";
             var models = _apiHelper.Get<List<ViewEquipmentModel>>($"/Equipment/GetClients?keyword={keyword}");
             TreeNode[] treeNodes = new TreeNode[models.Count];
-            foreach (var item in models)
+            for (var i=0;i<models.Count;i++)
             {
-                var node = new TreeNode($"{item.NickName}|{item.PubIp}");
-                node.ForeColor = item.OnLine ? Color.Black : Color.Red;
-                node.Tag = item;
-                treeNodes[0] = node;
+                var node = new TreeNode($"{models[i].NickName}|{models[i].PubIp}");
+                node.ForeColor = models[i].OnLine ? Color.Black : Color.Red;
+                node.Tag = models[i];
+                treeNodes[i] = node;
             }
             equipmentData.Invoke(new Action(() =>
             {
@@ -134,7 +135,7 @@ namespace SuperTerminal.Manager
                 }
                 else
                 {
-                    if (cmdResult.FirstOrDefault(o => o.Name == $"r{itemData.Id}") != null)
+                    if (cmdResult.FirstOrDefault(o => o.Name == $"r_{itemData.Id}") != null)
                     {
                         cmdResult.RemoveAll(o => o.Name == $"r_{itemData.Id}");
                     }
@@ -144,37 +145,32 @@ namespace SuperTerminal.Manager
             btnEnd.Visible = showbtnStart;
             if (showbtnStart)
             {
-                btnStart.Parent = this;
-                btnEnd.Parent = this;
-                btnEnd.BringToFront();
-                btnStart.BringToFront();
+                bottom.Controls.Clear();
+                ControlToControlResize(cmdResult.ToArray(), this.bottom, new Padding());
+            }
+            else
+            {
+                bottom.Controls.Clear();
             }
         }
-        private void ControlToControlResize(Control[] ControlArry, Control control_parent, int RowCount, Size? ControlSize, Padding pad)
+        private void ControlToControlResize(Control[] ControlArry, Control control_parent, Padding pad)
         {
-            //计算按钮相关信息
-            control_parent.Controls.Clear();
             //列数
-            int yCount = 0; int xCount = RowCount;
-            if (ControlArry.Length < RowCount) //定义一列展示的数量大于总控件
+            int yCount = 1; int xCount = 0;//一行最多显示三个
+            if (ControlArry.Length <= 3) //定义一列展示的数量大于总控件
             {
                 yCount = 1;
+                xCount = ControlArry.Length;
             }
             else
             {
-                yCount = ControlArry.Length % RowCount == 0 ? ControlArry.Length / RowCount : ControlArry.Length / RowCount + 1;
+                xCount = 3;
+                yCount = ControlArry.Length % 3 == 0 ? ControlArry.Length / 3 : ControlArry.Length / 3 + 1;
             }
             Padding ParentsPadding = control_parent.Padding;
-            Size btnSize = new System.Drawing.Size();
-            if (ControlSize != null)
-            {
-                btnSize = (Size)ControlSize;
-            }
-            else
-            {
-                btnSize.Width = Convert.ToInt32(Math.Floor(((double)control_parent.Width - (ParentsPadding.Left + ParentsPadding.Right)) / RowCount));
-                btnSize.Height = Convert.ToInt32(Math.Floor(((double)control_parent.Height - (ParentsPadding.Top + ParentsPadding.Bottom)) / yCount));
-            }
+            Size btnSize = new();
+            btnSize.Width = Convert.ToInt32(Math.Floor(((double)control_parent.Width - (ParentsPadding.Left + ParentsPadding.Right)) / xCount));
+            btnSize.Height = Convert.ToInt32(Math.Floor(((double)control_parent.Height - (ParentsPadding.Top + ParentsPadding.Bottom)) / yCount));
             int index = 0;
             for (int i = 0; i < yCount; i++)//行数
             {
@@ -203,7 +199,6 @@ namespace SuperTerminal.Manager
         /// <param name="e"></param>
         private void btnStart_Click(object sender, EventArgs e)
         {
-            ControlToControlResize(cmdResult.ToArray(), bottom, (cmdResult.Count / 3) + 1, null, new Padding(1,1,1,1));
             Task.Factory.StartNew(() =>
             {
                 foreach (var item in cmdResult)
@@ -260,6 +255,12 @@ namespace SuperTerminal.Manager
                     }
                 });
             }
+        }
+
+        private void Main_Resize(object sender, EventArgs e)
+        {
+            bottom.Controls.Clear();
+            ControlToControlResize(cmdResult.ToArray(), this.bottom, new Padding());
         }
     }
 }

@@ -36,14 +36,15 @@
             this.txtkeyword = new Sunny.UI.UITextBox();
             this.topright = new Sunny.UI.UIPanel();
             this.txtCmd = new Sunny.UI.UIRichTextBox();
-            this.btnStart = new Sunny.UI.UIButton();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.btnEnd = new Sunny.UI.UIButton();
-            this.bottom = new Sunny.UI.UIPanel();
+            this.btnStart = new Sunny.UI.UIButton();
+            this.bottom = new System.Windows.Forms.Panel();
             this.left.SuspendLayout();
             this.uiPanel2.SuspendLayout();
             this.uiPanel1.SuspendLayout();
             this.topright.SuspendLayout();
-            this.txtCmd.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // left
@@ -144,6 +145,7 @@
             // topright
             // 
             this.topright.Controls.Add(this.txtCmd);
+            this.topright.Controls.Add(this.panel1);
             this.topright.Dock = System.Windows.Forms.DockStyle.Top;
             this.topright.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.topright.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -151,7 +153,7 @@
             this.topright.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.topright.MinimumSize = new System.Drawing.Size(1, 1);
             this.topright.Name = "topright";
-            this.topright.Size = new System.Drawing.Size(685, 140);
+            this.topright.Size = new System.Drawing.Size(685, 92);
             this.topright.TabIndex = 1;
             this.topright.Text = null;
             this.topright.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
@@ -160,11 +162,10 @@
             // 
             this.txtCmd.AutoWordSelection = true;
             this.txtCmd.BackColor = System.Drawing.Color.Black;
-            this.txtCmd.Controls.Add(this.btnStart);
-            this.txtCmd.Controls.Add(this.btnEnd);
             this.txtCmd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCmd.FillColor = System.Drawing.Color.Black;
-            this.txtCmd.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
+            this.txtCmd.FillColor2 = System.Drawing.Color.Black;
+            this.txtCmd.FillDisableColor = System.Drawing.Color.Black;
             this.txtCmd.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtCmd.ForeColor = System.Drawing.Color.White;
             this.txtCmd.Location = new System.Drawing.Point(0, 0);
@@ -172,54 +173,58 @@
             this.txtCmd.MinimumSize = new System.Drawing.Size(1, 1);
             this.txtCmd.Name = "txtCmd";
             this.txtCmd.Padding = new System.Windows.Forms.Padding(2);
-            this.txtCmd.Size = new System.Drawing.Size(685, 140);
+            this.txtCmd.Size = new System.Drawing.Size(541, 92);
             this.txtCmd.Style = Sunny.UI.UIStyle.Custom;
+            this.txtCmd.StyleCustomMode = true;
             this.txtCmd.TabIndex = 0;
             this.txtCmd.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             this.txtCmd.WordWrap = true;
             this.txtCmd.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCmd_KeyDown);
             // 
-            // btnStart
+            // panel1
             // 
-            this.btnStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStart.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnStart.Location = new System.Drawing.Point(579, 11);
-            this.btnStart.MinimumSize = new System.Drawing.Size(1, 1);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Radius = 20;
-            this.btnStart.Size = new System.Drawing.Size(100, 24);
-            this.btnStart.TabIndex = 3;
-            this.btnStart.Text = "开始控制";
-            this.btnStart.Visible = false;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            this.panel1.Controls.Add(this.btnEnd);
+            this.panel1.Controls.Add(this.btnStart);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel1.Location = new System.Drawing.Point(541, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(144, 92);
+            this.panel1.TabIndex = 1;
             // 
             // btnEnd
             // 
-            this.btnEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEnd.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnEnd.Location = new System.Drawing.Point(579, 66);
+            this.btnEnd.Location = new System.Drawing.Point(17, 50);
             this.btnEnd.MinimumSize = new System.Drawing.Size(1, 1);
             this.btnEnd.Name = "btnEnd";
             this.btnEnd.Radius = 20;
-            this.btnEnd.Size = new System.Drawing.Size(100, 24);
+            this.btnEnd.Size = new System.Drawing.Size(100, 33);
             this.btnEnd.TabIndex = 4;
             this.btnEnd.Text = "结束控制";
             this.btnEnd.Visible = false;
             this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
             // 
+            // btnStart
+            // 
+            this.btnStart.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnStart.Location = new System.Drawing.Point(17, 11);
+            this.btnStart.MinimumSize = new System.Drawing.Size(1, 1);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Radius = 20;
+            this.btnStart.Size = new System.Drawing.Size(100, 33);
+            this.btnStart.TabIndex = 3;
+            this.btnStart.Text = "开始控制";
+            this.btnStart.Visible = false;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
             // bottom
             // 
+            this.bottom.AutoScroll = true;
             this.bottom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bottom.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
-            this.bottom.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.bottom.Location = new System.Drawing.Point(253, 175);
-            this.bottom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.bottom.MinimumSize = new System.Drawing.Size(1, 1);
+            this.bottom.Location = new System.Drawing.Point(253, 127);
             this.bottom.Name = "bottom";
-            this.bottom.Size = new System.Drawing.Size(685, 583);
-            this.bottom.TabIndex = 1;
-            this.bottom.Text = null;
-            this.bottom.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.bottom.Size = new System.Drawing.Size(685, 631);
+            this.bottom.TabIndex = 2;
             // 
             // Main
             // 
@@ -232,12 +237,13 @@
             this.Name = "Main";
             this.Text = "Main";
             this.Load += new System.EventHandler(this.Main_Load);
+            this.Resize += new System.EventHandler(this.Main_Resize);
             this.left.ResumeLayout(false);
             this.uiPanel2.ResumeLayout(false);
             this.uiPanel2.PerformLayout();
             this.uiPanel1.ResumeLayout(false);
             this.topright.ResumeLayout(false);
-            this.txtCmd.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -246,7 +252,6 @@
 
         private Sunny.UI.UIPanel left;
         private Sunny.UI.UIPanel topright;
-        private Sunny.UI.UIPanel bottom;
         private Sunny.UI.UITextBox txtkeyword;
         private Sunny.UI.UIPanel uiPanel1;
         private Sunny.UI.UITreeView equipmentData;
@@ -255,5 +260,7 @@
         private Sunny.UI.UIRichTextBox txtCmd;
         private Sunny.UI.UIButton btnStart;
         private Sunny.UI.UIButton btnEnd;
+        private System.Windows.Forms.Panel bottom;
+        private System.Windows.Forms.Panel panel1;
     }
 }

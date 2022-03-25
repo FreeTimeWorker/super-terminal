@@ -35,9 +35,11 @@
             // 
             // g_title
             // 
+            this.g_title.AutoSize = true;
             this.g_title.Controls.Add(this.Content);
             this.g_title.Dock = System.Windows.Forms.DockStyle.Fill;
             this.g_title.Location = new System.Drawing.Point(0, 0);
+            this.g_title.Margin = new System.Windows.Forms.Padding(0);
             this.g_title.Name = "g_title";
             this.g_title.Size = new System.Drawing.Size(389, 294);
             this.g_title.TabIndex = 0;
@@ -70,6 +72,7 @@
             this.Size = new System.Drawing.Size(389, 294);
             this.g_title.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
