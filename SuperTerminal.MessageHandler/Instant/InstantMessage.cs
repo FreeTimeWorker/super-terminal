@@ -66,7 +66,7 @@ namespace SuperTerminal.MessageHandler.Instant
         /// <returns></returns>
         public async Task SendOpenTerminal(OpenTerminalMessage message)
         {
-            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals(999))
+            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals("999"))
             {
                 if (Mapping.TryGetValue(message.Receiver, out string connectionId))
                 {
@@ -82,7 +82,7 @@ namespace SuperTerminal.MessageHandler.Instant
         /// <returns></returns>
         public async Task SendExecTerminalCmd(ExecuteTerminalCommandMessage message)
         {
-            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals(999))
+            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals("999"))
             {
                 if (Mapping.TryGetValue(message.Receiver, out string connectionId))
                 {
@@ -99,7 +99,7 @@ namespace SuperTerminal.MessageHandler.Instant
         /// <returns></returns>
         public async Task SendCloseTerminal(CloseTerminalMessage message)
         {
-            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals(999))
+            if (Context.GetHttpContext().Items[HttpItem.UserType].Equals("999"))
             {
                 if (Mapping.TryGetValue(message.Receiver, out string connectionId))
                 {

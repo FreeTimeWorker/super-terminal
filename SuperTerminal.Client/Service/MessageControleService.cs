@@ -18,14 +18,12 @@ namespace SuperTerminal.Client
         ManualResetEvent resetEvent = new ManualResetEvent(false);//阻止服务自动退出
         private CancellationTokenSource cancelSource;//关闭服务后退出服务
         private ConcurrentDictionary<int, InstantCmdService> _terminalMap = new ConcurrentDictionary<int, InstantCmdService>();
-        private readonly Config _config;
         private readonly SignalRClient _signalRClient;
         private readonly LogServer _logServer;
         private readonly IConfiguration _configuration;
         private readonly OsHelper _osHelper;
         public MessageControleService(IConfiguration configuration, SignalRClient signalRClient,LogServer logServer,OsHelper osHelper)
         {
-            configuration.Bind(_config);
             _signalRClient = signalRClient;
             _logServer = logServer;
             _configuration = configuration;
@@ -68,7 +66,7 @@ namespace SuperTerminal.Client
                             _signalRClient.SendMsg<NoticeMessage>("SendNotice", new NoticeMessage()
                             {
                                 Mark = NoticeMessageMark.SuperTerminal,
-                                SenderName = _config.NickName,
+                                SenderName = _configuration["NickName"],
                                 Content = "终端打开成功",
                                 NeedReply = false,
                                 Receiver = msg.Sender,
@@ -111,7 +109,7 @@ namespace SuperTerminal.Client
                                 _signalRClient.SendMsg<NoticeMessage>("SendNotice", new NoticeMessage()
                                 {
                                     Mark = NoticeMessageMark.SuperTerminal,
-                                    SenderName = _config.NickName,
+                                    SenderName = _configuration["NickNam"],
                                     Content = "终端结束",
                                     NeedReply = false,
                                     Receiver = msg.Sender,

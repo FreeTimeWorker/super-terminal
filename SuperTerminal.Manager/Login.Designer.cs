@@ -51,7 +51,7 @@
             this.txtUserName.Radius = 10;
             this.txtUserName.Size = new System.Drawing.Size(321, 39);
             this.txtUserName.Symbol = 61447;
-            this.txtUserName.TabIndex = 0;
+            this.txtUserName.TabIndex = 1;
             this.txtUserName.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             this.txtUserName.Watermark = "用户名";
             // 
@@ -61,7 +61,7 @@
             this.uiLabel1.Location = new System.Drawing.Point(77, 94);
             this.uiLabel1.Name = "uiLabel1";
             this.uiLabel1.Size = new System.Drawing.Size(100, 39);
-            this.uiLabel1.TabIndex = 1;
+            this.uiLabel1.TabIndex = 0;
             this.uiLabel1.Text = "用户名：";
             this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -80,7 +80,7 @@
             this.txtPassword.Radius = 10;
             this.txtPassword.Size = new System.Drawing.Size(321, 39);
             this.txtPassword.Symbol = 61475;
-            this.txtPassword.TabIndex = 0;
+            this.txtPassword.TabIndex = 2;
             this.txtPassword.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             this.txtPassword.Watermark = "密码";
             // 
@@ -90,7 +90,7 @@
             this.uiLabel2.Location = new System.Drawing.Point(77, 181);
             this.uiLabel2.Name = "uiLabel2";
             this.uiLabel2.Size = new System.Drawing.Size(100, 39);
-            this.uiLabel2.TabIndex = 1;
+            this.uiLabel2.TabIndex = 0;
             this.uiLabel2.Text = "密码:";
             this.uiLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -101,7 +101,7 @@
             this.btnLogin.MinimumSize = new System.Drawing.Size(1, 1);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(100, 35);
-            this.btnLogin.TabIndex = 2;
+            this.btnLogin.TabIndex = 0;
             this.btnLogin.Text = "登录";
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
@@ -112,7 +112,7 @@
             this.btnRegist.MinimumSize = new System.Drawing.Size(1, 1);
             this.btnRegist.Name = "btnRegist";
             this.btnRegist.Size = new System.Drawing.Size(100, 35);
-            this.btnRegist.TabIndex = 2;
+            this.btnRegist.TabIndex = 0;
             this.btnRegist.Text = "注册";
             this.btnRegist.Click += new System.EventHandler(this.btnRegist_Click);
             // 

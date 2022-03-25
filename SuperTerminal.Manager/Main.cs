@@ -259,7 +259,6 @@ namespace SuperTerminal.Manager
                         });
                     }
                 });
-                this.txtCmd.Text = this.txtCmd.Text.Trim();
             }
         }
     }

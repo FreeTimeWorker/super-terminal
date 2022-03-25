@@ -17,7 +17,7 @@ namespace SuperTerminal.Client
     /// </summary>
     public class InstantCmdService : IDisposable
     {
-        private readonly Config _config;
+        private readonly IConfiguration _configuration;
         private readonly LogServer _logServer;
         private readonly SignalRClient _signalRClient;
         private readonly OsHelper _osHelper;
@@ -55,7 +55,7 @@ namespace SuperTerminal.Client
             _logServer = logServer;
             _signalRClient = signalRClient;
             _osHelper = osHelper;
-            configuration.Bind(_config);
+            _configuration = configuration;
         }
 
         public void Dispose()
@@ -141,7 +141,7 @@ namespace SuperTerminal.Client
                         _logServer.Write($"超级终端执行错误输出:{s}");
                         _signalRClient.SendMsg<NoticeMessage>("SendNotice", new NoticeMessage()
                         {
-                            SenderName = _config.NickName,
+                            SenderName = _configuration["NickName"],
                             Content = s,
                             NeedReply = false,
                             Receiver = _terminalInfo.Sender,
@@ -167,7 +167,7 @@ namespace SuperTerminal.Client
                             //通知发送者执行结果
                             _signalRClient.SendMsg<NoticeMessage>("SendNotice", new NoticeMessage()
                             {
-                                SenderName = _config.NickName,
+                                SenderName = _configuration["NickName"],
                                 Content = s,
                                 NeedReply = false,
                                 Receiver = _terminalInfo.Sender,
