@@ -259,8 +259,11 @@ namespace SuperTerminal.Manager
 
         private void Main_Resize(object sender, EventArgs e)
         {
-            bottom.Controls.Clear();
-            ControlToControlResize(cmdResult.ToArray(), this.bottom, new Padding());
+            if (cmdResult.Count > 0)
+            {
+                bottom.Controls.Clear();
+                ControlToControlResize(cmdResult.ToArray(), this.bottom, new Padding());
+            }
         }
     }
 }
