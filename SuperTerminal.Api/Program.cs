@@ -7,16 +7,40 @@ namespace SuperTerminal.Api
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            if (args.Length == 0)
+            {
+                RunAsWebServer(args);
+            }
+            else
+            {
+                RunAsWindowServer(args);
+            }
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        /// <summary>
+        /// 以 web形式运行
+        /// </summary>
+        /// <param name="args"></param>
+        public static void RunAsWebServer(string[] args)
         {
-            return Host.CreateDefaultBuilder(args)
-.ConfigureWebHostDefaults(webBuilder =>
-{
-    webBuilder.UseStartup<Startup>();
-});
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                }).Build().Run();
+        }
+        /// <summary>
+        /// 以windows形式运行
+        /// </summary>
+        /// <param name="args"></param>
+        public static void RunAsWindowServer(string[] args)
+        {
+             Host.CreateDefaultBuilder(args)
+                .UseWindowsService()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseKestrel()
+                    .UseStartup<Startup>();
+                }).Build().Run();
         }
     }
 }
