@@ -33,25 +33,28 @@ namespace SuperTerminal.Manager
             { 
                 Application.Exit();
             }
-            loadEqipment("");
-            RegistReceiveMessage();
-            GetUserId();
+            Task.Factory.StartNew(() =>
+            {
+                _signalRClient.StartConnection();
+                loadEqipment("");
+                RegistReceiveMessage();
+                GetUserId();
+            });
         }
         private void RegistReceiveMessage()
         {
-            Task.Factory.StartNew(() =>
+            _signalRClient.AddReceiveHandler<NoticeMessage>("ReceiveNotice", o =>
             {
-                //注册事件
-                _signalRClient.AddReceiveHandler<NoticeMessage>("ReceiveNotice", o =>
+                bottom.Invoke(new Action(() =>
                 {
-                    bottom.Invoke(new Action(() =>
+                    var control = bottom.Controls.Find($"r_{o.Sender}", false).First() as CmdResult;
+                    if (control != null)
                     {
-                        var controle = bottom.Controls.Find($"r_{o.Sender}", false).First() as CmdResult;
-                        controle.Content.AppendText($"{Environment.NewLine}{o.SenderName}:{o.Content}");
-                        controle.Content.Select(controle.Content.Text.Length, 0);
-                        controle.Content.ScrollToCaret();
-                    }));
-                });
+                        control.Content.AppendText($"{Environment.NewLine}{o.SenderName}:{o.Content}");
+                        control.Content.Select(control.Content.Text.Length, 0);
+                        control.Content.ScrollToCaret();
+                    }
+                }));
             });
         }
         private void GetUserId()
@@ -65,23 +68,20 @@ namespace SuperTerminal.Manager
         private void loadEqipment(string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword)) keyword = "";
-            Task.Factory.StartNew(() =>
+            var models = _apiHelper.Get<List<ViewEquipmentModel>>($"/Equipment/GetClients?keyword={keyword}");
+            TreeNode[] treeNodes = new TreeNode[models.Count];
+            foreach (var item in models)
             {
-                var models = _apiHelper.Get<List<ViewEquipmentModel>>($"/Equipment/GetClients?keyword={keyword}");
-                TreeNode[] treeNodes = new TreeNode[models.Count];
-                foreach (var item in models)
-                {
-                    var node = new TreeNode($"{item.NickName}|{item.PubIp}");
-                    node.ForeColor = item.OnLine ? Color.Black : Color.Red;
-                    node.Tag = item;
-                    treeNodes[0] = node;
-                }
-                equipmentData.Invoke(new Action(() =>
-                {
-                    equipmentData.Nodes.Clear();
-                    equipmentData.Nodes.AddRange(treeNodes);
-                }));
-            });
+                var node = new TreeNode($"{item.NickName}|{item.PubIp}");
+                node.ForeColor = item.OnLine ? Color.Black : Color.Red;
+                node.Tag = item;
+                treeNodes[0] = node;
+            }
+            equipmentData.Invoke(new Action(() =>
+            {
+                equipmentData.Nodes.Clear();
+                equipmentData.Nodes.AddRange(treeNodes);
+            }));
         }
         /// <summary>
         /// 查询
@@ -140,7 +140,15 @@ namespace SuperTerminal.Manager
                     }
                 }
             }
-            this.btnStart.Enabled = showbtnStart;
+            btnStart.Visible = showbtnStart;
+            btnEnd.Visible = showbtnStart;
+            if (showbtnStart)
+            {
+                btnStart.Parent = this;
+                btnEnd.Parent = this;
+                btnEnd.BringToFront();
+                btnStart.BringToFront();
+            }
         }
         private void ControlToControlResize(Control[] ControlArry, Control control_parent, int RowCount, Size? ControlSize, Padding pad)
         {
@@ -250,8 +258,8 @@ namespace SuperTerminal.Manager
                             Receiver = (item.Tag as ViewEquipmentModel).Id
                         });
                     }
-                    this.txtCmd.Text = this.txtCmd.Text.Trim();
                 });
+                this.txtCmd.Text = this.txtCmd.Text.Trim();
             }
         }
     }

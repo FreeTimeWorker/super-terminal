@@ -2,6 +2,7 @@
 using SuperTerminal.Model.InstantMessage;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SuperTerminal.Utity
@@ -48,11 +49,16 @@ namespace SuperTerminal.Utity
             {
                 try
                 {
+                    var token = _apiHelper.GetToken();
+                    if (string.IsNullOrEmpty(token))
+                    {
+                        throw new Exception("Token获取失败");
+                    }
                     connection = new HubConnectionBuilder()
                     .WithUrl(string.Concat(_apiHelper.Domain, "/instantMessage"),
                     (o) =>
                     {
-                        o.Headers.Add("Token", string.Concat("SuperTerminal ", _apiHelper.GetToken()));
+                        o.Headers.Add("Token", string.Concat("SuperTerminal ", token));
                     }
                     )
                     .Build();
@@ -64,11 +70,18 @@ namespace SuperTerminal.Utity
                             connection.On(item.methodName, item.parameterTypes, item.handler);
                         }
                     }
-                    connection.StartAsync();
+                    connection.StartAsync().Wait();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("获取连接状态失败,程序将在5秒后重新连接,重新连接倒计时");
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Thread.Sleep(1000);
+                        Console.WriteLine(i + 1);
+                    }
+                    StartConnection();
                 }
             }
             return connection;
@@ -119,12 +132,15 @@ namespace SuperTerminal.Utity
         }
         public void Dispose()
         {
-            if (ClosedEvent != null)
+            if (connection != null)
             {
-                this.connection.Closed -= ClosedEvent;
+                if (ClosedEvent != null)
+                {
+                    connection.Closed -= ClosedEvent;
+                }
+                connection.Closed -= Connection_ClosedAsync;
+                connection.DisposeAsync().GetAwaiter();
             }
-            this.connection.Closed -= Connection_ClosedAsync;
-            this.connection.DisposeAsync().GetAwaiter();
             GC.SuppressFinalize(this);
         }
     }

@@ -156,7 +156,7 @@ namespace SuperTerminal.Service.Implements
             {
                 var result = _dbContext.Queryable<SysUser>()
                 .Where(o => o.UserType == 0)
-                .Where(o => o.NickName.Contains(keyword) || o.PubIp.Contains(keyword) || o.PrivIp.Contains(keyword))
+                .WhereIF(!string.IsNullOrEmpty(keyword),o => o.NickName.Contains(keyword) || o.PubIp.Contains(keyword) || o.PrivIp.Contains(keyword))
                 .Select<ViewEquipmentModel>().ToList();
                 foreach (var item in result)
                 {

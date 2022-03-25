@@ -14,7 +14,7 @@ namespace SuperTerminal.Manager
     {
         //这里保存提交到api的用户名和密码
         public static string UserName = "";
-        public static string PassWord = "";
+        public static string Password = "";
         public static string Token = "";
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
@@ -62,17 +62,17 @@ namespace SuperTerminal.Manager
         /// <returns></returns>
         public string GetToken()
         {
-            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(PassWord))
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
             {
                 return string.Empty;
             }
             var data = new
             {
                 UserName,
-                PassWord,
-                IsManager=true
+                Password,
+                IsManager = true
             };
-            var result = this.Post<BoolModel>("Auth/GetToken", data);
+            var result = this.Post<BoolModel<string>>("Auth/GetToken", data);
             if (result == null)
             {
                 return string.Empty;

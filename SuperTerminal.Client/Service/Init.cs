@@ -18,37 +18,43 @@ namespace SuperTerminal.Client
         private readonly IApiHelper _apiHelper;
         private readonly OsHelper _osHelper;
         private readonly Codebook _codebook;
-        public Init(IConfiguration configuration, IApiHelper apiHelper, OsHelper osHelper, Codebook codebook)
+        private readonly IHostApplicationLifetime _hostApplicationLifetime;
+        public Init(IConfiguration configuration, IApiHelper apiHelper, OsHelper osHelper, Codebook codebook, IHostApplicationLifetime hostApplicationLifetime)
         {
             _configuration = configuration;
             _apiHelper = apiHelper;
             _osHelper = osHelper;
             _codebook = codebook;
+            _hostApplicationLifetime = hostApplicationLifetime;
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            var address = _configuration["Address"];
-            _codebook.GenratePassFile();//生成密码本
-            var ivKey = _codebook.GetIVandKey();//获取密钥
-            //提交的model
-            var model = GetComputerInfo();
-            var result = _apiHelper.Post<BoolModel<int>>("/Auth/RegistEquipment", model);
-            if (result == null)
+            return Task.Run(() =>
             {
-                Console.WriteLine("服务器连接失败");
-                return Task.CompletedTask;
-            }
-            if (result.Successed)
-            {
-                model.Id = result.Data;
-                model.PassWord = model.PassWord.MD5().AesEncrypt(ivKey.Item1, ivKey.Item2);
-                WriteConfig(model, address);
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
-            return Task.CompletedTask;
+                var address = _configuration["Address"];
+                _codebook.GenratePassFile();//生成密码本
+                var ivKey = _codebook.GetIVandKey();//获取密钥              
+                var model = GetComputerInfo();//提交的model
+                var result = _apiHelper.Post<BoolModel<int>>("/Auth/RegistEquipment", model);
+                if (result == null)
+                {
+                    Console.WriteLine("服务器连接失败");
+                }
+                else
+                {
+                    if (result.Successed)
+                    {
+                        model.Id = result.Data;
+                        model.PassWord = model.PassWord.MD5().AesEncrypt(ivKey.Item1, ivKey.Item2);
+                        WriteConfig(model, address);
+                    }
+                    else
+                    {
+                        Console.WriteLine(result.Message);
+                    }
+                }
+                _hostApplicationLifetime.StopApplication();
+            });
         }
         public Task StopAsync(CancellationToken cancellationToken)
         {

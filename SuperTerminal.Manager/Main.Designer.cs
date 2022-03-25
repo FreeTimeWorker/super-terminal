@@ -37,8 +37,8 @@
             this.topright = new Sunny.UI.UIPanel();
             this.txtCmd = new Sunny.UI.UIRichTextBox();
             this.btnStart = new Sunny.UI.UIButton();
-            this.bottom = new Sunny.UI.UIPanel();
             this.btnEnd = new Sunny.UI.UIButton();
+            this.bottom = new Sunny.UI.UIPanel();
             this.left.SuspendLayout();
             this.uiPanel2.SuspendLayout();
             this.uiPanel1.SuspendLayout();
@@ -159,19 +159,21 @@
             // txtCmd
             // 
             this.txtCmd.AutoWordSelection = true;
-            this.txtCmd.BackColor = System.Drawing.Color.White;
+            this.txtCmd.BackColor = System.Drawing.Color.Black;
             this.txtCmd.Controls.Add(this.btnStart);
             this.txtCmd.Controls.Add(this.btnEnd);
             this.txtCmd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtCmd.FillColor = System.Drawing.Color.White;
+            this.txtCmd.FillColor = System.Drawing.Color.Black;
             this.txtCmd.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.txtCmd.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtCmd.ForeColor = System.Drawing.Color.White;
             this.txtCmd.Location = new System.Drawing.Point(0, 0);
             this.txtCmd.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtCmd.MinimumSize = new System.Drawing.Size(1, 1);
             this.txtCmd.Name = "txtCmd";
             this.txtCmd.Padding = new System.Windows.Forms.Padding(2);
             this.txtCmd.Size = new System.Drawing.Size(685, 140);
+            this.txtCmd.Style = Sunny.UI.UIStyle.Custom;
             this.txtCmd.TabIndex = 0;
             this.txtCmd.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             this.txtCmd.WordWrap = true;
@@ -179,6 +181,7 @@
             // 
             // btnStart
             // 
+            this.btnStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStart.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnStart.Location = new System.Drawing.Point(579, 11);
             this.btnStart.MinimumSize = new System.Drawing.Size(1, 1);
@@ -189,6 +192,20 @@
             this.btnStart.Text = "开始控制";
             this.btnStart.Visible = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // btnEnd
+            // 
+            this.btnEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEnd.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnEnd.Location = new System.Drawing.Point(579, 66);
+            this.btnEnd.MinimumSize = new System.Drawing.Size(1, 1);
+            this.btnEnd.Name = "btnEnd";
+            this.btnEnd.Radius = 20;
+            this.btnEnd.Size = new System.Drawing.Size(100, 24);
+            this.btnEnd.TabIndex = 4;
+            this.btnEnd.Text = "结束控制";
+            this.btnEnd.Visible = false;
+            this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
             // 
             // bottom
             // 
@@ -203,18 +220,6 @@
             this.bottom.TabIndex = 1;
             this.bottom.Text = null;
             this.bottom.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnEnd
-            // 
-            this.btnEnd.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnEnd.Location = new System.Drawing.Point(579, 66);
-            this.btnEnd.MinimumSize = new System.Drawing.Size(1, 1);
-            this.btnEnd.Name = "btnEnd";
-            this.btnEnd.Radius = 20;
-            this.btnEnd.Size = new System.Drawing.Size(100, 24);
-            this.btnEnd.TabIndex = 4;
-            this.btnEnd.Text = "结束控制";
-            this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
             // 
             // Main
             // 

@@ -83,7 +83,7 @@ namespace SuperTerminal.Manager
                 if (result.Successed)
                 {
                     ApiHelper.UserName = userName;
-                    ApiHelper.PassWord = password;
+                    ApiHelper.Password = password;
                     ApiHelper.Token = result.Data;
                     DialogResult = DialogResult.OK;
                 }
