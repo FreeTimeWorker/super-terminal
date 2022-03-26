@@ -14,8 +14,8 @@ namespace SuperTerminal.Manager
         public RSA GetRSA()
         {
            return  RSAStore.GetRSAFromX509(Enum.RSAKeyType.PubKey, "SuperTerminal", StoreLocation.CurrentUser)
-                ?? RSAStore.GetRSAFromPem("SuperTerminal.key") ??
-                RSAStore.GetRSAFromCustomFile("SuperTerminal.key", Enum.RSAKeyType.PubKey);
+                ?? RSAStore.GetRSAFromPem("SuperTerminal.pem") ??
+                RSAStore.GetRSAFromCustomFile("SuperTerminal.pem", Enum.RSAKeyType.PubKey);
         }
     }
 }

@@ -87,7 +87,7 @@ namespace SuperTerminal.Service.Implements
                 return new BoolModel(false,
                     @$"数据校验失败,请在本地安装证书后重试,
                     服务端为Windows    证书安装位置为:cert;CurrentUser/My
-                    服务端为非windows  请将 SuperTerminal.Pem文件置于根目录 公钥
+                    服务端为非windows  请将 SuperTerminal.pem文件置于根目录 公钥
                     ");
             }
             string[] ignoreNames = new string[] { "admin", "Administrator", "root" };
