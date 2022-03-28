@@ -38,11 +38,11 @@ namespace SuperTerminal.Utity
         /// 同步连接
         /// </summary>
         /// <returns></returns>
-        public HubConnection StartConnection()
+        public void StartConnection()
         {
             if (connection != null && connection.State == HubConnectionState.Disconnected)
             {
-                connection.DisposeAsync().GetAwaiter();
+                connection.DisposeAsync().GetAwaiter().GetResult();
                 connection = null;
             }
             if (connection == null)
@@ -84,7 +84,6 @@ namespace SuperTerminal.Utity
                     StartConnection();
                 }
             }
-            return connection;
         }
         /// <summary>
         /// 注册接收消息事件
