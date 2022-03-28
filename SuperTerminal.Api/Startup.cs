@@ -89,12 +89,9 @@ namespace SuperTerminal.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             ServiceAgent.Provider = app.ApplicationServices;//DI对象处理器
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SuperTerminal.Api v1"));
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SuperTerminal.Api v1"));
             app.UseRouting();
             app.UseJwt();//加入jwt
             app.UseHttpParamter();//jwt之后才有userid,先后顺序要弄对
