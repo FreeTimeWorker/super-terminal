@@ -16,11 +16,13 @@ namespace SuperTerminal.Client
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly Codebook _codebook;
-        public ApiHelper(IConfiguration configuration, IHttpClientFactory httpClientFactory,Codebook codebook)
+        private readonly LogServer _logServer;
+        public ApiHelper(IConfiguration configuration, IHttpClientFactory httpClientFactory,Codebook codebook,LogServer logServer)
         {
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
             _codebook = codebook;
+            _logServer = logServer;
         }
         public string Domain 
         { 
@@ -61,15 +63,17 @@ namespace SuperTerminal.Client
         /// <returns></returns>
         public string GetToken()
         {
-            if (string.IsNullOrEmpty(_configuration["UserName"]) || string.IsNullOrEmpty(_configuration["PassWord"]))
+            if (string.IsNullOrEmpty(_configuration["SuperTerminal_UserName"]) || string.IsNullOrEmpty(_configuration["SuperTerminal_PassWord"]))
             {
                 return string.Empty;
             }
             var ivKey = _codebook.GetIVandKey();
+            _logServer.Write(_configuration["SuperTerminal_UserName"]);
+            _logServer.Write(_configuration["SuperTerminal_PassWord"]);
             var data = new
             {
-                UserName= _configuration["UserName"],
-                Password = _configuration["PassWord"].AesDecrypt(ivKey.Item1, ivKey.Item2)
+                UserName= _configuration["SuperTerminal_UserName"],
+                Password = _configuration["SuperTerminal_PassWord"].AesDecrypt(ivKey.Item1, ivKey.Item2)
             };
             var result = this.Post<BoolModel<string>>("Auth/GetToken", data);
             if (result == null)

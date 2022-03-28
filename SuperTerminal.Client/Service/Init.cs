@@ -68,8 +68,8 @@ namespace SuperTerminal.Client
             var config = new Config()
             {
                 Id=model.Id,
-                UserName= model.UserName,
-                PassWord= model.PassWord,
+                SuperTerminal_UserName = model.UserName,
+                SuperTerminal_PassWord = model.PassWord,
                 NickName= model.NickName,
                 Address=Address
             };
