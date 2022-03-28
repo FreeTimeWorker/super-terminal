@@ -31,7 +31,7 @@ namespace SuperTerminal.Client
                         Init(args).Wait();
                         break;
                     case "purpose:WindowsServer":
-                       RunAsWindowsServer(args).Wait();
+                        RunAsWindowsServer(args).Wait();
                         break;
                     case "purpose:systemd":
                         RunAsSystemd(args).Wait();

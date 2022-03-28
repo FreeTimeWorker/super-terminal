@@ -70,7 +70,7 @@ namespace SuperTerminal.Utity
                             connection.On(item.methodName, item.parameterTypes, item.handler);
                         }
                     }
-                    connection.StartAsync().Wait();
+                    connection.StartAsync(CancellationToken.None).Wait();
                 }
                 catch (Exception ex)
                 {
