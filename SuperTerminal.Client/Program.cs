@@ -17,7 +17,7 @@ namespace SuperTerminal.Client
         {
             //args = new string[] { "purpose:systemd" };
             //args = new string[] { "purpose:regist", "Address=http://192.168.3.154:8086", "NickName=测试1" };
-            args = new string[] { "purpose:WindowsServer" };
+            //args = new string[] { "purpose:WindowsServer" };
             if (args.Length == 0)
             {
                 Console.WriteLine("请勿直接执行");

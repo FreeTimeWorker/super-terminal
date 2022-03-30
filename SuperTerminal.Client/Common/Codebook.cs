@@ -9,6 +9,11 @@ namespace SuperTerminal.Client
 {
     public class Codebook
     {
+        private readonly LogServer _logServer;
+        public Codebook(LogServer logServer)
+        {
+            _logServer = logServer;
+        }
         /// <summary>
         /// 生成一个512位的密码本
         /// </summary>
@@ -23,7 +28,7 @@ namespace SuperTerminal.Client
             }
             if (!File.Exists("pass.dll"))
             {
-                using (FileStream fs = new FileStream("pass.dll", FileMode.Create))
+                using (FileStream fs = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pass.dll"), FileMode.Create))
                 {
                     fs.Write(bt, 0, bt.Length);
                 }
@@ -35,18 +40,26 @@ namespace SuperTerminal.Client
         /// <returns></returns>
         public(string, string) GetIVandKey()
         {
-            var buffer = new byte[512];
-            Span<byte> bt = new Span<byte>(buffer);
-            using (FileStream fs = new FileStream("pass.dll", FileMode.Open, FileAccess.Read))
+            try
             {
-                fs.Read(bt);
+                var buffer = new byte[512];
+                Span<byte> bt = new Span<byte>(buffer);
+                using (FileStream fs = new FileStream(Path.Combine(AppContext.BaseDirectory,"pass.dll"), FileMode.Open, FileAccess.Read))
+                {
+                    fs.Read(bt);
+                }
+                //IV 16 Key :32
+                byte[] iv = new byte[16];
+                byte[] key = new byte[32];
+                bt.Slice(Convert.ToInt32(bt[0]), 16).CopyTo(iv);
+                bt.Slice(Convert.ToInt32(bt[1]), 32).CopyTo(key);
+                return (Convert.ToBase64String(iv), Convert.ToBase64String(key));
             }
-            //IV 16 Key :32
-            byte[] iv = new byte[16];
-            byte[] key = new byte[32];
-            bt.Slice(Convert.ToInt32(bt[0]), 16).CopyTo(iv);
-            bt.Slice(Convert.ToInt32(bt[1]), 32).CopyTo(key);
-            return (Convert.ToBase64String(iv), Convert.ToBase64String(key));
+            catch (Exception ex)
+            {
+                _logServer.Write(ex.Message);
+                throw;
+            }
         }
     }
 }
