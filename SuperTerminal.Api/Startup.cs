@@ -28,7 +28,7 @@ namespace SuperTerminal.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            RedisHelper.Initialization(new CSRedisClient(Configuration["Redis:Connection"]));
+            //RedisHelper.Initialization(new CSRedisClient(Configuration["Redis:Connection"]));
         }
         public void ConfigureServices(IServiceCollection services)
         {

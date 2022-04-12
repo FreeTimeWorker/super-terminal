@@ -39,6 +39,7 @@ namespace SuperTerminal.Client
                 if (result == null)
                 {
                     Console.WriteLine("服务器连接失败");
+                    Environment.ExitCode = 1;
                 }
                 else
                 {
@@ -47,10 +48,12 @@ namespace SuperTerminal.Client
                         model.Id = result.Data;
                         model.PassWord = model.PassWord.MD5().AesEncrypt(ivKey.Item1, ivKey.Item2);
                         WriteConfig(model, address);
+                        Environment.ExitCode = 0;
                     }
                     else
                     {
                         Console.WriteLine(result.Message);
+                        Environment.ExitCode = 1;
                     }
                 }
                 _hostApplicationLifetime.StopApplication();
