@@ -68,8 +68,6 @@ namespace SuperTerminal.Client
                 return string.Empty;
             }
             var ivKey = _codebook.GetIVandKey();
-            _logServer.Write(_configuration["SuperTerminal_UserName"]);
-            _logServer.Write(_configuration["SuperTerminal_PassWord"]);
             var data = new
             {
                 UserName= _configuration["SuperTerminal_UserName"],
@@ -119,8 +117,9 @@ namespace SuperTerminal.Client
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                _logServer.Write(ex.Message);
                 return default;
             }
         }
