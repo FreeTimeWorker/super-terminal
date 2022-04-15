@@ -141,8 +141,8 @@ namespace SuperTerminal.Manager
                     }
                 }
             }
-            btnStart.Visible = showbtnStart;
-            btnEnd.Visible = showbtnStart;
+            btnStart.Enabled = showbtnStart;
+            btnEnd.Enabled = showbtnStart;
             if (showbtnStart)
             {
                 bottom.Controls.Clear();

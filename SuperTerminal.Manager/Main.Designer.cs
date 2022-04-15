@@ -31,7 +31,7 @@ namespace SuperTerminal.Manager
         private void InitializeComponent()
         {
             this.left = new Sunny.UI.UIPanel();
-            this.equipmentData = new TreeView();
+            this.equipmentData = new System.Windows.Forms.TreeView();
             this.uiPanel2 = new Sunny.UI.UIPanel();
             this.checkAll = new System.Windows.Forms.CheckBox();
             this.uiPanel1 = new Sunny.UI.UIPanel();
@@ -42,6 +42,7 @@ namespace SuperTerminal.Manager
             this.btnEnd = new Sunny.UI.UIButton();
             this.btnStart = new Sunny.UI.UIButton();
             this.bottom = new System.Windows.Forms.Panel();
+            this.uiLine1 = new Sunny.UI.UILine();
             this.left.SuspendLayout();
             this.uiPanel2.SuspendLayout();
             this.uiPanel1.SuspendLayout();
@@ -75,10 +76,8 @@ namespace SuperTerminal.Manager
             this.equipmentData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.equipmentData.MinimumSize = new System.Drawing.Size(1, 1);
             this.equipmentData.Name = "equipmentData";
-            this.equipmentData.SelectedNode = null;
             this.equipmentData.Size = new System.Drawing.Size(253, 660);
             this.equipmentData.TabIndex = 3;
-            this.equipmentData.Text = null;
             this.equipmentData.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.equipmentData_AfterCheck);
             // 
             // uiPanel2
@@ -192,6 +191,7 @@ namespace SuperTerminal.Manager
             // 
             // btnEnd
             // 
+            this.btnEnd.Enabled = false;
             this.btnEnd.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnEnd.Location = new System.Drawing.Point(17, 50);
             this.btnEnd.MinimumSize = new System.Drawing.Size(1, 1);
@@ -200,11 +200,11 @@ namespace SuperTerminal.Manager
             this.btnEnd.Size = new System.Drawing.Size(100, 33);
             this.btnEnd.TabIndex = 4;
             this.btnEnd.Text = "结束控制";
-            this.btnEnd.Visible = false;
             this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
             // 
             // btnStart
             // 
+            this.btnStart.Enabled = false;
             this.btnStart.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnStart.Location = new System.Drawing.Point(17, 11);
             this.btnStart.MinimumSize = new System.Drawing.Size(1, 1);
@@ -213,17 +213,27 @@ namespace SuperTerminal.Manager
             this.btnStart.Size = new System.Drawing.Size(100, 33);
             this.btnStart.TabIndex = 3;
             this.btnStart.Text = "开始控制";
-            this.btnStart.Visible = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // bottom
             // 
             this.bottom.AutoScroll = true;
             this.bottom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bottom.Location = new System.Drawing.Point(253, 127);
+            this.bottom.Location = new System.Drawing.Point(253, 130);
             this.bottom.Name = "bottom";
-            this.bottom.Size = new System.Drawing.Size(685, 631);
+            this.bottom.Size = new System.Drawing.Size(685, 628);
             this.bottom.TabIndex = 2;
+            // 
+            // uiLine1
+            // 
+            this.uiLine1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.uiLine1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.uiLine1.LineDashStyle = Sunny.UI.UILineDashStyle.None;
+            this.uiLine1.Location = new System.Drawing.Point(253, 127);
+            this.uiLine1.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiLine1.Name = "uiLine1";
+            this.uiLine1.Size = new System.Drawing.Size(685, 3);
+            this.uiLine1.TabIndex = 0;
             // 
             // Main
             // 
@@ -231,6 +241,7 @@ namespace SuperTerminal.Manager
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(938, 758);
             this.Controls.Add(this.bottom);
+            this.Controls.Add(this.uiLine1);
             this.Controls.Add(this.topright);
             this.Controls.Add(this.left);
             this.Name = "Main";
@@ -261,5 +272,6 @@ namespace SuperTerminal.Manager
         private Sunny.UI.UIButton btnEnd;
         private System.Windows.Forms.Panel bottom;
         private System.Windows.Forms.Panel panel1;
+        private Sunny.UI.UILine uiLine1;
     }
 }
