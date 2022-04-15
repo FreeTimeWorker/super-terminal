@@ -1,4 +1,6 @@
-﻿namespace SuperTerminal.Manager
+﻿using System.Windows.Forms;
+
+namespace SuperTerminal.Manager
 {
     partial class Main
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             this.left = new Sunny.UI.UIPanel();
-            this.equipmentData = new Sunny.UI.UITreeView();
+            this.equipmentData = new TreeView();
             this.uiPanel2 = new Sunny.UI.UIPanel();
             this.checkAll = new System.Windows.Forms.CheckBox();
             this.uiPanel1 = new Sunny.UI.UIPanel();
@@ -68,8 +70,6 @@
             // 
             this.equipmentData.CheckBoxes = true;
             this.equipmentData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.equipmentData.FillColor = System.Drawing.Color.White;
-            this.equipmentData.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.equipmentData.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.equipmentData.Location = new System.Drawing.Point(0, 35);
             this.equipmentData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -79,7 +79,6 @@
             this.equipmentData.Size = new System.Drawing.Size(253, 660);
             this.equipmentData.TabIndex = 3;
             this.equipmentData.Text = null;
-            this.equipmentData.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             this.equipmentData.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.equipmentData_AfterCheck);
             // 
             // uiPanel2
@@ -254,7 +253,7 @@
         private Sunny.UI.UIPanel topright;
         private Sunny.UI.UITextBox txtkeyword;
         private Sunny.UI.UIPanel uiPanel1;
-        private Sunny.UI.UITreeView equipmentData;
+        private TreeView equipmentData;
         private Sunny.UI.UIPanel uiPanel2;
         private System.Windows.Forms.CheckBox checkAll;
         private Sunny.UI.UIRichTextBox txtCmd;

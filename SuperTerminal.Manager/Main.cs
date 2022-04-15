@@ -51,7 +51,7 @@ namespace SuperTerminal.Manager
                     var control = bottom.Controls.Find($"r_{o.Sender}", false).First() as CmdResult;
                     if (control != null)
                     {
-                        control.Content.AppendText($"{Environment.NewLine}{o.SenderName}:{o.Content}");
+                        control.Content.AppendText($"{Environment.NewLine}{o.Content}");//{o.SenderName}:
                         control.Content.Select(control.Content.Text.Length, 0);
                         control.Content.ScrollToCaret();
                     }
@@ -73,8 +73,8 @@ namespace SuperTerminal.Manager
             TreeNode[] treeNodes = new TreeNode[models.Count];
             for (var i=0;i<models.Count;i++)
             {
-                var node = new TreeNode($"{models[i].NickName}|{models[i].PubIp}");
-                node.ForeColor = models[i].OnLine ? Color.Black : Color.Red;
+                var node = new TreeNode($"{models[i].OSPlatform.ToString()}|{models[i].NickName}|{models[i].PubIp}");
+                node.ForeColor = models[i].OnLine ? Color.Green : Color.Black;
                 node.Tag = models[i];
                 treeNodes[i] = node;
             }
