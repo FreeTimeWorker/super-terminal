@@ -29,7 +29,7 @@ linux下执行 uninstall.sh
 # 证书
 管理端：SuperTerminal.Manager 注册需要本地安装证书
 服务端如果是安装在linux下，那么需要通过服务端安装完毕后当前目录下的 SuperTerminal.pem 放到管理端的运行根目录下
-服务端如果是安装在windows下,需要服务端生成的 SuperTerminal.pem 安装到本地证书目录 当前用户我的下边
+服务端如果是安装在windows下,需要服务端生成的 SuperTerminal.cer 安装到本地证书目录 当前用户我的下边
 生成证书的方法：
 ## Linux:
 ```
