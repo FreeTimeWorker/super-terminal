@@ -61,7 +61,7 @@ server端的端口依旧是8086，自定义方式和windows一样。
 执行install.bat/install.sh  按照要求填入服务端地址和别名即可
 ### 管理端
 目前不需要安装，windows7 sp1以上的机器应该可以直接运行，不过在运行前需要根据不同的服务端安装证书。
-### 卸载
+## 卸载
 windows下执行 uninstall.bat
 linux下执行 uninstall.sh   
 安装仅会在当前目录下写文件，windows会创建一个服务，linux也仅仅是创建一个服务，在卸载的时候，会将创建的这些都删除，mysql的数据也会在卸载的时候清理。
