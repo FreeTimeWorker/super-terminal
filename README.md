@@ -4,6 +4,29 @@
 
 [所有项目相关的知识点介绍都在这里，目前以一周一篇的频率，持续更新中](https://www.zhihu.com/column/c_1441347599417094144) 项目进度和文章编写速度保持同步。
 
+
+# 安装 
+## Server端：
+针对windows和linux的安装都是通过脚本绿色安装的  
+在完整release发布下  针对window和linux都是一键安装  
+window下以管理员身份执行start.bat.  
+安装后，会安装一个本地的mysql,端口是3388 ,证书需要自己去执行Win11.ps1生成  
+server端的默认端口是8086，如果有特殊端口要求，修改 web文件夹下的appsettings.json中的urls即可  
+linux下以root权限执行install.sh
+如果首次将文件复制到服务器的情况也许需要执行 chmod +x install.sh 赋予执行权限  
+执行install.sh，会安装mysql，配置文件在当前目录mysql-8.0.28/my.cnf 端口依旧是3388 ，完全不影响系统中安装其他版本的mysql.  
+server端的端口依旧是8086，自定义方式和windows一样。  
+## Client端
+执行install.bat/install.sh  按照要求填入服务端地址和别名即可
+## 管理端
+目前不需要安装，windows7 sp1以上的机器应该可以直接运行，不过在运行前需要根据不同的服务端安装证书。
+# 卸载
+windows下执行 uninstall.bat
+linux下执行 uninstall.sh   
+安装仅会在当前目录下写文件，windows会创建一个服务，linux也仅仅是创建一个服务，在卸载的时候，会将创建的这些都删除，mysql的数据也会在卸载的时候清理。
+所以卸载前需要考虑情况要不要执行
+
+# 证书
 管理端：SuperTerminal.Manager 注册需要本地安装证书
 服务端如果是安装在linux下，那么需要通过服务端安装完毕后当前目录下的 SuperTerminal.pem 放到管理端的运行根目录下
 服务端如果是安装在windows下,需要服务端生成的 SuperTerminal.pem 安装到本地证书目录 当前用户我的下边
@@ -43,38 +66,17 @@ Export-Certificate -Type CERT -Cert $targetCert -FilePath $outpath
 echo 导出证书完成,证书名称SuperTerminalClient.cer
 pause
 ```
-## 客户端 SuperTerminal.Client 
-在完整发布文件夹中已经包含了windows,linux的发布脚本
-只需要在相应环境执行insall.sh/insall.bat输入服务端信息即可完成注册。
 
-## 安装 
-### Server端：
-针对windows和linux的安装都是通过脚本绿色安装的
-在完整release发布下  针对window和linux都是一键安装
-window下以管理员身份执行start.bat.
-安装后，会安装一个本地的mysql,端口是3388 ,证书需要自己去执行Win11.ps1生成 ，server端的默认端口是8086，如果有特殊端口要求，修改 web文件夹下的appsettings.json中的urls即可
-linux下以root权限执行install.sh
-如果首次将文件复制到服务器的情况也许需要执行 chmod +x install.sh 赋予执行权限
-执行install.sh，会安装mysql，配置文件在当前目录mysql-8.0.28/my.cnf 端口依旧是3388 ，完全不影响系统中安装其他版本的mysql.
-server端的端口依旧是8086，自定义方式和windows一样。
-### Client端
-执行install.bat/install.sh  按照要求填入服务端地址和别名即可
-### 管理端
-目前不需要安装，windows7 sp1以上的机器应该可以直接运行，不过在运行前需要根据不同的服务端安装证书。
-## 卸载
-windows下执行 uninstall.bat
-linux下执行 uninstall.sh   
-安装仅会在当前目录下写文件，windows会创建一个服务，linux也仅仅是创建一个服务，在卸载的时候，会将创建的这些都删除，mysql的数据也会在卸载的时候清理。
-所以卸载前需要考虑情况要不要执行
-
-## 说明
+# 管理端预览
+![管理端预览](https://images.gitee.com/uploads/images/2022/0417/155818_fa175059_1026745.png "QQ截图20220417155218.png")
+# 说明
 增加证书环节的目的还是为了安全，毕竟这个工具相对而言是比较危险的，管理人员必须是可信人员，在特定机器执行。
 因为相应的服务都是以超级管理员身份注册的，所以理论上来说它是拥有目标机器所有操作权限的。而对于管理端而言，他不需要记住所有机器的账号。
 只需要持有证书即可对所有可管理的机器做任何事，安装软件、重启等，重要的是，可以批量对多个终端执行相同命令
 所有安装均不需要单独安装.net环境,所以相对来说可能体积会稍大一些。
 
 
-## 完整release文件请通过网盘下载
+# 完整release文件请通过网盘下载
 ### 百度网盘：
 链接：https://pan.baidu.com/s/1essQAXMFe6C-SdTmFbIcTA
 提取码：8086
