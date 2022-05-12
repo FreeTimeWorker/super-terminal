@@ -36,5 +36,17 @@ namespace SuperTerminal.FeildCheck
             Max = max;
             Min = min;
         }
+        /// <summary>
+        /// 时间范围
+        /// </summary>
+        /// <param name="errorMsg"></param>
+        /// <param name="min">Time Str</param>
+        /// <param name="max">Time Str</param>
+        public CheckByRange(string errorMsg, string min, string max)
+        {
+            ErrorMsg = errorMsg;
+            Max = DateTime.Parse(min);
+            Min = DateTime.Parse(max);
+        }
     }
 }
