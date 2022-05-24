@@ -17,6 +17,12 @@ namespace SuperTerminal.Utity
             };
             jsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
         }
+        /// <summary>
+        /// 字符串转换为任意类型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static T ToObject<T>(this string source)
         {
             try
@@ -29,6 +35,12 @@ namespace SuperTerminal.Utity
             }
 
         }
+        /// <summary>
+        /// 任意类型的序列化
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static string ToJson<T>(this T t)
         {
             return JsonSerializer.Serialize(t, jsonSerializerOptions);
